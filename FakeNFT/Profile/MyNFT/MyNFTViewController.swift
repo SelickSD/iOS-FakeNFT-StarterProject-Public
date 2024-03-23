@@ -1,0 +1,95 @@
+
+import UIKit
+
+class MyNFTViewController: UIViewController {
+    
+    private var nftArray: [MyNFT] = [
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 1", rating: 1, author: "Jonh", isLike: true, price: "3.54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 2", rating: 2, author: "Elsa", isLike: false, price: "5.64"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 3", rating: 3, author: "Piter", isLike: true, price: "7.54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 4", rating: 4, author: "Sarah", isLike: false, price: "10.54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 5", rating: 4, author: "Sarah", isLike: false, price: "10.54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 6", rating: 4, author: "Sarah", isLike: false, price: "10.54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 7", rating: 4, author: "Sarah", isLike: false, price: "10.54")]
+    
+    private lazy var myNftTableView: UITableView = {
+        let profileTableView = UITableView()
+        profileTableView.translatesAutoresizingMaskIntoConstraints = false
+        profileTableView.rowHeight = 140
+        profileTableView.isScrollEnabled = true
+        profileTableView.delegate = self
+        profileTableView.separatorColor = .white
+        profileTableView.dataSource = self
+        profileTableView.register(MyNFTTableViewCell.self, forCellReuseIdentifier: "MyNFTTableViewCell")
+        return profileTableView
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        setupNavBar()
+        addSubviews()
+        setupConstraints()
+    }
+    private func addSubviews(){
+        view.addSubview(myNftTableView)
+
+    }
+    
+    private func setupConstraints(){
+        NSLayoutConstraint.activate([
+            myNftTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 108),
+            myNftTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            myNftTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            myNftTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            
+        ])
+    }
+    private func setupNavBar(){
+        navigationItem.title = "Мои NFT"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(dismissNav))
+        navigationItem.leftBarButtonItem?.tintColor = .black
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify.left"), style: .plain, target: self, action: #selector(filter))
+        navigationItem.rightBarButtonItem?.tintColor = .black
+    }
+    @objc private func dismissNav(){
+        self.navigationController?.popViewController(animated: true)
+    }
+    @objc private func filter(){
+        let alertController = UIAlertController(title: "Cортировка", message: .none,  preferredStyle: .actionSheet)
+        
+        let priceFilter = UIAlertAction(title: "По цене", style: .default) { _ in
+
+        }
+        let ratingFilter = UIAlertAction(title: "По рейтингу", style: .default) { _ in
+
+        }
+        let nameFilter = UIAlertAction(title: "По названию", style: .default) { _ in
+
+        }
+        
+        let cancel = UIAlertAction(title: "Закрыть", style: .cancel)
+        
+        alertController.addAction(priceFilter)
+        alertController.addAction(ratingFilter)
+        alertController.addAction(nameFilter)
+        alertController.addAction(cancel)
+        
+        self.present(alertController, animated: true)
+    }
+}
+extension MyNFTViewController: UITableViewDelegate, UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return nftArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MyNFTTableViewCell", for: indexPath) as! MyNFTTableViewCell
+        let currentNft = nftArray[indexPath.row]
+        cell.nftTitle.text = currentNft.title
+        cell.nftPrice.text = (currentNft.price ?? "") + " ETH"
+        cell.nftAuthor.text = currentNft.author
+
+        return cell
+    }
+}

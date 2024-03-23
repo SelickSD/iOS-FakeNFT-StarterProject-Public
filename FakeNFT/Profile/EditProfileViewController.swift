@@ -1,0 +1,179 @@
+
+import UIKit
+
+class EditProfileViewController: UIViewController, UITextFieldDelegate {
+    
+    private var activeTextField: UITextField?
+    
+    private lazy var profileImage: UIImageView = {
+        let profileImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
+        profileImage.translatesAutoresizingMaskIntoConstraints = false
+        profileImage.layer.cornerRadius =  profileImage.frame.width / 2
+        profileImage.clipsToBounds = true
+        profileImage.backgroundColor = .black
+        return profileImage
+    }()
+    private lazy var editNameTitle: UILabel = {
+        let profileNameTitle = UILabel()
+        profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
+        profileNameTitle.font = .systemFont(ofSize: 22, weight: .bold)
+        profileNameTitle.textColor = .black
+        profileNameTitle.text = "Имя"
+        return profileNameTitle
+    }()
+    private lazy var editNameTextField: UITextField = {
+        let editNameTextField = UITextField()
+        editNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        editNameTextField.placeholder = "Информация отсутствует"
+        editNameTextField.backgroundColor = UIColor(hexString: "#F7F7F8")
+        editNameTextField.font = .systemFont(ofSize: 17, weight: .medium)
+        editNameTextField.textColor = .black
+        editNameTextField.layer.cornerRadius = 16
+        editNameTextField.layer.borderWidth = 0
+        editNameTextField.layer.masksToBounds = true
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: editNameTextField.frame.height))
+        editNameTextField.leftView = paddingView
+        editNameTextField.leftView = paddingView
+        editNameTextField.leftViewMode = .always
+        editNameTextField.rightView = clearButton
+
+        editNameTextField.rightViewMode = .whileEditing
+        editNameTextField.delegate = self
+        return editNameTextField
+    }()
+    private lazy var editDescriptionTitle: UILabel = {
+        let profileNameTitle = UILabel()
+        profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
+        profileNameTitle.font = .systemFont(ofSize: 22, weight: .bold)
+        profileNameTitle.textColor = .black
+        profileNameTitle.text = "Описание"
+        return profileNameTitle
+    }()
+    private lazy var editDescriptionTextField: UITextField = {
+        let editDescriptionTextField = UITextField()
+        editDescriptionTextField.translatesAutoresizingMaskIntoConstraints = false
+        editDescriptionTextField.placeholder = "Информация отсутствует"
+        editDescriptionTextField.backgroundColor = UIColor(hexString: "#F7F7F8")
+        editDescriptionTextField.font = .systemFont(ofSize: 17, weight: .medium)
+        editDescriptionTextField.textColor = .black
+        editDescriptionTextField.layer.cornerRadius = 16
+        editDescriptionTextField.layer.borderWidth = 0
+        editDescriptionTextField.layer.masksToBounds = true
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: editDescriptionTextField.frame.height))
+        editDescriptionTextField.leftView = paddingView
+        editDescriptionTextField.leftViewMode = .always
+        editDescriptionTextField.rightView = clearButton
+        editDescriptionTextField.rightViewMode = .whileEditing
+        editDescriptionTextField.delegate = self
+        return editDescriptionTextField
+    }()
+    private lazy var editSiteTitle: UILabel = {
+        let profileNameTitle = UILabel()
+        profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
+        profileNameTitle.font = .systemFont(ofSize: 22, weight: .bold)
+        profileNameTitle.textColor = .black
+        profileNameTitle.text = "Сайт"
+        return profileNameTitle
+    }()
+    private lazy var editSiteTextField: UITextField = {
+        let editSiteTextField = UITextField()
+        editSiteTextField.translatesAutoresizingMaskIntoConstraints = false
+        editSiteTextField.placeholder = "Информация отсутствует"
+        editSiteTextField.backgroundColor = UIColor(hexString: "#F7F7F8")
+        editSiteTextField.font = .systemFont(ofSize: 17, weight: .medium)
+        editSiteTextField.textColor = .black
+        editSiteTextField.layer.cornerRadius = 16
+        editSiteTextField.layer.borderWidth = 0
+        editSiteTextField.layer.masksToBounds = true
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: editSiteTextField.frame.height))
+        editSiteTextField.leftView = paddingView
+        editSiteTextField.leftViewMode = .always
+        editSiteTextField.rightView = clearButton
+        editSiteTextField.rightViewMode = .whileEditing
+        editSiteTextField.delegate = self
+        return editSiteTextField
+    }()
+    private lazy var clearButton: UIButton = {
+        let clearButton = UIButton(type: .custom)
+        clearButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        clearButton.tintColor = .gray
+        clearButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16)
+        clearButton.contentMode = .scaleAspectFit
+        clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
+        return clearButton
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        setupNavBar()
+        addSubviews()
+        setupConstraints()
+
+    }
+    
+    private func setupNavBar(){
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissController))
+        navigationItem.rightBarButtonItem?.tintColor = .black
+    }
+    @objc private func dismissController(){
+        dismiss(animated: true)
+    }
+    @objc func clearTextField(_ textField: UITextField) {
+        activeTextField?.text = ""
+    }
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.activeTextField = textField
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.activeTextField = nil
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+    }
+    
+    private func addSubviews(){
+        view.addSubview(profileImage)
+        view.addSubview(editNameTitle)
+        view.addSubview(editNameTextField)
+        view.addSubview(editDescriptionTitle)
+        view.addSubview(editDescriptionTextField)
+        view.addSubview(editSiteTitle)
+        view.addSubview(editSiteTextField)
+    }
+    
+    private func setupConstraints(){
+        NSLayoutConstraint.activate([
+            profileImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
+            profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            profileImage.heightAnchor.constraint(equalToConstant: 70),
+            profileImage.widthAnchor.constraint(equalToConstant: 70),
+            
+            editNameTitle.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 24),
+            editNameTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            
+            editNameTextField.topAnchor.constraint(equalTo: editNameTitle.bottomAnchor, constant: 8),
+            editNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            editNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            editNameTextField.heightAnchor.constraint(equalToConstant: 44),
+            
+            editDescriptionTitle.topAnchor.constraint(equalTo: editNameTextField.bottomAnchor, constant: 24),
+            editDescriptionTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            
+            editDescriptionTextField.topAnchor.constraint(equalTo: editDescriptionTitle.bottomAnchor, constant: 8),
+            editDescriptionTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            editDescriptionTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            editDescriptionTextField.heightAnchor.constraint(equalToConstant: 132),
+            
+            editSiteTitle.topAnchor.constraint(equalTo: editDescriptionTextField.bottomAnchor, constant: 24),
+            editSiteTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            
+            editSiteTextField.topAnchor.constraint(equalTo: editSiteTitle.bottomAnchor, constant: 8),
+            editSiteTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            editSiteTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            editSiteTextField.heightAnchor.constraint(equalToConstant: 44),
+    
+        ])
+    }
+}
