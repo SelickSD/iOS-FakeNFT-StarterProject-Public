@@ -46,7 +46,7 @@ class ProfileViewController: UIViewController {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileWebTitleTapped))
         profileWebTitle.addGestureRecognizer(tapGesture)
-
+        
         return profileWebTitle
     }()
     
@@ -82,7 +82,7 @@ class ProfileViewController: UIViewController {
         profileWebView.profileWebText = profileWebTitle.text
         self.navigationController?.pushViewController(profileWebView, animated: true)
     }
-
+    
     private func setupNavBar(){
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: #selector(editProfileInfo))
         navigationItem.rightBarButtonItem?.tintColor = .black
@@ -148,12 +148,12 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
         if indexPath.row == 0 {
             let NFTNav = MyNFTViewController()
             self.navigationController?.pushViewController(NFTNav, animated: true)
-
+            
         }
         if indexPath.row == 1 {
             let favouritesNav = FavouritesViewController()
             self.navigationController?.pushViewController(favouritesNav, animated: true)
-
+            
         }
         if indexPath.row == 2 {
             let profileWebView = ProfileWebViewController()

@@ -30,7 +30,7 @@ class MyNFTViewController: UIViewController {
         profileTableView.register(MyNFTTableViewCell.self, forCellReuseIdentifier: "MyNFTTableViewCell")
         return profileTableView
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -41,7 +41,7 @@ class MyNFTViewController: UIViewController {
     
     private func addSubviews(){
         view.addSubview(myNftTableView)
-
+        
     }
     
     private func setupConstraints(){
@@ -67,13 +67,13 @@ class MyNFTViewController: UIViewController {
         let alertController = UIAlertController(title: "Cортировка", message: .none,  preferredStyle: .actionSheet)
         
         let priceFilter = UIAlertAction(title: "По цене", style: .default) { _ in
-
+            
         }
         let ratingFilter = UIAlertAction(title: "По рейтингу", style: .default) { _ in
-
+            
         }
         let nameFilter = UIAlertAction(title: "По названию", style: .default) { _ in
-
+            
         }
         
         let cancel = UIAlertAction(title: "Закрыть", style: .cancel)

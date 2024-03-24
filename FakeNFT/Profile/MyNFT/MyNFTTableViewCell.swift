@@ -32,7 +32,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         stackViewStarImage.backgroundColor = .white
         return stackViewStarImage
     }()
-
+    
     private lazy var nftTitle: UILabel = {
         let nftTitle = UILabel()
         nftTitle.translatesAutoresizingMaskIntoConstraints = false

@@ -38,7 +38,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editNameTextField.leftView = paddingView
         editNameTextField.leftViewMode = .always
         editNameTextField.rightView = clearButton
-
+        
         editNameTextField.rightViewMode = .whileEditing
         editNameTextField.delegate = self
         return editNameTextField
@@ -134,7 +134,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.activeTextField = nil
     }
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
     }
@@ -188,7 +188,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
             editSiteTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             editSiteTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             editSiteTextField.heightAnchor.constraint(equalToConstant: 44),
-    
+            
         ])
     }
 }
