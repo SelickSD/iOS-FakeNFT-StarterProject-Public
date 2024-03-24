@@ -4,13 +4,20 @@ import UIKit
 class MyNFTViewController: UIViewController {
     
     private var nftArray: [MyNFT] = [
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 1", rating: 1, author: "Jonh", isLike: true, price: "3.54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 2", rating: 2, author: "Elsa", isLike: false, price: "5.64"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 3", rating: 3, author: "Piter", isLike: true, price: "7.54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 4", rating: 4, author: "Sarah", isLike: false, price: "10.54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 5", rating: 4, author: "Sarah", isLike: false, price: "10.54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 6", rating: 4, author: "Sarah", isLike: false, price: "10.54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "nft 7", rating: 4, author: "Sarah", isLike: false, price: "10.54")]
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 0, author: "Jonh", isLike: true, price: "3,54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Archie", rating: 2, author: "Elsa", isLike: false, price: "5,64"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 3, author: "Piter", isLike: true, price: "7,54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, author: "Sarah", isLike: false, price: "1,54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 3, author: "Sarah", isLike: false, price: "12,54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 2, author: "Sarah", isLike: false, price: "14,54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Stiphe", rating: 5, author: "Sarah", isLike: false, price: "20,54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 0, author: "Jonh", isLike: true, price: "3,54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Archie", rating: 2, author: "Elsa", isLike: false, price: "5,64"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 3, author: "Piter", isLike: true, price: "7,54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, author: "Sarah", isLike: false, price: "1,54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 3, author: "Sarah", isLike: false, price: "12,54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 2, author: "Sarah", isLike: false, price: "14,54"),
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Stiphe", rating: 5, author: "Sarah", isLike: false, price: "20,54")]
     
     private lazy var myNftTableView: UITableView = {
         let profileTableView = UITableView()
@@ -31,6 +38,7 @@ class MyNFTViewController: UIViewController {
         addSubviews()
         setupConstraints()
     }
+    
     private func addSubviews(){
         view.addSubview(myNftTableView)
 
@@ -86,10 +94,7 @@ extension MyNFTViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyNFTTableViewCell", for: indexPath) as! MyNFTTableViewCell
         let currentNft = nftArray[indexPath.row]
-        cell.nftTitle.text = currentNft.title
-        cell.nftPrice.text = (currentNft.price ?? "") + " ETH"
-        cell.nftAuthor.text = currentNft.author
-
+        cell.configure(with: currentNft)
         return cell
     }
 }

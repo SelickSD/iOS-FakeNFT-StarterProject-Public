@@ -1,94 +1,78 @@
 
 import UIKit
 
-class MyNFTTableViewCell: UITableViewCell {
+final class MyNFTTableViewCell: UITableViewCell {
     
     private lazy var nftImage: UIImageView = {
-        let profileImage = UIImageView()
-        profileImage.translatesAutoresizingMaskIntoConstraints = false
-        profileImage.layer.cornerRadius = 12
-        profileImage.clipsToBounds = true
-        profileImage.image = UIImage(systemName: "person.crop.circle.fill")
-        return profileImage
+        let nftImage = UIImageView()
+        nftImage.translatesAutoresizingMaskIntoConstraints = false
+        nftImage.layer.cornerRadius = 12
+        nftImage.clipsToBounds = true
+        nftImage.image = UIImage(systemName: "person.crop.circle.fill")
+        nftImage.backgroundColor = .lightGray
+        return nftImage
     }()
+    
     private lazy var nftLikeImage: UIImageView = {
-        let profileImage = UIImageView()
-        profileImage.translatesAutoresizingMaskIntoConstraints = false
-        profileImage.clipsToBounds = true
-        profileImage.image = UIImage(systemName: "heart")
-        return profileImage
+        let nftLikeImage = UIImageView()
+        nftLikeImage.translatesAutoresizingMaskIntoConstraints = false
+        nftLikeImage.clipsToBounds = true
+        nftLikeImage.image = UIImage(systemName: "heart.fill")
+        nftLikeImage.tintColor = .white
+        return nftLikeImage
     }()
-    private lazy var starImage1: UIImageView = {
-        let starImage = UIImageView()
-        starImage.translatesAutoresizingMaskIntoConstraints = false
-        starImage.clipsToBounds = true
-        starImage.image = UIImage(systemName: "star.fill")
-        return starImage
+    
+    private lazy var stackViewStarImage: UIStackView = {
+        let stackViewStarImage = UIStackView()
+        stackViewStarImage.translatesAutoresizingMaskIntoConstraints = false
+        stackViewStarImage.axis = .horizontal
+        stackViewStarImage.distribution = .fillEqually
+        stackViewStarImage.alignment = .fill
+        stackViewStarImage.spacing = 0
+        stackViewStarImage.backgroundColor = .white
+        return stackViewStarImage
     }()
-    private lazy var starImage2: UIImageView = {
-        let starImage = UIImageView()
-        starImage.translatesAutoresizingMaskIntoConstraints = false
-        starImage.clipsToBounds = true
-        starImage.image = UIImage(systemName: "star.fill")
-        return starImage
+
+    private lazy var nftTitle: UILabel = {
+        let nftTitle = UILabel()
+        nftTitle.translatesAutoresizingMaskIntoConstraints = false
+        nftTitle.textColor = .black
+        nftTitle.font = .systemFont(ofSize: 17, weight: .bold)
+        return nftTitle
     }()
-    private lazy var starImage3: UIImageView = {
-        let starImage = UIImageView()
-        starImage.translatesAutoresizingMaskIntoConstraints = false
-        starImage.clipsToBounds = true
-        starImage.image = UIImage(systemName: "star.fill")
-        return starImage
+    
+    private lazy var nftAuthorOT: UILabel = {
+        let nftAuthorOT = UILabel()
+        nftAuthorOT.translatesAutoresizingMaskIntoConstraints = false
+        nftAuthorOT.textColor = .black
+        nftAuthorOT.text = "от"
+        nftAuthorOT.font = .systemFont(ofSize: 15, weight: .medium)
+        return nftAuthorOT
     }()
-    private lazy var starImage4: UIImageView = {
-        let starImage = UIImageView()
-        starImage.translatesAutoresizingMaskIntoConstraints = false
-        starImage.clipsToBounds = true
-        starImage.image = UIImage(systemName: "star.fill")
-        return starImage
+    
+    private lazy var nftAuthor: UILabel = {
+        let nftAuthor = UILabel()
+        nftAuthor.translatesAutoresizingMaskIntoConstraints = false
+        nftAuthor.textColor = .black
+        nftAuthor.font = .systemFont(ofSize: 13, weight: .medium)
+        return nftAuthor
     }()
-    private lazy var starImage5: UIImageView = {
-        let starImage = UIImageView()
-        starImage.translatesAutoresizingMaskIntoConstraints = false
-        starImage.clipsToBounds = true
-        starImage.image = UIImage(systemName: "star.fill")
-        return starImage
+    
+    private lazy var nftPriceName: UILabel = {
+        let nftPriceName = UILabel()
+        nftPriceName.translatesAutoresizingMaskIntoConstraints = false
+        nftPriceName.textColor = .black
+        nftPriceName.text = "Цена"
+        nftPriceName.font = .systemFont(ofSize: 13, weight: .medium)
+        return nftPriceName
     }()
-    lazy var nftTitle: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.font = .systemFont(ofSize: 17, weight: .bold)
-        return label
-    }()
-    lazy var nftAuthorOT: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.text = "от"
-        label.font = .systemFont(ofSize: 15, weight: .medium)
-        return label
-    }()
-    lazy var nftAuthor: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.font = .systemFont(ofSize: 13, weight: .medium)
-        return label
-    }()
-    lazy var nftPriceName: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.text = "Цена"
-        label.font = .systemFont(ofSize: 13, weight: .medium)
-        return label
-    }()
-    lazy var nftPrice: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.font = .systemFont(ofSize: 17, weight: .bold)
-        return label
+    
+    private lazy var nftPrice: UILabel = {
+        let nftPrice = UILabel()
+        nftPrice.translatesAutoresizingMaskIntoConstraints = false
+        nftPrice.textColor = .black
+        nftPrice.font = .systemFont(ofSize: 17, weight: .bold)
+        return nftPrice
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -96,19 +80,42 @@ class MyNFTTableViewCell: UITableViewCell {
         setupContentView()
         setupTableCellConstraints()
     }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        for subview in stackViewStarImage.arrangedSubviews{
+            stackViewStarImage.removeArrangedSubview(subview)
+            subview.removeFromSuperview()
+        }
+    }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
+    func configure(with nft: MyNFT){
+        nftTitle.text = nft.title
+        nftPrice.text = (nft.price ?? "*") + " ETH"
+        nftAuthor.text = nft.author
+        let likeColor: UIColor = nft.isLike == false ?  .white :  .red
+        nftLikeImage.tintColor = likeColor
+        addStarRating(from: nft.rating ?? 0)
+    }
+    
+    func addStarRating(from rating: Int){
+        for index in 0...4 {
+            stackViewStarImage.addArrangedSubview(UIImageView(image: UIImage(systemName:"star.fill")))
+            stackViewStarImage.arrangedSubviews[index].tintColor = UIColor(hexString: "#e1e3e6")
+            print(index)
+        }
+        for index in 0..<rating {
+            stackViewStarImage.arrangedSubviews[index].tintColor = UIColor.yellow
+        }
+    }
+    
     private func setupContentView(){
         contentView.addSubview(nftImage)
         nftImage.addSubview(nftLikeImage)
-        contentView.addSubview(starImage1)
-        contentView.addSubview(starImage2)
-        contentView.addSubview(starImage3)
-        contentView.addSubview(starImage4)
-        contentView.addSubview(starImage5)
+        contentView.addSubview(stackViewStarImage)
         contentView.addSubview(nftTitle)
         contentView.addSubview(nftAuthorOT)
         contentView.addSubview(nftAuthor)
@@ -125,43 +132,23 @@ class MyNFTTableViewCell: UITableViewCell {
             nftImage.heightAnchor.constraint(equalToConstant: 108),
             nftImage.widthAnchor.constraint(equalToConstant: 108),
             
-            nftLikeImage.topAnchor.constraint(equalTo: contentView.topAnchor),
-            nftLikeImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            nftLikeImage.heightAnchor.constraint(equalToConstant: 42),
-            nftLikeImage.widthAnchor.constraint(equalToConstant: 42),
+            nftLikeImage.topAnchor.constraint(equalTo: nftImage.topAnchor, constant: 12),
+            nftLikeImage.trailingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: -11.36),
+            nftLikeImage.heightAnchor.constraint(equalToConstant: 18),
+            nftLikeImage.widthAnchor.constraint(equalToConstant: 21),
             
             nftTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 23),
             nftTitle.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),
             
-            starImage1.topAnchor.constraint(equalTo: nftTitle.bottomAnchor, constant: 4),
-            starImage1.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),
-            starImage1.heightAnchor.constraint(equalToConstant: 12),
-            starImage1.widthAnchor.constraint(equalToConstant: 12),
+            stackViewStarImage.topAnchor.constraint(equalTo: nftTitle.bottomAnchor, constant: 4),
+            stackViewStarImage.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),
+            stackViewStarImage.heightAnchor.constraint(equalToConstant: 12),
+            stackViewStarImage.widthAnchor.constraint(equalToConstant: 68),
             
-            starImage2.topAnchor.constraint(equalTo: nftTitle.bottomAnchor, constant: 4),
-            starImage2.leadingAnchor.constraint(equalTo: starImage1.trailingAnchor),
-            starImage2.heightAnchor.constraint(equalToConstant: 12),
-            starImage2.widthAnchor.constraint(equalToConstant: 12),
-            
-            starImage3.topAnchor.constraint(equalTo: nftTitle.bottomAnchor, constant: 4),
-            starImage3.leadingAnchor.constraint(equalTo: starImage2.trailingAnchor),
-            starImage3.heightAnchor.constraint(equalToConstant: 12),
-            starImage3.widthAnchor.constraint(equalToConstant: 12),
-            
-            starImage4.topAnchor.constraint(equalTo: nftTitle.bottomAnchor, constant: 4),
-            starImage4.leadingAnchor.constraint(equalTo: starImage3.trailingAnchor),
-            starImage4.heightAnchor.constraint(equalToConstant: 12),
-            starImage4.widthAnchor.constraint(equalToConstant: 12),
-            
-            starImage5.topAnchor.constraint(equalTo: nftTitle.bottomAnchor, constant: 4),
-            starImage5.leadingAnchor.constraint(equalTo: starImage4.trailingAnchor),
-            starImage5.heightAnchor.constraint(equalToConstant: 12),
-            starImage5.widthAnchor.constraint(equalToConstant: 12),
-            
-            nftAuthorOT.topAnchor.constraint(equalTo: starImage1.bottomAnchor, constant: 4),
+            nftAuthorOT.topAnchor.constraint(equalTo: stackViewStarImage.bottomAnchor, constant: 4),
             nftAuthorOT.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),
             
-            nftAuthor.topAnchor.constraint(equalTo: starImage1.bottomAnchor, constant: 4),
+            nftAuthor.topAnchor.constraint(equalTo: stackViewStarImage.bottomAnchor, constant: 4),
             nftAuthor.leadingAnchor.constraint(equalTo: nftAuthorOT.trailingAnchor, constant: 4),
             
             nftPriceName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 33),

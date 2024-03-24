@@ -13,6 +13,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         profileImage.backgroundColor = .black
         return profileImage
     }()
+    
     private lazy var editNameTitle: UILabel = {
         let profileNameTitle = UILabel()
         profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -21,6 +22,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         profileNameTitle.text = "Имя"
         return profileNameTitle
     }()
+    
     private lazy var editNameTextField: UITextField = {
         let editNameTextField = UITextField()
         editNameTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -28,7 +30,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editNameTextField.backgroundColor = UIColor(hexString: "#F7F7F8")
         editNameTextField.font = .systemFont(ofSize: 17, weight: .medium)
         editNameTextField.textColor = .black
-        editNameTextField.layer.cornerRadius = 16
+        editNameTextField.layer.cornerRadius = 12
         editNameTextField.layer.borderWidth = 0
         editNameTextField.layer.masksToBounds = true
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: editNameTextField.frame.height))
@@ -41,6 +43,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editNameTextField.delegate = self
         return editNameTextField
     }()
+    
     private lazy var editDescriptionTitle: UILabel = {
         let profileNameTitle = UILabel()
         profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -49,24 +52,21 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         profileNameTitle.text = "Описание"
         return profileNameTitle
     }()
-    private lazy var editDescriptionTextField: UITextField = {
-        let editDescriptionTextField = UITextField()
-        editDescriptionTextField.translatesAutoresizingMaskIntoConstraints = false
-        editDescriptionTextField.placeholder = "Информация отсутствует"
-        editDescriptionTextField.backgroundColor = UIColor(hexString: "#F7F7F8")
-        editDescriptionTextField.font = .systemFont(ofSize: 17, weight: .medium)
-        editDescriptionTextField.textColor = .black
-        editDescriptionTextField.layer.cornerRadius = 16
-        editDescriptionTextField.layer.borderWidth = 0
-        editDescriptionTextField.layer.masksToBounds = true
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: editDescriptionTextField.frame.height))
-        editDescriptionTextField.leftView = paddingView
-        editDescriptionTextField.leftViewMode = .always
-        editDescriptionTextField.rightView = clearButton
-        editDescriptionTextField.rightViewMode = .whileEditing
-        editDescriptionTextField.delegate = self
-        return editDescriptionTextField
+    
+    private lazy var editDescriptionTextView: UITextView = {
+        let editDescriptionTextView = UITextView()
+        editDescriptionTextView.translatesAutoresizingMaskIntoConstraints = false
+        editDescriptionTextView.backgroundColor = UIColor(hexString: "#F7F7F8")
+        editDescriptionTextView.font = .systemFont(ofSize: 17, weight: .medium)
+        editDescriptionTextView.isScrollEnabled = true
+        editDescriptionTextView.textColor = .black
+        editDescriptionTextView.textContainerInset = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
+        editDescriptionTextView.layer.cornerRadius = 12
+        editDescriptionTextView.layer.borderWidth = 0
+        editDescriptionTextView.layer.masksToBounds = true
+        return editDescriptionTextView
     }()
+    
     private lazy var editSiteTitle: UILabel = {
         let profileNameTitle = UILabel()
         profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -75,6 +75,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         profileNameTitle.text = "Сайт"
         return profileNameTitle
     }()
+    
     private lazy var editSiteTextField: UITextField = {
         let editSiteTextField = UITextField()
         editSiteTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +83,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editSiteTextField.backgroundColor = UIColor(hexString: "#F7F7F8")
         editSiteTextField.font = .systemFont(ofSize: 17, weight: .medium)
         editSiteTextField.textColor = .black
-        editSiteTextField.layer.cornerRadius = 16
+        editSiteTextField.layer.cornerRadius = 12
         editSiteTextField.layer.borderWidth = 0
         editSiteTextField.layer.masksToBounds = true
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: editSiteTextField.frame.height))
@@ -93,6 +94,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editSiteTextField.delegate = self
         return editSiteTextField
     }()
+    
     private lazy var clearButton: UIButton = {
         let clearButton = UIButton(type: .custom)
         clearButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
@@ -106,25 +108,29 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        addGesture()
         setupNavBar()
         addSubviews()
         setupConstraints()
-
     }
     
     private func setupNavBar(){
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissController))
         navigationItem.rightBarButtonItem?.tintColor = .black
     }
+    
     @objc private func dismissController(){
         dismiss(animated: true)
     }
+    
     @objc func clearTextField(_ textField: UITextField) {
         activeTextField?.text = ""
     }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.activeTextField = textField
     }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.activeTextField = nil
     }
@@ -133,12 +139,21 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
     }
     
+    func addGesture(){
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(textViewShouldReturn))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func textViewShouldReturn(){
+        editDescriptionTextView.resignFirstResponder()
+    }
+    
     private func addSubviews(){
         view.addSubview(profileImage)
         view.addSubview(editNameTitle)
         view.addSubview(editNameTextField)
         view.addSubview(editDescriptionTitle)
-        view.addSubview(editDescriptionTextField)
+        view.addSubview(editDescriptionTextView)
         view.addSubview(editSiteTitle)
         view.addSubview(editSiteTextField)
     }
@@ -161,12 +176,12 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
             editDescriptionTitle.topAnchor.constraint(equalTo: editNameTextField.bottomAnchor, constant: 24),
             editDescriptionTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             
-            editDescriptionTextField.topAnchor.constraint(equalTo: editDescriptionTitle.bottomAnchor, constant: 8),
-            editDescriptionTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            editDescriptionTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            editDescriptionTextField.heightAnchor.constraint(equalToConstant: 132),
+            editDescriptionTextView.topAnchor.constraint(equalTo: editDescriptionTitle.bottomAnchor, constant: 8),
+            editDescriptionTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            editDescriptionTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            editDescriptionTextView.heightAnchor.constraint(equalToConstant: 132),
             
-            editSiteTitle.topAnchor.constraint(equalTo: editDescriptionTextField.bottomAnchor, constant: 24),
+            editSiteTitle.topAnchor.constraint(equalTo: editDescriptionTextView.bottomAnchor, constant: 24),
             editSiteTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             
             editSiteTextField.topAnchor.constraint(equalTo: editSiteTitle.bottomAnchor, constant: 8),
