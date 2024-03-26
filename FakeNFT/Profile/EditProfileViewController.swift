@@ -1,16 +1,21 @@
 
 import UIKit
 
+protocol EditProfileViewControllerDelegate: AnyObject {
+    func updateProfile(from profile: Profile)
+}
+
 class EditProfileViewController: UIViewController, UITextFieldDelegate {
     
     private var activeTextField: UITextField?
+    
+    weak var delegate: EditProfileViewControllerDelegate?
     
     private lazy var profileImage: UIImageView = {
         let profileImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         profileImage.layer.cornerRadius =  profileImage.frame.width / 2
         profileImage.clipsToBounds = true
-        profileImage.backgroundColor = .black
         return profileImage
     }()
     
@@ -104,6 +109,18 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
         return clearButton
     }()
+    init(state: Profile) {
+        super.init(nibName: nil, bundle: nil)
+        profileImage.image = state.profileImage
+        editNameTextField.text = state.profileName
+        editDescriptionTextView.text = state.profileDescription
+        editSiteTextField.text = state.profileSite
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,6 +137,10 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func dismissController(){
+        delegate?.updateProfile(from: Profile(profileImage: profileImage.image,
+                                              profileName: editNameTextField.text,
+                                              profileDescription: editDescriptionTextView.text,
+                                              profileSite: editSiteTextField.text))
         dismiss(animated: true)
     }
     
@@ -127,24 +148,24 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         activeTextField?.text = ""
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    internal func textFieldDidBeginEditing(_ textField: UITextField) {
         self.activeTextField = textField
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    internal func textFieldDidEndEditing(_ textField: UITextField) {
         self.activeTextField = nil
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
     }
     
-    func addGesture(){
+    private func addGesture(){
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(textViewShouldReturn))
         view.addGestureRecognizer(tapGesture)
     }
     
-    @objc func textViewShouldReturn(){
+    @objc private func textViewShouldReturn(){
         editDescriptionTextView.resignFirstResponder()
     }
     

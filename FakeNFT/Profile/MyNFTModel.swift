@@ -16,3 +16,10 @@ struct MyFavNFT {
     let price: String?
 }
 
+struct Profile {
+    let profileImage: UIImage?
+    let profileName: String?
+    let profileDescription: String?
+    let profileSite: String?
+}
+

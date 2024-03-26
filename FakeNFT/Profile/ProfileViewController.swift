@@ -4,6 +4,8 @@ import WebKit
 
 class ProfileViewController: UIViewController {
     
+    private let profile: Profile = .init(profileImage: UIImage(systemName: "person.crop.circle.fill"), profileName: "Alex",
+                                         profileDescription: "В правом верхнем углу экрана находится кнопка редактирования профиля. Нажав на нее, пользователь видит всплывающий экран, на котором может отредактировать имя пользователя, описание, сайт и ссылку на изображение. Загружать само изображение через приложение не нужно, обновляется только ссылка на изображение.", profileSite: "https://github.com/yandex-practicum-ios/fakenft")
     private let categories = ["Мои NFT (112)","Избранные NFT","О разработчике"]
     
     private lazy var profileImage: UIImageView = {
@@ -71,7 +73,12 @@ class ProfileViewController: UIViewController {
     }
     
     @objc private func editProfileInfo(){
-        let editProfileInfoNav = EditProfileViewController()
+        let editProfileInfoNav = EditProfileViewController(state: .init(
+            profileImage: profileImage.image,
+            profileName: profileNameTitle.text,
+            profileDescription: descriptionTextView.text,
+            profileSite: profileWebTitle.text))
+        editProfileInfoNav.delegate = self
         let navController = UINavigationController(rootViewController: editProfileInfoNav)
         present(navController, animated: true, completion: nil)
     }
@@ -162,4 +169,11 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
         }
     }
 }
-
+extension ProfileViewController: EditProfileViewControllerDelegate {
+    func updateProfile(from profile: Profile) {
+        profileImage.image = profile.profileImage
+        profileNameTitle.text = profile.profileName
+        descriptionTextView.text = profile.profileDescription
+        profileWebTitle.text = profile.profileSite
+    }
+}
