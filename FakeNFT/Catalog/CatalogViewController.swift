@@ -1,8 +1,8 @@
 
 import UIKit
-final class CatalogViewController: UIViewController {
+final class CatalogViewController: UIViewController, CatalogViewControlledProtocol {
 
-    private let servicesAssembly: ServicesAssembly
+    var presenter: CatalogPresenterProtocol?
 
     private lazy var catalogTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -15,19 +15,24 @@ final class CatalogViewController: UIViewController {
         return tableView
     }()
 
-    init(servicesAssembly: ServicesAssembly) {
-        self.servicesAssembly = servicesAssembly
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    init(servicesAssembly: ServicesAssembly) {
+//        self.servicesAssembly = servicesAssembly
+//        super.init(nibName: nil, bundle: nil)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter?.viewDidLoad()
         drawSelf()
         setupUIBarButtonItem()
+    }
+
+    func updateTableViewAnimated() {
+        
     }
 
     @objc private func sortTapped() {
