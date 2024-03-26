@@ -19,15 +19,24 @@ final class CatalogViewController: UIViewController {
     }
 
     @objc private func sortTapped() {
+        let sortTitle = NSLocalizedString("catalogView.sortTitle",
+                                                 comment: "Text displayed like sort alert description")
+        let sortName = NSLocalizedString("catalogView.sortName",
+                                                 comment: "Text displayed like sort alert description")
+        let sortNFT = NSLocalizedString("catalogView.sortNFT",
+                                                 comment: "Text displayed like sort alert description")
+        let sortClose = NSLocalizedString("catalogView.sortClose",
+                                                 comment: "Text displayed like sort alert description")
+        
         let alert = UIAlertController(
-            title: "Сортировка",
+            title: sortTitle,
             message: nil,
             preferredStyle: .actionSheet
         )
 
-        [UIAlertAction(title: "По названию", style: UIAlertAction.Style.default) {_ in },
-         UIAlertAction(title: "По количеству NFT", style: UIAlertAction.Style.default) {_ in },
-         UIAlertAction(title: "Закрыть", style: UIAlertAction.Style.cancel) {_ in }
+        [UIAlertAction(title: sortName, style: UIAlertAction.Style.default) {_ in },
+         UIAlertAction(title: sortNFT, style: UIAlertAction.Style.default) {_ in },
+         UIAlertAction(title: sortClose, style: UIAlertAction.Style.cancel) {_ in }
         ].forEach{
             alert.addAction($0)
         }
