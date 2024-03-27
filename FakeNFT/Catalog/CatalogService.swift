@@ -5,7 +5,7 @@
 //  Created by Сергей Денисенко on 26.03.2024.
 //
 import Foundation
-class ImagesListService {
+final class ImagesListService {
 
     static let didChangeNotification = Notification.Name(rawValue: "CatalogServiceDidChange")
     static let shared = ImagesListService()

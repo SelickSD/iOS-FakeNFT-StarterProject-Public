@@ -1,9 +1,7 @@
 
 import UIKit
 final class CatalogViewController: UIViewController, CatalogViewControlledProtocol {
-    
     var presenter: CatalogPresenterProtocol?
-    
     private lazy var catalogTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.dataSource = self
@@ -79,12 +77,6 @@ final class CatalogViewController: UIViewController, CatalogViewControlledProtoc
                                                             target: self,
                                                             action: #selector(sortTapped))
         navigationItem.rightBarButtonItem?.tintColor = .black
-    }
-    
-    private func configCell(for cell: CatalogTableViewCell, with indexPath: IndexPath) {
-        guard let presenter = self.presenter else {return}
-        presenter.getCell(cell: cell, index: indexPath.row)
-        catalogTableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
 
