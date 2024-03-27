@@ -17,7 +17,8 @@ class MyNFTViewController: UIViewController {
         MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, author: "Sarah", isLike: false, price: "1,54"),
         MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 3, author: "Sarah", isLike: false, price: "12,54"),
         MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 2, author: "Sarah", isLike: false, price: "14,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Stiphe", rating: 5, author: "Sarah", isLike: false, price: "20,54")]
+        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Stiphe", rating: 5, author: "Sarah", isLike: false, price: "20,54")
+    ]
     
     private lazy var myNftTableView: UITableView = {
         let profileTableView = UITableView()
@@ -30,6 +31,15 @@ class MyNFTViewController: UIViewController {
         profileTableView.register(MyNFTTableViewCell.self, forCellReuseIdentifier: "MyNFTTableViewCell")
         return profileTableView
     }()
+    private lazy var myNftPlaceHolderTitle: UILabel = {
+        let nftPlaceHolderTitle = UILabel()
+        nftPlaceHolderTitle.translatesAutoresizingMaskIntoConstraints = false
+        nftPlaceHolderTitle.textColor = .black
+        nftPlaceHolderTitle.text = "У Вас ещё нет NFT"
+        nftPlaceHolderTitle.font = .systemFont(ofSize: 17, weight: .bold)
+        nftPlaceHolderTitle.isHidden = true
+        return nftPlaceHolderTitle
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,11 +47,22 @@ class MyNFTViewController: UIViewController {
         setupNavBar()
         addSubviews()
         setupConstraints()
+        updatePlaceHolderNaf()
     }
     
     private func addSubviews(){
         view.addSubview(myNftTableView)
-        
+        view.addSubview(myNftPlaceHolderTitle)
+    }
+    
+    private func updatePlaceHolderNaf(){
+        if nftArray.count != 0 {
+            myNftTableView.isHidden = false
+            myNftPlaceHolderTitle.isHidden = true
+        } else {
+            myNftTableView.isHidden = true
+            myNftPlaceHolderTitle.isHidden = false
+        }
     }
     
     private func setupConstraints(){
@@ -49,7 +70,10 @@ class MyNFTViewController: UIViewController {
             myNftTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 108),
             myNftTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             myNftTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            myNftTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            myNftTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            myNftPlaceHolderTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            myNftPlaceHolderTitle.centerYAnchor.constraint(equalTo: view.centerYAnchor)
             
         ])
     }

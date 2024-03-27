@@ -25,7 +25,8 @@ class FavouritesViewController: UIViewController {
         MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 4, isLike: false, price: "14,54"),
         MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, isLike: false, price: "12,54"),
         MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 4, isLike: false, price: "10,54"),
-        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 4, isLike: false, price: "10,54"),]
+        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 4, isLike: false, price: "10,54"),
+    ]
     
     private lazy var nftCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -39,16 +40,38 @@ class FavouritesViewController: UIViewController {
         return nftCollectionView
     }()
     
+    private lazy var myFavNftPlaceHolderTitle: UILabel = {
+        let myFavNftPlaceHolderTitle = UILabel()
+        myFavNftPlaceHolderTitle.translatesAutoresizingMaskIntoConstraints = false
+        myFavNftPlaceHolderTitle.textColor = .black
+        myFavNftPlaceHolderTitle.text = "У Вас ещё нет избранных NFT"
+        myFavNftPlaceHolderTitle.font = .systemFont(ofSize: 17, weight: .bold)
+        myFavNftPlaceHolderTitle.isHidden = true
+        return myFavNftPlaceHolderTitle
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavBar()
         addSubviews()
         setupConstraints()
+        updatePlaceHolderNaf()
+    }
+    
+    private func updatePlaceHolderNaf(){
+        if nftFavArray.count != 0 {
+            nftCollectionView.isHidden = false
+            myFavNftPlaceHolderTitle.isHidden = true
+        } else {
+            nftCollectionView.isHidden = true
+            myFavNftPlaceHolderTitle.isHidden = false
+        }
     }
     
     private func addSubviews(){
         view.addSubview(nftCollectionView)
+        view.addSubview(myFavNftPlaceHolderTitle)
         
     }
     
@@ -67,8 +90,10 @@ class FavouritesViewController: UIViewController {
             nftCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 108),
             nftCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             nftCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            nftCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            nftCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
+            myFavNftPlaceHolderTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            myFavNftPlaceHolderTitle.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 }

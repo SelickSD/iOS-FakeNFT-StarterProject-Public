@@ -14,9 +14,28 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     private lazy var profileImage: UIImageView = {
         let profileImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
         profileImage.translatesAutoresizingMaskIntoConstraints = false
+        profileImage.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
         profileImage.layer.cornerRadius =  profileImage.frame.width / 2
         profileImage.clipsToBounds = true
         return profileImage
+    }()
+    
+    private lazy var editChangeImageLabel: UILabel = {
+        let editDescriptionTextView = UILabel()
+        editDescriptionTextView.translatesAutoresizingMaskIntoConstraints = false
+        editDescriptionTextView.font = .systemFont(ofSize: 10, weight: .medium)
+        editDescriptionTextView.textColor = .white
+        editDescriptionTextView.numberOfLines = 2
+        editDescriptionTextView.textAlignment = .center
+        editDescriptionTextView.lineBreakMode = .byWordWrapping
+        editDescriptionTextView.text = """
+           Сменить
+           фото
+           """
+        editDescriptionTextView.layer.cornerRadius = editDescriptionTextView.frame.width / 2
+        editDescriptionTextView.layer.borderWidth = 0
+        editDescriptionTextView.layer.masksToBounds = true
+        return editDescriptionTextView
     }()
     
     private lazy var editNameTitle: UILabel = {
@@ -171,6 +190,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     
     private func addSubviews(){
         view.addSubview(profileImage)
+        profileImage.addSubview(editChangeImageLabel)
         view.addSubview(editNameTitle)
         view.addSubview(editNameTextField)
         view.addSubview(editDescriptionTitle)
@@ -209,6 +229,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
             editSiteTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             editSiteTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             editSiteTextField.heightAnchor.constraint(equalToConstant: 44),
+            
+            editChangeImageLabel.topAnchor.constraint(equalTo: profileImage.topAnchor, constant: 23),
+            editChangeImageLabel.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 12),
+            editChangeImageLabel.heightAnchor.constraint(equalToConstant: 24),
+            editChangeImageLabel.widthAnchor.constraint(equalToConstant: 45),
             
         ])
     }
