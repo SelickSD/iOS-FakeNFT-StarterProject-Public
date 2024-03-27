@@ -1,9 +1,9 @@
 
 import UIKit
 final class CatalogViewController: UIViewController, CatalogViewControlledProtocol {
-
+    
     var presenter: CatalogPresenterProtocol?
-
+    
     private lazy var catalogTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.dataSource = self
@@ -14,53 +14,50 @@ final class CatalogViewController: UIViewController, CatalogViewControlledProtoc
         tableView.separatorStyle = .none
         return tableView
     }()
-
-//    init(servicesAssembly: ServicesAssembly) {
-//        self.servicesAssembly = servicesAssembly
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter?.viewDidLoad()
         drawSelf()
         setupUIBarButtonItem()
     }
-
+    
     func updateTableViewAnimated() {
+        guard let presenter = self.presenter else {return}
+        let count = presenter.getValueCount()
         
+        catalogTableView.performBatchUpdates {
+            let indexPath = (0 ..< count).map { IndexPath(item: $0, section: 0) }
+            self.catalogTableView.insertRows(at: indexPath, with: .automatic)
+        } completion: { _ in }
     }
-
+    
     @objc private func sortTapped() {
         let sortTitle = NSLocalizedString("catalogView.sortTitle",
-                                                 comment: "Text displayed like sort alert description")
+                                          comment: "Text displayed like sort alert description")
         let sortName = NSLocalizedString("catalogView.sortName",
-                                                 comment: "Text displayed like sort alert description")
+                                         comment: "Text displayed like sort alert description")
         let sortNFT = NSLocalizedString("catalogView.sortNFT",
-                                                 comment: "Text displayed like sort alert description")
+                                        comment: "Text displayed like sort alert description")
         let sortClose = NSLocalizedString("catalogView.sortClose",
-                                                 comment: "Text displayed like sort alert description")
+                                          comment: "Text displayed like sort alert description")
         
         let alert = UIAlertController(
             title: sortTitle,
             message: nil,
             preferredStyle: .actionSheet
         )
-
+        
         [UIAlertAction(title: sortName, style: UIAlertAction.Style.default) {_ in },
          UIAlertAction(title: sortNFT, style: UIAlertAction.Style.default) {_ in },
          UIAlertAction(title: sortClose, style: UIAlertAction.Style.cancel) {_ in }
         ].forEach{
             alert.addAction($0)
         }
-
+        
         present(alert, animated: true)
     }
-
+    
     private func drawSelf() {
         view.backgroundColor = .white
         [catalogTableView].forEach{
@@ -75,13 +72,19 @@ final class CatalogViewController: UIViewController, CatalogViewControlledProtoc
             catalogTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-
+    
     private func setupUIBarButtonItem() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Sort"),
-                                                           style: .plain,
-                                                           target: self,
-                                                           action: #selector(sortTapped))
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(sortTapped))
         navigationItem.rightBarButtonItem?.tintColor = .black
+    }
+    
+    private func configCell(for cell: CatalogTableViewCell, with indexPath: IndexPath) {
+        guard let presenter = self.presenter else {return}
+        presenter.getCell(cell: cell, index: indexPath.row)
+        catalogTableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
 
@@ -94,17 +97,20 @@ extension CatalogViewController: UITableViewDelegate {
 //MARK: -UITableViewDataSource
 extension CatalogViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        guard let presenter = self.presenter else {return 0}
+        return presenter.getValueCount()
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CatalogTableViewCell.identifier,
-                                                       for: indexPath) as? CatalogTableViewCell else {
+                                                       for: indexPath) as? CatalogTableViewCell,
+              let presenter = self.presenter else {
             return UITableViewCell()
         }
+        presenter.getCell(cell: cell, index: indexPath.row)
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 179
     }

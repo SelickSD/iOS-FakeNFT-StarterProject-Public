@@ -51,6 +51,7 @@
 		44E4C0BE2BB37795008081B9 /* URLSession + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0BD2BB37795008081B9 /* URLSession + Extensions.swift */; };
 		44E4C0C02BB377DE008081B9 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0BF2BB377DE008081B9 /* NetworkError.swift */; };
 		44E4C0C22BB379B8008081B9 /* URLRequest + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0C12BB379B8008081B9 /* URLRequest + Extensions.swift */; };
+		44E4C0C62BB487C6008081B9 /* CustomActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0C52BB487C6008081B9 /* CustomActivityIndicator.swift */; };
 		4B64F4052BAE003300117331 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B64F4042BAE003300117331 /* ProfileViewController.swift */; };
 		4B64F4072BAE005C00117331 /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B64F4062BAE005C00117331 /* CatalogViewController.swift */; };
 		4B64F40D2BAE00D700117331 /* ShoppingСartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B64F40C2BAE00D700117331 /* ShoppingСartViewController.swift */; };
@@ -124,6 +125,7 @@
 		44E4C0BD2BB37795008081B9 /* URLSession + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession + Extensions.swift"; sourceTree = "<group>"; };
 		44E4C0BF2BB377DE008081B9 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		44E4C0C12BB379B8008081B9 /* URLRequest + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest + Extensions.swift"; sourceTree = "<group>"; };
+		44E4C0C52BB487C6008081B9 /* CustomActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityIndicator.swift; sourceTree = "<group>"; };
 		4B64F4042BAE003300117331 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4B64F4062BAE005C00117331 /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
 		4B64F40C2BAE00D700117331 /* ShoppingСartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShoppingСartViewController.swift"; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 				44E4C0BD2BB37795008081B9 /* URLSession + Extensions.swift */,
 				44E4C0BF2BB377DE008081B9 /* NetworkError.swift */,
 				44E4C0C12BB379B8008081B9 /* URLRequest + Extensions.swift */,
+				44E4C0C52BB487C6008081B9 /* CustomActivityIndicator.swift */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";
@@ -622,6 +625,7 @@
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
 				0CFCB7402A78002A0009A829 /* NftService.swift in Sources */,
 				4B64F4052BAE003300117331 /* ProfileViewController.swift in Sources */,
+				44E4C0C62BB487C6008081B9 /* CustomActivityIndicator.swift in Sources */,
 				3F6806D529CBBEC700B4F915 /* NetworkTask.swift in Sources */,
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
 				3F68069729CBBAF100B4F915 /* AppDelegate.swift in Sources */,

@@ -25,7 +25,7 @@ extension URLRequest {
             request.url = components.url
         }
         if (needToken) {
-            request.setValue("Bearer 7939bfb7-0c9d-4a5e-8cb7-feb0cbaa99d9", forHTTPHeaderField: "Authorization")
+            request.setValue("7939bfb7-0c9d-4a5e-8cb7-feb0cbaa99d9", forHTTPHeaderField: "X-Practicum-Mobile-Token")
         }
         return request
     }

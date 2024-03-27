@@ -4,26 +4,17 @@
 //
 //  Created by Сергей Денисенко on 26.03.2024.
 //
-
 import UIKit
 import Kingfisher
-
-class CatalogPresenter: CatalogPresenterProtocol {
+final class CatalogPresenter: CatalogPresenterProtocol {
     weak var view: CatalogViewControlledProtocol?
 
-    private var imagesListServiceObserver: NSObjectProtocol?
-    private let imagesListService = ImagesListService.shared
+    private var catalogServiceObserver: NSObjectProtocol?
+    private let catalogService = ImagesListService.shared
     private var collections: [Collection] = []
 
-//    private lazy var dateFormatter: DateFormatter = {
-//        let formatter = DateFormatter()
-//        formatter.dateStyle = .long
-//        formatter.timeStyle = .none
-//        return formatter
-//    }()
-
     init() {
-        imagesListServiceObserver = NotificationCenter.default.addObserver(
+        catalogServiceObserver = NotificationCenter.default.addObserver(
             forName: ImagesListService.didChangeNotification,
             object: nil,
             queue: .main
@@ -41,92 +32,42 @@ class CatalogPresenter: CatalogPresenterProtocol {
     func viewDidLoad() {
         DispatchQueue.main.async {
             if self.collections.count == 0 {
-                self.imagesListService.fetchCollectionNextPage()
+                self.catalogService.fetchCollections()
             }
         }
     }
 
-//    func getUrlLargeString(index: Int) -> String {
-////        photos[index].largeImageURL
-//    }
-//
-//    func getUrlThumbString(index: Int) -> String {
-////        photos[index].thumbImageURL
-//    }
+    func getCell(cell: CatalogTableViewCell, index: Int) {
+        guard let urlCover = URL(string: collections[index].cover) else { return }
 
-//    func getCell(cell: ImagesListCell, index: Int) {
-//        guard let urlToResized = URL(string: photos[index].thumbImageURL) else { return }
-//        let url = URL.resizedImageURL(urlToResized: urlToResized)
-//
-//        let processor = RoundCornerImageProcessor(cornerRadius: 16)
-//        let options: KingfisherOptionsInfo = [
-//            .backgroundDecode,
-//            .processor(processor)
-//        ]
-//
-//        cell.cellImage.kf.indicatorType = .custom(indicator: CustomActivityIndicator())
-//        DispatchQueue.main.async {
-//            cell.cellImage.kf.setImage(
-//                with:url,
-//                placeholder: UIImage(named: "Stub"),
-//                options: options,
-//                completionHandler:{ [weak self] result in
-//                    guard self != nil else { return }
-//                    switch result {
-//                    case .success(let value):
-//                            cell.cellImage.image = value.image
-//                            cell.cellImage.contentMode = .scaleAspectFill
-//                            print(value.cacheType)
-//                    case .failure(let error):
-//                        print("Ошибка: \(error)")
-//                    }
-//                }
-//            )
-//        }
-//        cell.dataLabel.text = dateFormatter.string(from: photos[index].createdAt ?? Date())
-//        cell.likeButton.setImage(UIImage(named: photos[index].isLiked ? "FavoritesActive" : "FavoritesNoActive"), for: .normal)
-//    }
+        let processor = RoundCornerImageProcessor(cornerRadius: 16)
+        let options: KingfisherOptionsInfo = [
+            .backgroundDecode,
+            .processor(processor)
+        ]
 
-//    func getValueCount() -> (oldCount: Int, newCount: Int) {
-//        let oldCount = photos.count
-//        let newCount = imagesListService.photos.count
-//        photos = imagesListService.photos
-//
-//        return (oldCount, newCount)
-//    }
-//
-//    func photosCount() -> Int {
-//        photos.count
-//    }
-//
-//    func heightForRowAt(index: Int, top: CGFloat, bottom: CGFloat, imageViewWidth: CGFloat) -> CGFloat {
-//        guard index < imagesListService.photos.count else { return CGFloat() }
-//
-//        let image = photos[index]
-//        let imageWidth = image.size.width
-//        let scale = imageViewWidth / imageWidth
-//        let cellHeight = image.size.height * scale + top + bottom
-//        return cellHeight
-//    }
-//
-//    func checkNextPhoto(index: Int) {
-//        if index >= photos.count - 1 {
-//            imagesListService.fetchPhotosNextPage()
-//        }
-//    }
-//
-//    func changeLike(index: Int) {
-//
-//        let photo = photos[index]
-//        imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked, index: index) {[weak self] result in
-//            guard let self = self else {return}
-//            switch result {
-//            case .success(let photoID):
-//                print("LikeService обновил лайк в \(photoID)")
-//                self.view?.reloadDataTableView()
-//            case .failure:
-//                print("Что-то не получилось поставить лайк в \(index)")
-//            }
-//        }
-//    }
+        cell.mainImageView.kf.indicatorType = .custom(indicator: CustomActivityIndicator())
+        DispatchQueue.main.async {
+            cell.mainImageView.kf.setImage(
+                with:urlCover,
+                options: options,
+                completionHandler:{ [weak self] result in
+                    guard self != nil else { return }
+                    switch result {
+                    case .success(let value):
+                        cell.mainImageView.image = value.image
+                        cell.mainImageView.contentMode = .scaleAspectFill
+                    case .failure(let error):
+                        print("Ошибка: \(error)")
+                    }
+                }
+            )
+        }
+        cell.titleLabel.text = "\(collections[index].name)(\(collections[index].nfts.count))"
+    }
+
+    func getValueCount() -> Int {
+        collections = catalogService.collections
+        return collections.count
+    }
 }

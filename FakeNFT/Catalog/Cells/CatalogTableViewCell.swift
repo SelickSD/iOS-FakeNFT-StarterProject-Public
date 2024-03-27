@@ -7,15 +7,14 @@
 import UIKit
 final class CatalogTableViewCell: UITableViewCell {
     static let identifier = "CatalogTableViewCell"
-    private lazy var mainImageView: UIImageView = {
+    var mainImageView: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .lightGray
         view.layer.cornerRadius = 12
         return view
     }()
-    private lazy var titleLabel: UILabel = {
+    var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Text(12)"
         label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.numberOfLines = 0
         label.textAlignment = .center
