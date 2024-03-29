@@ -19,10 +19,9 @@ final class TabBarController: UITabBarController{
     }
 
     private func generateTabBar(){
-        let catalogViewController = CatalogViewController()
         let catalogPresenter = CatalogPresenter()
+        let catalogViewController = CatalogViewController(presenter: catalogPresenter)
         catalogPresenter.view = catalogViewController
-        catalogViewController.presenter = catalogPresenter
 
         let profileNav = UINavigationController(rootViewController: ProfileViewController())
         let catalogNav = UINavigationController(rootViewController: catalogViewController)

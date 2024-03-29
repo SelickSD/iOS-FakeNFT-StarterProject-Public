@@ -6,6 +6,5 @@
 //
 import Foundation
 protocol CatalogViewControlledProtocol: AnyObject {
-    var presenter: CatalogPresenterProtocol? { get set }
     func updateTableViewAnimated()
 }

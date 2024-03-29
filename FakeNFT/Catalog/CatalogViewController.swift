@@ -1,7 +1,7 @@
 
 import UIKit
 final class CatalogViewController: UIViewController, CatalogViewControlledProtocol {
-    var presenter: CatalogPresenterProtocol?
+    private let presenter: CatalogPresenterProtocol
     private lazy var catalogTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.dataSource = self
@@ -15,13 +15,21 @@ final class CatalogViewController: UIViewController, CatalogViewControlledProtoc
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter?.viewDidLoad()
+        presenter.viewDidLoad()
         drawSelf()
         setupUIBarButtonItem()
     }
 
+    init(presenter: CatalogPresenterProtocol) {
+        self.presenter = presenter
+        super .init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func updateTableViewAnimated() {
-        guard let presenter = self.presenter else {return}
         let count = presenter.getValueCount()
 
         catalogTableView.performBatchUpdates {
@@ -89,13 +97,11 @@ extension CatalogViewController: UITableViewDelegate {
 //MARK: -UITableViewDataSource
 extension CatalogViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let presenter = self.presenter else {return 0}
         return presenter.getValueCount()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let presenter = self.presenter,
-              let image = presenter.getImagesForCell(index: indexPath.row),
+        guard let image = presenter.getImagesForCell(index: indexPath.row),
               let cell = tableView.dequeueReusableCell(withIdentifier: CatalogTableViewCell.identifier,
                                                        for: indexPath) as? CatalogTableViewCell else {
             return UITableViewCell()
