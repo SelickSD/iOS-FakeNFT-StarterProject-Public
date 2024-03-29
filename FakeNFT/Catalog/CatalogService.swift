@@ -33,7 +33,7 @@ final class ImagesListService {
                 switch result {
                 case .success(let body):
                     self.collections += body.map {
-                        Collection(createdAt: self.formatDate(dateString: $0.createdAt),
+                        Collection(createdAt: Date().formatDate(dateString: $0.createdAt),
                                    name: $0.name,
                                    cover: $0.cover,
                                    nfts: $0.nfts,
@@ -46,19 +46,12 @@ final class ImagesListService {
                         object: self,
                         userInfo: ["collections": self.collections])
                     self.task = nil
-                case .failure(let error):
-                    print("Ошибка \(error)")
+                case .failure( _):
                     self.task = nil
                 }
             }
         }
         self.task = task
         task.resume()
-    }
-
-    private func formatDate(dateString: String) -> Date? {
-        let dateFormatter = ISO8601DateFormatter()
-        let date = dateFormatter.date(from: dateString)
-        return date
     }
 }
