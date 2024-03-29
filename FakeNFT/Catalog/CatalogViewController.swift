@@ -12,24 +12,24 @@ final class CatalogViewController: UIViewController, CatalogViewControlledProtoc
         tableView.separatorStyle = .none
         return tableView
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter?.viewDidLoad()
         drawSelf()
         setupUIBarButtonItem()
     }
-    
+
     func updateTableViewAnimated() {
         guard let presenter = self.presenter else {return}
         let count = presenter.getValueCount()
-        
+
         catalogTableView.performBatchUpdates {
             let indexPath = (0 ..< count).map { IndexPath(item: $0, section: 0) }
             self.catalogTableView.insertRows(at: indexPath, with: .automatic)
         } completion: { _ in }
     }
-    
+
     @objc private func sortTapped() {
         let sortTitle = NSLocalizedString("catalogView.sortTitle",
                                           comment: "Text displayed like sort alert description")
@@ -39,30 +39,30 @@ final class CatalogViewController: UIViewController, CatalogViewControlledProtoc
                                         comment: "Text displayed like sort alert description")
         let sortClose = NSLocalizedString("catalogView.sortClose",
                                           comment: "Text displayed like sort alert description")
-        
+
         let alert = UIAlertController(
             title: sortTitle,
             message: nil,
             preferredStyle: .actionSheet
         )
-        
+
         [UIAlertAction(title: sortName, style: UIAlertAction.Style.default) {_ in },
          UIAlertAction(title: sortNFT, style: UIAlertAction.Style.default) {_ in },
          UIAlertAction(title: sortClose, style: UIAlertAction.Style.cancel) {_ in }
         ].forEach{
             alert.addAction($0)
         }
-        
+
         present(alert, animated: true)
     }
-    
+
     private func drawSelf() {
         view.backgroundColor = .white
         [catalogTableView].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
-        
+
         NSLayoutConstraint.activate([
             catalogTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             catalogTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -70,7 +70,7 @@ final class CatalogViewController: UIViewController, CatalogViewControlledProtoc
             catalogTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
+
     private func setupUIBarButtonItem() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Sort"),
                                                             style: .plain,
@@ -92,14 +92,16 @@ extension CatalogViewController: UITableViewDataSource {
         guard let presenter = self.presenter else {return 0}
         return presenter.getValueCount()
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CatalogTableViewCell.identifier,
-                                                       for: indexPath) as? CatalogTableViewCell,
-              let presenter = self.presenter else {
+        guard let presenter = self.presenter,
+              let image = presenter.getImagesForCell(index: indexPath.row),
+              let cell = tableView.dequeueReusableCell(withIdentifier: CatalogTableViewCell.identifier,
+                                                       for: indexPath) as? CatalogTableViewCell else {
             return UITableViewCell()
         }
-        presenter.getCell(cell: cell, index: indexPath.row)
+
+        cell.configCell(image: image, text: presenter.getLabelText(index: indexPath.row))
         return cell
     }
     

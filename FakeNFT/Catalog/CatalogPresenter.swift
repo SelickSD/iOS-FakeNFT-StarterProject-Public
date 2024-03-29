@@ -8,11 +8,11 @@ import UIKit
 import Kingfisher
 final class CatalogPresenter: CatalogPresenterProtocol {
     weak var view: CatalogViewControlledProtocol?
-
+    
     private var catalogServiceObserver: NSObjectProtocol?
     private let catalogService = ImagesListService.shared
     private var collections: [Collection] = []
-
+    
     init() {
         catalogServiceObserver = NotificationCenter.default.addObserver(
             forName: ImagesListService.didChangeNotification,
@@ -24,44 +24,47 @@ final class CatalogPresenter: CatalogPresenterProtocol {
             self.view?.updateTableViewAnimated()
         }
     }
-
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-
+    
     func viewDidLoad() {
         if self.collections.count == 0 {
             self.catalogService.fetchCollections()
         }
     }
-
-    func getCell(cell: CatalogTableViewCell, index: Int) {
-        guard let urlCover = URL(string: collections[index].cover) else { return }
-
+    
+    func getImagesForCell(index: Int) -> UIImageView? {
+        guard let urlCover = URL(string: collections[index].cover) else { return nil }
+        let imageView = UIImageView()
         let processor = RoundCornerImageProcessor(cornerRadius: 16)
         let options: KingfisherOptionsInfo = [
             .backgroundDecode,
             .processor(processor)
         ]
-
-        cell.mainImageView.kf.indicatorType = .custom(indicator: CustomActivityIndicator())
-        cell.mainImageView.kf.setImage(
+        imageView.kf.indicatorType = .custom(indicator: CustomActivityIndicator())
+        imageView.kf.setImage(
             with:urlCover,
             options: options,
             completionHandler:{ [weak self] result in
-                guard let self else { return }
+                guard self != nil else { return }
                 switch result {
                 case .success(let value):
-                    cell.mainImageView.image = value.image
-                    cell.mainImageView.contentMode = .scaleAspectFill
+                    imageView.image = value.image
                 case .failure(let error):
                     print("Ошибка: \(error)")
                 }
             }
         )
-        cell.titleLabel.text = "\(collections[index].name)(\(collections[index].nfts.count))"
+        return imageView
     }
-
+    
+    func getLabelText(index: Int) -> String {
+        let text = "\(collections[index].name)(\(collections[index].nfts.count))"
+        return text
+    }
+    
     func getValueCount() -> Int {
         collections = catalogService.collections
         return collections.count

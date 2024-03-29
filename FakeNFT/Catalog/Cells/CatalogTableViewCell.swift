@@ -7,13 +7,9 @@
 import UIKit
 final class CatalogTableViewCell: UITableViewCell {
     static let identifier = "CatalogTableViewCell"
-    var mainImageView: UIImageView = {
-        let view = UIImageView()
-        view.backgroundColor = .lightGray
-        view.layer.cornerRadius = 12
-        return view
-    }()
-    var titleLabel: UILabel = {
+
+    private lazy var mainImageView = UIImageView()
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.numberOfLines = 0
@@ -23,16 +19,24 @@ final class CatalogTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.selectionStyle = .none
-        self.clipsToBounds = true
-        setupView()
+
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    func configCell(image: UIImageView, text: String) {
+        mainImageView = image
+        mainImageView.contentMode = .scaleAspectFill
+        mainImageView.layer.cornerRadius = 12
+        titleLabel.text = text
+        setupView()
+    }
+
     private func setupView() {
+        self.selectionStyle = .none
+        self.clipsToBounds = true
         [mainImageView, titleLabel].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.clipsToBounds = true
