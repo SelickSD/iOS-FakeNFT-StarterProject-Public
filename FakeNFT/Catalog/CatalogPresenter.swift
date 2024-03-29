@@ -45,22 +45,20 @@ final class CatalogPresenter: CatalogPresenterProtocol {
         ]
 
         cell.mainImageView.kf.indicatorType = .custom(indicator: CustomActivityIndicator())
-        DispatchQueue.main.async {
-            cell.mainImageView.kf.setImage(
-                with:urlCover,
-                options: options,
-                completionHandler:{ [weak self] result in
-                    guard self != nil else { return }
-                    switch result {
-                    case .success(let value):
-                        cell.mainImageView.image = value.image
-                        cell.mainImageView.contentMode = .scaleAspectFill
-                    case .failure(let error):
-                        print("Ошибка: \(error)")
-                    }
+        cell.mainImageView.kf.setImage(
+            with:urlCover,
+            options: options,
+            completionHandler:{ [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let value):
+                    cell.mainImageView.image = value.image
+                    cell.mainImageView.contentMode = .scaleAspectFill
+                case .failure(let error):
+                    print("Ошибка: \(error)")
                 }
-            )
-        }
+            }
+        )
         cell.titleLabel.text = "\(collections[index].name)(\(collections[index].nfts.count))"
     }
 
