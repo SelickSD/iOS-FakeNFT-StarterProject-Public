@@ -30,10 +30,8 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     }
 
     func viewDidLoad() {
-        DispatchQueue.main.async {
-            if self.collections.count == 0 {
-                self.catalogService.fetchCollections()
-            }
+        if self.collections.count == 0 {
+            self.catalogService.fetchCollections()
         }
     }
 
