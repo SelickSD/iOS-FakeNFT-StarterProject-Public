@@ -4,7 +4,8 @@
 //
 //  Created by Сергей Денисенко on 27.03.2024.
 //
-import Foundation
+import UIKit
 protocol CatalogViewControlledProtocol: AnyObject {
     func updateTableViewAnimated()
+    func showAlert(alert: UIAlertController)
 }

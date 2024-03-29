@@ -11,4 +11,5 @@ protocol CatalogPresenterProtocol {
     func getImagesForCell(index: Int) -> UIImageView?
     func getLabelText(index: Int) -> String
     func viewDidLoad()
+    func showSortAlert()
 }
