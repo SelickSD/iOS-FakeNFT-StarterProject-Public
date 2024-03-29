@@ -53,6 +53,7 @@
 		44E4C0C22BB379B8008081B9 /* URLRequest + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0C12BB379B8008081B9 /* URLRequest + Extensions.swift */; };
 		44E4C0C62BB487C6008081B9 /* CustomActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0C52BB487C6008081B9 /* CustomActivityIndicator.swift */; };
 		44E4C1512BB739DE008081B9 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C1502BB739DE008081B9 /* Date + Extension.swift */; };
+		44E4C1532BB74817008081B9 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C1522BB74817008081B9 /* UIBlockingProgressHUD.swift */; };
 		4B64F4052BAE003300117331 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B64F4042BAE003300117331 /* ProfileViewController.swift */; };
 		4B64F4072BAE005C00117331 /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B64F4062BAE005C00117331 /* CatalogViewController.swift */; };
 		4B64F40D2BAE00D700117331 /* ShoppingСartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B64F40C2BAE00D700117331 /* ShoppingСartViewController.swift */; };
@@ -128,6 +129,7 @@
 		44E4C0C12BB379B8008081B9 /* URLRequest + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest + Extensions.swift"; sourceTree = "<group>"; };
 		44E4C0C52BB487C6008081B9 /* CustomActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityIndicator.swift; sourceTree = "<group>"; };
 		44E4C1502BB739DE008081B9 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
+		44E4C1522BB74817008081B9 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		4B64F4042BAE003300117331 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4B64F4062BAE005C00117331 /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
 		4B64F40C2BAE00D700117331 /* ShoppingСartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShoppingСartViewController.swift"; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 				44E4C0B92BB3723E008081B9 /* CollectionResult.swift */,
 				44E4C0BF2BB377DE008081B9 /* NetworkError.swift */,
 				44E4C0C52BB487C6008081B9 /* CustomActivityIndicator.swift */,
+				44E4C1522BB74817008081B9 /* UIBlockingProgressHUD.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -649,6 +652,7 @@
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				44E4C0B02BB1CB49008081B9 /* CatalogTableViewCell.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
+				44E4C1532BB74817008081B9 /* UIBlockingProgressHUD.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
 				0CFCB7402A78002A0009A829 /* NftService.swift in Sources */,
 				4B64F4052BAE003300117331 /* ProfileViewController.swift in Sources */,

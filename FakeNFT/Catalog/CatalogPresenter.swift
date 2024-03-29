@@ -43,7 +43,6 @@ final class CatalogPresenter: CatalogPresenterProtocol {
             .backgroundDecode,
             .processor(processor)
         ]
-        imageView.kf.indicatorType = .custom(indicator: CustomActivityIndicator())
         imageView.kf.setImage(
             with:urlCover,
             options: options,

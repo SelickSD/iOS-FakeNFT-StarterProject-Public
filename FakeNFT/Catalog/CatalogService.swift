@@ -18,6 +18,7 @@ final class ImagesListService {
     private init() {}
 
     func fetchCollections() {
+        UIBlockingProgressHUD.show()
         assert(Thread.isMainThread)
 
         if task != nil {
@@ -46,8 +47,10 @@ final class ImagesListService {
                         object: self,
                         userInfo: ["collections": self.collections])
                     self.task = nil
+                    UIBlockingProgressHUD.dismiss()
                 case .failure( _):
                     self.task = nil
+                    UIBlockingProgressHUD.dismiss()
                 }
             }
         }
