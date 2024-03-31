@@ -23,3 +23,12 @@ struct Profile {
     let profileSite: String?
 }
 
+struct ProfileResult: Codable {
+    let name: String
+    let avatar: String
+    let description: String
+    let website: String
+    let nfts: [String]
+    let likes: [String]
+    let id: String
+}

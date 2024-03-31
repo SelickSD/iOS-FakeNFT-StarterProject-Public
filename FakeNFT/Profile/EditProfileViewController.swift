@@ -11,11 +11,14 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     
     weak var delegate: EditProfileViewControllerDelegate?
     
+    private let network = NetworkNFTService()
+    
     private lazy var profileImage: UIImageView = {
         let profileImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         profileImage.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
         profileImage.layer.cornerRadius =  profileImage.frame.width / 2
+        profileImage.isUserInteractionEnabled = true
         profileImage.clipsToBounds = true
         return profileImage
     }()
@@ -35,6 +38,9 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editDescriptionTextView.layer.cornerRadius = editDescriptionTextView.frame.width / 2
         editDescriptionTextView.layer.borderWidth = 0
         editDescriptionTextView.layer.masksToBounds = true
+        editDescriptionTextView.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(loadingNewImage))
+        editDescriptionTextView.addGestureRecognizer(tapGesture)
         return editDescriptionTextView
     }()
     
@@ -144,10 +150,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        addGesture()
         setupNavBar()
         addSubviews()
         setupConstraints()
+        addGesture()
+        addGestureLoadingNewImage()
     }
     
     private func setupNavBar(){
@@ -156,11 +163,14 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func dismissController(){
-        delegate?.updateProfile(from: Profile(profileImage: profileImage.image,
-                                              profileName: editNameTextField.text,
-                                              profileDescription: editDescriptionTextView.text,
-                                              profileSite: editSiteTextField.text))
-        dismiss(animated: true)
+        if editNameTextField.text != "", editDescriptionTextView.text != "", editSiteTextField.text != ""{
+            delegate?.updateProfile(from: Profile(profileImage: profileImage.image,
+                                                  profileName: editNameTextField.text,
+                                                  profileDescription: editDescriptionTextView.text,
+                                                  profileSite: editSiteTextField.text))
+            dismiss(animated: true)
+        }
+  
     }
     
     @objc func clearTextField(_ textField: UITextField) {
@@ -179,13 +189,49 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
     }
     
+    private func addGestureLoadingNewImage(){
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(loadingNewImage))
+        tapGesture.cancelsTouchesInView = false
+        editChangeImageLabel.addGestureRecognizer(tapGesture)
+     
+    }
+    
+    @objc private func loadingNewImage(){
+        print("загрузить изображение")
+        let alertController = UIAlertController(title: .none, message: "Хотите загрузить новое изображение?", preferredStyle: .alert)
+        alertController.addTextField { textField in
+            textField.placeholder = "Введите url изображение .jpg"
+        }
+        let downloadImage = UIAlertAction(title: "Загрузить новое изображение?", style: .default) { _ in
+            UIBlockingProgressHUD.show()
+            guard let textField = alertController.textFields?.first else {return}
+            if let text = textField.text{
+                DispatchQueue.main.async {
+                    self.network.loadImageFromUrl(from: text){ imageView in
+                        self.profileImage.image = imageView?.image ?? UIImage(systemName: "")
+                        UIBlockingProgressHUD.dismiss()
+//                    https://beautyhack.ru/assets/images/2019/10/phoenix_txt.jpg
+                    }
+                }}
+        }
+        
+        let cancel = UIAlertAction(title: "Отменить", style: .destructive)
+        
+        alertController.addAction(downloadImage)
+        alertController.addAction(cancel)
+        
+        self.present(alertController, animated: true)
+    }
+    
     private func addGesture(){
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(textViewShouldReturn))
+        tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
     }
     
     @objc private func textViewShouldReturn(){
         editDescriptionTextView.resignFirstResponder()
+        print("сброс")
     }
     
     private func addSubviews(){
