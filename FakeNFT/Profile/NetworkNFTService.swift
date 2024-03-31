@@ -62,7 +62,9 @@ class NetworkNFTService {
                         let profile = Profile(profileImage: profileImageView.image,
                                               profileName: profileResult.name,
                                               profileDescription: profileResult.description,
-                                              profileSite: profileResult.website)
+                                              profileSite: profileResult.website,
+                                              myNft: profileResult.nfts,
+                                              myFavNft: profileResult.likes)
                         completion(.success(profile))
                         UIBlockingProgressHUD.dismiss()
                     }}

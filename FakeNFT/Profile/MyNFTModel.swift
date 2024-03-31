@@ -21,6 +21,8 @@ struct Profile {
     let profileName: String?
     let profileDescription: String?
     let profileSite: String?
+    let myNft: [String]?
+    let myFavNft: [String]?
 }
 
 struct ProfileResult: Codable {
@@ -31,4 +33,9 @@ struct ProfileResult: Codable {
     let nfts: [String]
     let likes: [String]
     let id: String
+}
+
+struct nftFromID: Codable {
+    let id: String
+    let nft: [String]
 }

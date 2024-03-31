@@ -167,7 +167,9 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
             delegate?.updateProfile(from: Profile(profileImage: profileImage.image,
                                                   profileName: editNameTextField.text,
                                                   profileDescription: editDescriptionTextView.text,
-                                                  profileSite: editSiteTextField.text))
+                                                  profileSite: editSiteTextField.text,
+                                                  myNft: [],
+                                                 myFavNft: []))
             dismiss(animated: true)
         }
   

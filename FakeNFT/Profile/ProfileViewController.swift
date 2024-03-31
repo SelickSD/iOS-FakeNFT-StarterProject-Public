@@ -84,6 +84,8 @@ class ProfileViewController: UIViewController {
                     self.profileNameTitle.text = profile.profileName
                     self.descriptionTextView.text = profile.profileDescription
                     self.profileWebTitle.text = profile.profileSite
+                    self.myNftArray = profile.myNft ?? []
+                    self.myFavNftArray = profile.myFavNft ?? []
                     self.navigationItem.rightBarButtonItem?.isEnabled = true
                 }
 
@@ -96,7 +98,10 @@ class ProfileViewController: UIViewController {
             profileImage: profileImage.image,
             profileName: profileNameTitle.text,
             profileDescription: descriptionTextView.text,
-            profileSite: profileWebTitle.text))
+            profileSite: profileWebTitle.text,
+            myNft: [],
+            myFavNft: []
+))
         editProfileInfoNav.delegate = self
         let navController = UINavigationController(rootViewController: editProfileInfoNav)
         present(navController, animated: true, completion: nil)
