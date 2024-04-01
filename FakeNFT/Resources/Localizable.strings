@@ -4,3 +4,10 @@
 "Error.unknown" = "Произошла неизвестная ошибка";
 "Error.repeat" = "Повторить";
 "Error.title" = "Ошибка";
+
+//MARK: CatalogViewController
+"catalogView.sortTitle" = "Сортировка";
+"catalogView.sortName" = "По названию";
+"catalogView.sortNFT" = "По количеству NFT";
+"catalogView.sortClose" = "Закрыть";
+
