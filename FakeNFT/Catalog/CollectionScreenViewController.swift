@@ -288,8 +288,8 @@ extension CollectionScreenViewController: UICollectionViewDelegateFlowLayout {
 
     private var params: GeometricParams {
         return GeometricParams(cellCount: 3,
-                               leftInset: 10,
-                               rightInset: 10,
+                               leftInset: 0,
+                               rightInset: 0,
                                cellSpacing: 10)
     }
 
