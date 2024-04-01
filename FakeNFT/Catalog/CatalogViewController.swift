@@ -73,6 +73,8 @@ final class CatalogViewController: UIViewController, CatalogViewControlledProtoc
 //MARK: -UITableViewDelegate
 extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = CollectionScreenViewController()
+        self.present(vc, animated: true)
     }
 }
 
