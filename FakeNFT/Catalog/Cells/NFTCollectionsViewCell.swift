@@ -85,6 +85,7 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
     }
 
     private func drawSelf() {
+        maneView.layer.cornerRadius = 12
         [maneView, likeButton, addToBasketButton,
          ratingStackView, nameLabel, costLabel].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false

@@ -85,6 +85,10 @@ final class CollectionScreenViewController: UIViewController {
 
     private func drawSelf() {
         view.backgroundColor = .white
+
+        mainImageView.layer.cornerRadius = 12
+        mainImageView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+
         [mainImageView, titleLabel, authorLabel,
          linkButton, descriptionLabel, backgroundScrollView].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
