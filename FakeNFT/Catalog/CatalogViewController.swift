@@ -73,8 +73,11 @@ final class CatalogViewController: UIViewController, CatalogViewControlledProtoc
 //MARK: -UITableViewDelegate
 extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = CollectionScreenViewController()
-        self.present(vc, animated: true)
+        let collectionsViewController = CollectionScreenViewController()
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.navigationItem.backBarButtonItem?.tintColor = .black
+        self.navigationController?.pushViewController(collectionsViewController, animated: true)
+
     }
 }
 
