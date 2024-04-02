@@ -9,24 +9,6 @@ final class CollectionScreenViewController: UIViewController {
 
     private lazy var mainImageView = UIImageView()
 
-    private lazy var labelStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 20
-        stack.distribution = .fill
-        stack.alignment = .top
-        return stack
-    }()
-
-    private lazy var authorStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.spacing = 4
-        stack.distribution = .fill
-        stack.alignment = .leading
-        return stack
-    }()
-
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
@@ -43,13 +25,17 @@ final class CollectionScreenViewController: UIViewController {
         return label
     }()
 
-    private lazy var linkLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        label.numberOfLines = 0
-        label.textAlignment = .left
-        label.textColor = UIColor.init(hexString: "#0A84FF")
-        return label
+    private lazy var linkButton: UIButton = {
+        let button = UIButton()
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.clipsToBounds = true
+        button.setTitleColor(UIColor.init(hexString: "#0A84FF"), for: .normal)
+//        button.backgroundColor = UIColor.init(hexString: "#1A1B22")
+//        button.layer.cornerRadius = 16
+        button.setTitle("Jhon Doe", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        button.addTarget(self, action: #selector(didTapLinkButton), for: .touchUpInside)
+        return button
     }()
 
     private lazy var descriptionLabel: UILabel = {
@@ -93,26 +79,17 @@ final class CollectionScreenViewController: UIViewController {
         drawSelf()
     }
 
+    @objc private func didTapLinkButton() {
+
+    }
+
     private func drawSelf() {
         view.backgroundColor = .white
-        [mainImageView, titleLabel, labelStackView,
-         descriptionLabel, backgroundScrollView].forEach{
+        [mainImageView, titleLabel, authorLabel,
+         linkButton, descriptionLabel, backgroundScrollView].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.clipsToBounds = true
             view.addSubview($0)
-        }
-
-        [authorStackView].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.clipsToBounds = true
-            labelStackView.addArrangedSubview($0)
-        }
-
-        [authorLabel,
-         linkLabel].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.clipsToBounds = true
-            authorStackView.addArrangedSubview($0)
         }
 
         [contentView, collectionsCollectionView].forEach{
@@ -131,7 +108,6 @@ final class CollectionScreenViewController: UIViewController {
         titleLabel.text = "Peach"
         authorLabel.text = "Автор коллекции:"
         descriptionLabel.text = "Персиковый - как облака над закатным солнцем в океане. В этой коллекции совмещены тогательная нежность и живая игривость сказочных зифирных зверей"
-        linkLabel.text = "Jhon Doe"
 
         NSLayoutConstraint.activate([
             mainImageView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -143,10 +119,14 @@ final class CollectionScreenViewController: UIViewController {
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
 
-            labelStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            labelStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            labelStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            labelStackView.heightAnchor.constraint(equalToConstant: 64),
+            authorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            authorLabel.widthAnchor.constraint(equalToConstant: 112),
+
+            linkButton.heightAnchor.constraint(equalToConstant: 20),
+            linkButton.leadingAnchor.constraint(equalTo: authorLabel.trailingAnchor, constant: 4),
+            linkButton.widthAnchor.constraint(equalToConstant: 66),
+            linkButton.centerYAnchor.constraint(equalTo: authorLabel.centerYAnchor),
 
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
