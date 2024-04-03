@@ -7,15 +7,15 @@
 import UIKit
 import Kingfisher
 final class CatalogPresenter: CatalogPresenterProtocol {
-    weak var view: CatalogViewControlledProtocol?
+    weak var view: CatalogViewControllerProtocol?
 
     private var catalogServiceObserver: NSObjectProtocol?
-    private let catalogService = ImagesListService.shared
+    private let catalogService = CatalogService.shared
     private var collections: [Collection] = []
 
     init() {
         catalogServiceObserver = NotificationCenter.default.addObserver(
-            forName: ImagesListService.didChangeNotification,
+            forName: CatalogService.didChangeNotification,
             object: nil,
             queue: .main
         ) { [weak self] _ in
@@ -33,6 +33,11 @@ final class CatalogPresenter: CatalogPresenterProtocol {
         if self.collections.count == 0 {
             self.catalogService.fetchCollections()
         }
+    }
+
+    func getCollectionsElement(index: Int) -> Collection? {
+        guard index <= collections.count else { return nil}
+        return collections[index]
     }
 
     func getImagesForCell(index: Int) -> UIImageView? {

@@ -6,10 +6,11 @@
 //
 import UIKit
 protocol CatalogPresenterProtocol {
-    var view: CatalogViewControlledProtocol? { get set }
+    var view: CatalogViewControllerProtocol? { get set }
     func getValueCount() -> Int
     func getImagesForCell(index: Int) -> UIImageView?
     func getLabelText(index: Int) -> String
     func viewDidLoad()
     func showSortAlert()
+    func getCollectionsElement(index: Int) -> Collection?
 }

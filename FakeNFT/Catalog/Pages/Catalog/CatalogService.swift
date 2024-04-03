@@ -5,10 +5,10 @@
 //  Created by Сергей Денисенко on 26.03.2024.
 //
 import Foundation
-final class ImagesListService {
+final class CatalogService {
 
     static let didChangeNotification = Notification.Name(rawValue: "CatalogServiceDidChange")
-    static let shared = ImagesListService()
+    static let shared = CatalogService()
 
     private let urlSession = URLSession.shared
     private (set) var collections: [Collection] = []
@@ -43,7 +43,7 @@ final class ImagesListService {
                                    id: $0.id)
                     }
                     NotificationCenter.default.post(
-                        name: ImagesListService.didChangeNotification,
+                        name: CatalogService.didChangeNotification,
                         object: self,
                         userInfo: ["collections": self.collections])
                     self.task = nil

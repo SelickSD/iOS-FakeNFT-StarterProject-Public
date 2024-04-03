@@ -5,8 +5,9 @@
 //  Created by Сергей Денисенко on 01.04.2024.
 //
 import UIKit
-final class CollectionScreenViewController: UIViewController {
-
+import Kingfisher
+final class CollectionScreenViewController: UIViewController, CollectionScreenViewProtocol {
+    private let presenter: CollectionScreenPresenterProtocol
     private lazy var mainImageView = UIImageView()
 
     private lazy var titleLabel: UILabel = {
@@ -22,6 +23,7 @@ final class CollectionScreenViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.numberOfLines = 1
         label.textAlignment = .left
+        label.text = "Автор коллекции:"
         return label
     }()
 
@@ -32,7 +34,7 @@ final class CollectionScreenViewController: UIViewController {
         button.setTitleColor(UIColor.init(hexString: "#0A84FF"), for: .normal)
 //        button.backgroundColor = UIColor.init(hexString: "#1A1B22")
 //        button.layer.cornerRadius = 16
-        button.setTitle("Jhon Doe", for: .normal)
+//        button.setTitle("Jhon Doe", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         button.addTarget(self, action: #selector(didTapLinkButton), for: .touchUpInside)
         return button
@@ -75,17 +77,63 @@ final class CollectionScreenViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter.viewDidLoad()
 
         drawSelf()
+    }
+
+    init(presenter: CollectionScreenPresenterProtocol) {
+        self.presenter = presenter
+        super .init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func updateTableViewAnimated() {
+        print(#function)
+        let count = presenter.getValueCount()
+
+        collectionsCollectionView.performBatchUpdates {
+            let indexPath = (0 ..< count).map { IndexPath(item: $0, section: 0) }
+            self.collectionsCollectionView.insertItems(at: indexPath)
+        } completion: { _ in }
     }
 
     @objc private func didTapLinkButton() {
 
     }
 
+    private func setImageWithOptions() {
+        guard  let options = presenter.getOptions() else {return}
+        mainImageView.kf.setImage(
+            with:options.urlCover,
+            options: options.options,
+            completionHandler:{ [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let value):
+                    mainImageView.image = value.image
+                case .failure(let error):
+                    print("ошибка")
+//MARK:                    showConnectError(message: "\(error)")
+                }
+            }
+        )
+    }
+
+    private func setMainInfo() {
+        let mainInfo = presenter.getMainInfo()
+        titleLabel.text = mainInfo.name
+        linkButton.setTitle(mainInfo.author, for: .normal)
+        descriptionLabel.text = mainInfo.description
+    }
+
     private func drawSelf() {
         view.backgroundColor = .white
-
+        setImageWithOptions()
+        setMainInfo()
         mainImageView.layer.cornerRadius = 12
         mainImageView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
 
@@ -106,13 +154,6 @@ final class CollectionScreenViewController: UIViewController {
         let equalHeight = contentView.heightAnchor.constraint(equalToConstant: 850)
         equalHeight.priority = UILayoutPriority(250)
 
-
-        //MARK: Удалить
-        mainImageView.backgroundColor = .yellow
-        titleLabel.text = "Peach"
-        authorLabel.text = "Автор коллекции:"
-        descriptionLabel.text = "Персиковый - как облака над закатным солнцем в океане. В этой коллекции совмещены тогательная нежность и живая игривость сказочных зифирных зверей"
-
         NSLayoutConstraint.activate([
             mainImageView.topAnchor.constraint(equalTo: view.topAnchor),
             mainImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -129,7 +170,7 @@ final class CollectionScreenViewController: UIViewController {
 
             linkButton.heightAnchor.constraint(equalToConstant: 20),
             linkButton.leadingAnchor.constraint(equalTo: authorLabel.trailingAnchor, constant: 4),
-            linkButton.widthAnchor.constraint(equalToConstant: 66),
+            linkButton.widthAnchor.constraint(equalToConstant: 120),
             linkButton.centerYAnchor.constraint(equalTo: authorLabel.centerYAnchor),
 
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -164,7 +205,7 @@ extension CollectionScreenViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return presenter.getValueCount()
     }
 
     func collectionView(_ collectionView: UICollectionView,

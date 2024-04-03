@@ -1,6 +1,6 @@
 
 import UIKit
-final class CatalogViewController: UIViewController, CatalogViewControlledProtocol {
+final class CatalogViewController: UIViewController, CatalogViewControllerProtocol {
     private let presenter: CatalogPresenterProtocol
     private lazy var catalogTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -73,7 +73,9 @@ final class CatalogViewController: UIViewController, CatalogViewControlledProtoc
 //MARK: -UITableViewDelegate
 extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let collectionsViewController = CollectionScreenViewController()
+        guard let collectionElement = presenter.getCollectionsElement(index: indexPath.row) else {return}
+        let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement)
+        let collectionsViewController = CollectionScreenViewController(presenter: collectionScreenPresenter)
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem?.tintColor = .black
         self.navigationController?.pushViewController(collectionsViewController, animated: true)
