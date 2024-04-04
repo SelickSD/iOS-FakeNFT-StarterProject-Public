@@ -3,21 +3,25 @@ import UIKit
 
 class MyNFTViewController: UIViewController {
     
+    private var nftService = NetworkNFTService()
+    
+    private var idArray: [String] = []
+    
     private var nftArray: [MyNFT] = [
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 0, author: "Jonh", isLike: true, price: "3,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Archie", rating: 2, author: "Elsa", isLike: false, price: "5,64"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 3, author: "Piter", isLike: true, price: "7,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, author: "Sarah", isLike: false, price: "1,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 3, author: "Sarah", isLike: false, price: "12,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 2, author: "Sarah", isLike: false, price: "14,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Stiphe", rating: 5, author: "Sarah", isLike: false, price: "20,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 0, author: "Jonh", isLike: true, price: "3,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Archie", rating: 2, author: "Elsa", isLike: false, price: "5,64"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 3, author: "Piter", isLike: true, price: "7,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, author: "Sarah", isLike: false, price: "1,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 3, author: "Sarah", isLike: false, price: "12,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 2, author: "Sarah", isLike: false, price: "14,54"),
-        MyNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Stiphe", rating: 5, author: "Sarah", isLike: false, price: "20,54")
+//        MyNFT(author: "Jonh", image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 0, isLike: true, price: 3.54),
+//        MyNFT(author: "Elsa", image: UIImage(systemName: "person.crop.circle.fill"), title: "Archie", rating: 2, isLike: false, price: 5.64),
+//        MyNFT(author: "Piter", image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 3, isLike: true, price: 7.54),
+//        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, isLike: false, price: 1.54),
+//        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 3, isLike: false, price: 12.54),
+//        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 2, isLike: false, price: 14.54),
+//        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Stiphe", rating: 5, isLike: false, price: 20.54),
+//        MyNFT(author: "Jonh", image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 0, isLike: true, price: 3.54),
+//        MyNFT(author: "Elsa", image: UIImage(systemName: "person.crop.circle.fill"), title: "Archie", rating: 2, isLike: false, price: 5.64),
+//        MyNFT(author: "Piter", image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 3, isLike: true, price: 7.54),
+//        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, isLike: false, price: 1.54),
+//        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 3, isLike: false, price: 12.54),
+//        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 2, isLike: false, price: 14.54),
+//        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Stiphe", rating: 5, isLike: false, price: 20.54)
     ]
     
     private lazy var myNftTableView: UITableView = {
@@ -48,6 +52,7 @@ class MyNFTViewController: UIViewController {
         addSubviews()
         setupConstraints()
         updatePlaceHolderNaf()
+        addMyNFTArray(from: idArray)
     }
     
     private func addSubviews(){
@@ -109,6 +114,19 @@ class MyNFTViewController: UIViewController {
         
         self.present(alertController, animated: true)
     }
+    private func addMyNFTArray(from myFavNft:[String]){
+        nftService.fetchMyNFT(from: idArray){ nftResult in
+            switch nftResult {
+            case .success(let nftFav):
+                DispatchQueue.main.async {
+                    self.nftArray.append(nftFav)
+                    self.myNftTableView.reloadData()
+                    self.updatePlaceHolderNaf()
+                }
+            case .failure(_ ): break
+            }
+        }
+    }
 }
 extension MyNFTViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -117,6 +135,7 @@ extension MyNFTViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyNFTTableViewCell", for: indexPath) as! MyNFTTableViewCell
+        if nftArray.count == 0{print("массив данных пуст")}
         let currentNft = nftArray[indexPath.row]
         cell.configure(with: currentNft)
         return cell

@@ -20,13 +20,13 @@ class FavouritesCollectionViewCell: UICollectionViewCell {
         return nftImage
     }()
     
-    private lazy var nftLikeImage: UIImageView = {
-        let nftLikeImage = UIImageView()
-        nftLikeImage.translatesAutoresizingMaskIntoConstraints = false
-        nftLikeImage.clipsToBounds = true
-        nftLikeImage.image = UIImage(systemName: "heart.fill")
-        nftLikeImage.tintColor = .white
-        return nftLikeImage
+    private lazy var nftLikeButton: UIButton = {
+        let nftLikeButton = UIButton()
+        nftLikeButton.translatesAutoresizingMaskIntoConstraints = false
+        nftLikeButton.clipsToBounds = true
+        nftLikeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        nftLikeButton.tintColor = .red
+        return nftLikeButton
     }()
     
     private lazy var stackViewStarImage: UIStackView = {
@@ -76,10 +76,11 @@ class FavouritesCollectionViewCell: UICollectionViewCell {
     func configure(with nftFav: MyFavNFT){
         addSubview()
         setupConstraint()
+        nftImage.image = nftFav.image
         nftTitle.text = nftFav.title
-        nftPrice.text = (nftFav.price ?? "*") + " ETH"
-        let likeColor: UIColor = nftFav.isLike == false ?  .white :  .red
-        nftLikeImage.tintColor = likeColor
+        if let price = nftFav.price{
+            nftPrice.text = "\(price)" + " ETH"
+        }
         addStarRating(from: nftFav.rating ?? 0)
  
     }
@@ -87,7 +88,6 @@ class FavouritesCollectionViewCell: UICollectionViewCell {
         for index in 0...4 {
             stackViewStarImage.addArrangedSubview(UIImageView(image: UIImage(systemName:"star.fill")))
             stackViewStarImage.arrangedSubviews[index].tintColor = UIColor(hexString: "#e1e3e6")
-            print(index)
         }
         for index in 0..<rating {
             stackViewStarImage.arrangedSubviews[index].tintColor = UIColor.yellow
@@ -97,7 +97,7 @@ class FavouritesCollectionViewCell: UICollectionViewCell {
     private func addSubview() {
         contentView.addSubview(nftCellView)
         nftCellView.addSubview(nftImage)
-        nftImage.addSubview(nftLikeImage)
+        nftImage.addSubview(nftLikeButton)
         nftCellView.addSubview(nftTitle)
         nftCellView.addSubview(nftPrice)
         nftCellView.addSubview(stackViewStarImage)
@@ -115,10 +115,10 @@ class FavouritesCollectionViewCell: UICollectionViewCell {
             nftImage.heightAnchor.constraint(equalToConstant: 80),
             nftImage.widthAnchor.constraint(equalToConstant: 80),
             
-            nftLikeImage.topAnchor.constraint(equalTo: nftImage.topAnchor, constant: 5.81),
-            nftLikeImage.trailingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: -5.82),
-            nftLikeImage.heightAnchor.constraint(equalToConstant: 18),
-            nftLikeImage.widthAnchor.constraint(equalToConstant: 21),
+            nftLikeButton.topAnchor.constraint(equalTo: nftImage.topAnchor, constant: 5.81),
+            nftLikeButton.trailingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: -5.82),
+            nftLikeButton.heightAnchor.constraint(equalToConstant: 18),
+            nftLikeButton.widthAnchor.constraint(equalToConstant: 21),
             
             nftTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 7),
             nftTitle.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 12),

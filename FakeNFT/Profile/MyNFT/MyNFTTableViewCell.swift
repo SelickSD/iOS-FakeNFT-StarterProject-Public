@@ -13,13 +13,13 @@ final class MyNFTTableViewCell: UITableViewCell {
         return nftImage
     }()
     
-    private lazy var nftLikeImage: UIImageView = {
-        let nftLikeImage = UIImageView()
-        nftLikeImage.translatesAutoresizingMaskIntoConstraints = false
-        nftLikeImage.clipsToBounds = true
-        nftLikeImage.image = UIImage(systemName: "heart.fill")
-        nftLikeImage.tintColor = .white
-        return nftLikeImage
+    private lazy var nftLikeButton: UIButton = {
+        let nftLikeButton = UIButton()
+        nftLikeButton.translatesAutoresizingMaskIntoConstraints = false
+        nftLikeButton.clipsToBounds = true
+        nftLikeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        nftLikeButton.tintColor = .white
+        return nftLikeButton
     }()
     
     private lazy var stackViewStarImage: UIStackView = {
@@ -94,10 +94,12 @@ final class MyNFTTableViewCell: UITableViewCell {
     
     func configure(with nft: MyNFT){
         nftTitle.text = nft.title
-        nftPrice.text = (nft.price ?? "*") + " ETH"
+        if let price = nft.price{
+            nftPrice.text = "\(price)" + " ETH"
+        }
         nftAuthor.text = nft.author
         let likeColor: UIColor = nft.isLike == false ?  .white :  .red
-        nftLikeImage.tintColor = likeColor
+        nftLikeButton.tintColor = likeColor
         addStarRating(from: nft.rating ?? 0)
     }
     
@@ -114,7 +116,7 @@ final class MyNFTTableViewCell: UITableViewCell {
     
     private func setupContentView(){
         contentView.addSubview(nftImage)
-        nftImage.addSubview(nftLikeImage)
+        nftImage.addSubview(nftLikeButton)
         contentView.addSubview(stackViewStarImage)
         contentView.addSubview(nftTitle)
         contentView.addSubview(nftAuthorOT)
@@ -132,10 +134,10 @@ final class MyNFTTableViewCell: UITableViewCell {
             nftImage.heightAnchor.constraint(equalToConstant: 108),
             nftImage.widthAnchor.constraint(equalToConstant: 108),
             
-            nftLikeImage.topAnchor.constraint(equalTo: nftImage.topAnchor, constant: 12),
-            nftLikeImage.trailingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: -11.36),
-            nftLikeImage.heightAnchor.constraint(equalToConstant: 18),
-            nftLikeImage.widthAnchor.constraint(equalToConstant: 21),
+            nftLikeButton.topAnchor.constraint(equalTo: nftImage.topAnchor, constant: 12),
+            nftLikeButton.trailingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: -11.36),
+            nftLikeButton.heightAnchor.constraint(equalToConstant: 18),
+            nftLikeButton.widthAnchor.constraint(equalToConstant: 21),
             
             nftTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 23),
             nftTitle.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),

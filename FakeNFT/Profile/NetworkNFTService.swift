@@ -76,6 +76,140 @@ class NetworkNFTService {
         }
         task.resume()
     }
+
+    func fetchMyFavNFT(from  arrayId: [String], completion: @escaping (Result<MyFavNFT, Error>) -> Void) {
+        UIBlockingProgressHUD.show()
+        guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
+            return }
+        guard !arrayId.isEmpty else { UIBlockingProgressHUD.dismiss()
+            return }
+        self.isFetching = true
+        for id in arrayId {
+            UIBlockingProgressHUD.show()
+            guard let url = URL(string: "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/nft/\(id)")
+            else {
+                self.isFetching = false
+                UIBlockingProgressHUD.dismiss()
+                return
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.setValue("\(self.token)", forHTTPHeaderField: "X-Practicum-Mobile-Token")
+            
+            let task = URLSession.shared.objectTask(for: request) { (result: Result<MyNFTResult, Error>) in
+                switch result {
+                case .success(let nftResult):
+                    DispatchQueue.main.async {
+                        var nftImageView = UIImageView()
+                        self.loadImageFromUrl(from: nftResult.images.first ?? ""){ imageView in
+                            nftImageView = imageView ?? UIImageView(image: UIImage(systemName: ""))
+                            
+                            let nftFav = MyFavNFT(image: nftImageView.image,
+                                                  title: nftResult.name,
+                                                  rating: nftResult.rating,
+                                                  isLike: true,
+                                                  price: nftResult.price)
+                            completion(.success(nftFav))
+                        }
+                        UIBlockingProgressHUD.dismiss()
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                        UIBlockingProgressHUD.dismiss()
+                    }}
+            }
+            task.resume()
+        }
+    }
+    
+    func fetchMyNFT(from  arrayId: [String], completion: @escaping (Result<MyNFT, Error>) -> Void) {
+        UIBlockingProgressHUD.show()
+        guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
+            return }
+        guard !arrayId.isEmpty else { UIBlockingProgressHUD.dismiss()
+            return }
+        self.isFetching = true
+        for id in arrayId {
+            UIBlockingProgressHUD.show()
+            print(id)
+            guard let url = URL(string: "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/nft/\(id)")
+            else {
+                self.isFetching = false
+                UIBlockingProgressHUD.dismiss()
+                return
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.setValue("\(self.token)", forHTTPHeaderField: "X-Practicum-Mobile-Token")
+            
+            let task = URLSession.shared.objectTask(for: request) { (result: Result<MyNFTResult, Error>) in
+                switch result {
+                case .success(let nftResult):
+                    DispatchQueue.main.async {
+                        var nftImageView = UIImageView()
+                        self.loadImageFromUrl(from: nftResult.images.first ?? ""){ imageView in
+                            nftImageView = imageView ?? UIImageView(image: UIImage(systemName: ""))
+                            
+                            let nftFav = MyNFT(author: nftResult.author,
+                                               image: nftImageView.image,
+                                                  title: nftResult.name,
+                                                  rating: nftResult.rating,
+                                                  isLike: false,
+                                                  price: nftResult.price)
+                            completion(.success(nftFav))
+                        }
+                        UIBlockingProgressHUD.dismiss()
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                        UIBlockingProgressHUD.dismiss()
+                    }}
+            }
+            task.resume()
+        }
+    }
+    func deleteFromFav(from likes: Likes,completion: @escaping (Result<Void, Error>) -> Void) {
+
+        let url = "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/profile/1"
+        guard let url = URL(string: url)
+        else {
+            self.isFetching = false
+            UIBlockingProgressHUD.dismiss()
+            return
+        }
+        let parameters = likes.likesArray
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("\(self.token)", forHTTPHeaderField: "X-Practicum-Mobile-Token")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        do{
+            request.httpBody = try JSONEncoder().encode(parameters)
+        }catch{
+            print("Ошибка при кодирование параметров", error.localizedDescription)
+        }
+        let task = URLSession.shared.dataTask(with: request) { (_, response, error) in
+            if let error = error {
+                completion(.failure(NetworkError.urlRequestError(error)))
+            }
+            if let responseCode = (response as? HTTPURLResponse)?.statusCode {
+                if 200..<300 ~= responseCode {
+                } else {
+                    completion(.failure(NetworkError.httpStatusCode(responseCode)))
+                }
+            }
+            completion(.success(()))
+        }
+        
+        task.resume()
+    }
 }
 
 extension URLSession {

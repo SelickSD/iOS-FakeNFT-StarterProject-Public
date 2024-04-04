@@ -5,13 +5,14 @@ import WebKit
 class ProfileViewController: UIViewController {
     
     private var profile: Profile?
-    private let categories = ["Мои NFT (112)","Избранные NFT","О разработчике"]
-    
+
     private let nftServise = NetworkNFTService()
     
     private var myNftArray: [String] = []
     
     private var myFavNftArray: [String] = []
+    
+    private let categories = ["Мои NFT","Избранные NFT","О разработчике"]
     
     private lazy var profileImage: UIImageView = {
         let profileImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
@@ -184,6 +185,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
         }
         if indexPath.row == 1 {
             let favouritesNav = FavouritesViewController()
+            favouritesNav.idFavArray = myFavNftArray
             self.navigationController?.pushViewController(favouritesNav, animated: true)
             
         }
