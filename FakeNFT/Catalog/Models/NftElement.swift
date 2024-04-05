@@ -4,13 +4,11 @@
 //
 //  Created by Сергей Денисенко on 03.04.2024.
 //
-
-import Foundation
-
+import UIKit
 struct NftElement {
     let createdAt: Date?
     let name: String
-    let images: [String]
+    let images: UIImage?
     let rating: Int
     let price: Double
     let description: String

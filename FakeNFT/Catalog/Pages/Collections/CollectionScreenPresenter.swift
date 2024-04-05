@@ -32,12 +32,17 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     }
 
     func viewDidLoad() {
-        guard !collection.nfts.isEmpty else {return}
-        if self.nfts.count == 0 {
-
-            self.collectionService.fetchNfts(collectionElement: collection.nfts[0])
-
-        }
+//        guard !collection.nfts.isEmpty else {return}
+//        if self.nfts.count == 0 {
+//
+//            self.collectionService.fetchNfts(collectionElement: collection.nfts, completion: { item in
+//                switch Result<Any, <#Failure: Error#>> {
+//                case .success(let body):
+//                    self.nfts.append(body)
+//                }
+//            })
+//
+//        }
     }
 
     func getOptions() -> (urlCover: URL, options: KingfisherOptionsInfo)? {
