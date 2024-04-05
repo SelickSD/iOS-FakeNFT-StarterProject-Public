@@ -51,8 +51,6 @@
 		4465A0E32BBDB855000AFE89 /* NftElementResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465A0E22BBDB855000AFE89 /* NftElementResult.swift */; };
 		4465A0E72BC0338F000AFE89 /* CatalogNetWorkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465A0E62BC0338F000AFE89 /* CatalogNetWorkService.swift */; };
 		4465A0EB2BC099BD000AFE89 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465A0EA2BC099BD000AFE89 /* WebViewController.swift */; };
-		4465A0ED2BC099DD000AFE89 /* WebViewViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465A0EC2BC099DD000AFE89 /* WebViewViewControllerProtocol.swift */; };
-		4465A0EF2BC099FA000AFE89 /* WebViewPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465A0EE2BC099FA000AFE89 /* WebViewPresenterProtocol.swift */; };
 		44E4C0B02BB1CB49008081B9 /* CatalogTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0AF2BB1CB49008081B9 /* CatalogTableViewCell.swift */; };
 		44E4C0B42BB36E82008081B9 /* CatalogPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0B32BB36E82008081B9 /* CatalogPresenter.swift */; };
 		44E4C0B62BB36F93008081B9 /* CatalogPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0B52BB36F93008081B9 /* CatalogPresenterProtocol.swift */; };
@@ -138,8 +136,6 @@
 		4465A0E22BBDB855000AFE89 /* NftElementResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftElementResult.swift; sourceTree = "<group>"; };
 		4465A0E62BC0338F000AFE89 /* CatalogNetWorkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogNetWorkService.swift; sourceTree = "<group>"; };
 		4465A0EA2BC099BD000AFE89 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
-		4465A0EC2BC099DD000AFE89 /* WebViewViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewControllerProtocol.swift; sourceTree = "<group>"; };
-		4465A0EE2BC099FA000AFE89 /* WebViewPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenterProtocol.swift; sourceTree = "<group>"; };
 		44E4C0AF2BB1CB49008081B9 /* CatalogTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogTableViewCell.swift; sourceTree = "<group>"; };
 		44E4C0B32BB36E82008081B9 /* CatalogPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogPresenter.swift; sourceTree = "<group>"; };
 		44E4C0B52BB36F93008081B9 /* CatalogPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogPresenterProtocol.swift; sourceTree = "<group>"; };
@@ -447,8 +443,6 @@
 				44E4C0B52BB36F93008081B9 /* CatalogPresenterProtocol.swift */,
 				4465A0DE2BBDB597000AFE89 /* CollectionScreenViewProtocol.swift */,
 				4465A0DC2BBDB534000AFE89 /* CollectionScreenPresenterProtocol.swift */,
-				4465A0EC2BC099DD000AFE89 /* WebViewViewControllerProtocol.swift */,
-				4465A0EE2BC099FA000AFE89 /* WebViewPresenterProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -744,7 +738,6 @@
 				0C79EE6C2A76DE2E00EE90EA /* ServicesAssemly.swift in Sources */,
 				0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */,
 				4465A0E72BC0338F000AFE89 /* CatalogNetWorkService.swift in Sources */,
-				4465A0EF2BC099FA000AFE89 /* WebViewPresenterProtocol.swift in Sources */,
 				3FC8C39129D2453B0081F015 /* ExampleRequest.swift in Sources */,
 				0CFCB7462A78064B0009A829 /* NftDetailCellModel.swift in Sources */,
 				0CFCB74B2A780EA80009A829 /* UIView+Constraints.swift in Sources */,
@@ -754,7 +747,6 @@
 				E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */,
 				4465A0EB2BC099BD000AFE89 /* WebViewController.swift in Sources */,
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
-				4465A0ED2BC099DD000AFE89 /* WebViewViewControllerProtocol.swift in Sources */,
 				44E4C0C02BB377DE008081B9 /* NetworkError.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,

@@ -89,7 +89,12 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
     }
     
     @objc private func didTapLinkButton() {
-        
+        let stringUrl = "https://practicum.yandex.ru/ios-developer/"
+        let webView = WebViewController(stringUrl: stringUrl)
+
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem?.tintColor = .black
+        navigationController?.pushViewController(webView, animated: true)
     }
     
     private func setMainInfo() {

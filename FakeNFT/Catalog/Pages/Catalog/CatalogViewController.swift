@@ -80,7 +80,6 @@ extension CatalogViewController: UITableViewDelegate {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem?.tintColor = .black
         self.navigationController?.pushViewController(collectionsViewController, animated: true)
-
     }
 }
 
