@@ -26,11 +26,11 @@ final class CatalogTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configCell(image: UIImageView, text: String) {
-        mainImageView = image
+    func configCell(catalogItem: Collection) {
+        mainImageView.image = catalogItem.cover
         mainImageView.contentMode = .scaleAspectFill
         mainImageView.layer.cornerRadius = 12
-        titleLabel.text = text
+        titleLabel.text = "\(catalogItem.name) (\(catalogItem.nfts.count))"
         setupView()
     }
 

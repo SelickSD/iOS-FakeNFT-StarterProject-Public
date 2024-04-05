@@ -91,13 +91,13 @@ extension CatalogViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let image = presenter.getImagesForCell(index: indexPath.row),
+        guard let catalogItem = presenter.getCollectionsElement(index: indexPath.row),
               let cell = tableView.dequeueReusableCell(withIdentifier: CatalogTableViewCell.identifier,
                                                        for: indexPath) as? CatalogTableViewCell else {
             return UITableViewCell()
         }
 
-        cell.configCell(image: image, text: presenter.getLabelText(index: indexPath.row))
+        cell.configCell(catalogItem: catalogItem)
         return cell
     }
     

@@ -5,7 +5,6 @@
 //  Created by Сергей Денисенко on 01.04.2024.
 //
 import UIKit
-import Kingfisher
 final class CollectionScreenViewController: UIViewController, CollectionScreenViewProtocol {
     private let presenter: CollectionScreenPresenterProtocol
     private lazy var mainImageView = UIImageView()
@@ -102,34 +101,16 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
 
     }
 
-    private func setImageWithOptions() {
-        guard  let options = presenter.getOptions() else {return}
-        mainImageView.kf.setImage(
-            with:options.urlCover,
-            options: options.options,
-            completionHandler:{ [weak self] result in
-                guard let self else { return }
-                switch result {
-                case .success(let value):
-                    mainImageView.image = value.image
-                case .failure(let error):
-                    print("ошибка")
-//MARK:                    showConnectError(message: "\(error)")
-                }
-            }
-        )
-    }
-
     private func setMainInfo() {
-        let mainInfo = presenter.getMainInfo()
-        titleLabel.text = mainInfo.name
-        linkButton.setTitle(mainInfo.author, for: .normal)
-        descriptionLabel.text = mainInfo.description
+        let options = presenter.getOptions()
+        mainImageView.image = options.cover
+        titleLabel.text = options.name
+        linkButton.setTitle(options.author, for: .normal)
+        descriptionLabel.text = options.description
     }
 
     private func drawSelf() {
         view.backgroundColor = .white
-        setImageWithOptions()
         setMainInfo()
         mainImageView.layer.cornerRadius = 12
         mainImageView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]

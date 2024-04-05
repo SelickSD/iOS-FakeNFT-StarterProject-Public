@@ -5,19 +5,18 @@
 //  Created by Сергей Денисенко on 03.04.2024.
 //
 import UIKit
-import Kingfisher
 final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     weak var view: CollectionScreenViewProtocol?
 
     private var collectionServiceObserver: NSObjectProtocol?
-    private let collectionService = CollectionScreenService.shared
+    private let collectionService = CatalogNetWorkService.shared
     private var nfts: [NftElement] = []
     private let collection: Collection
 
     init(collection: Collection) {
         self.collection = collection
         collectionServiceObserver = NotificationCenter.default.addObserver(
-            forName: CollectionScreenService.didChangeNotification,
+            forName: CatalogNetWorkService.didChangeNotificationCollections,
             object: nil,
             queue: .main
         ) { [weak self] _ in
@@ -36,22 +35,16 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
 
     func viewDidLoad() {
         collectionService.resetNft()
-        collectionService.fetchNfts(collectionElement: collection.nfts) { _ in }
+        collectionService.fetchNfts(collectionElement: collection.nfts)
     }
 
-    func getOptions() -> (urlCover: URL, options: KingfisherOptionsInfo)? {
-        guard let urlCover = URL(string: collection.cover) else { return nil }
-        let processor = RoundCornerImageProcessor(cornerRadius: 16)
-        let options: KingfisherOptionsInfo = [
-            .backgroundDecode,
-            .processor(processor)
-        ]
-        return (urlCover, options)
+    func getOptions() -> Collection {
+        return collection
     }
 
-    func getMainInfo() -> (name: String, author: String, description: String) {
-        return (collection.name, collection.author, collection.description)
-    }
+//    func getMainInfo() -> (name: String, author: String, description: String) {
+//        return (collection.name, collection.author, collection.description)
+//    }
 
     //    func getLabelText(index: Int) -> String {
     //        let text = "\(collections[index].name)(\(collections[index].nfts.count))"

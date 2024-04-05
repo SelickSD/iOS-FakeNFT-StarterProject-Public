@@ -5,17 +5,16 @@
 //  Created by Сергей Денисенко on 26.03.2024.
 //
 import UIKit
-import Kingfisher
 final class CatalogPresenter: CatalogPresenterProtocol {
     weak var view: CatalogViewControllerProtocol?
 
     private var catalogServiceObserver: NSObjectProtocol?
-    private let catalogService = CatalogService.shared
+    private let catalogService = CatalogNetWorkService.shared
     private var collections: [Collection] = []
 
     init() {
         catalogServiceObserver = NotificationCenter.default.addObserver(
-            forName: CatalogService.didChangeNotification,
+            forName: CatalogNetWorkService.didChangeNotificationCatalog,
             object: nil,
             queue: .main
         ) { [weak self] _ in
@@ -30,8 +29,9 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     }
 
     func viewDidLoad() {
-        if self.collections.count == 0 {
-            self.catalogService.fetchCollections()
+        catalogService.resetCollections()
+        if collections.count == 0 {
+            catalogService.fetchCollections()
         }
     }
 
@@ -40,28 +40,8 @@ final class CatalogPresenter: CatalogPresenterProtocol {
         return collections[index]
     }
 
-    func getImagesForCell(index: Int) -> UIImageView? {
-        guard let urlCover = URL(string: collections[index].cover) else { return nil }
-        let imageView = UIImageView()
-        let processor = RoundCornerImageProcessor(cornerRadius: 16)
-        let options: KingfisherOptionsInfo = [
-            .backgroundDecode,
-            .processor(processor)
-        ]
-        imageView.kf.setImage(
-            with:urlCover,
-            options: options,
-            completionHandler:{ [weak self] result in
-                guard let self else { return }
-                switch result {
-                case .success(let value):
-                    imageView.image = value.image
-                case .failure(let error):
-                    showConnectError(message: "\(error)")
-                }
-            }
-        )
-        return imageView
+    func getImagesForCell(index: Int) -> Collection {
+        return collections[index]
     }
 
     func getLabelText(index: Int) -> String {
