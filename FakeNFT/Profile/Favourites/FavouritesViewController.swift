@@ -1,5 +1,6 @@
 
 import UIKit
+import Foundation
 
 class FavouritesViewController: UIViewController {
     
@@ -48,22 +49,26 @@ class FavouritesViewController: UIViewController {
         myFavNftPlaceHolderTitle.translatesAutoresizingMaskIntoConstraints = false
         myFavNftPlaceHolderTitle.textColor = .black
         myFavNftPlaceHolderTitle.text = "У Вас ещё нет избранных NFT"
-        myFavNftPlaceHolderTitle.font = .systemFont(ofSize: 17, weight: .bold)
+        myFavNftPlaceHolderTitle.font = UIFont(name: "SFProText-Bold", size: 17)
         myFavNftPlaceHolderTitle.isHidden = true
         return myFavNftPlaceHolderTitle
     }()
     
     override func viewDidLoad() {
+        navigationController?.tabBarController?.tabBar.isHidden = true
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavBar()
         addSubviews()
         setupConstraints()
         updatePlaceHolderNaf()
-        addFavInArray(from: idFavArray)
+        addFavInArray()
     }
     
-    private func addFavInArray(from myFavNft:[String]){
+    private func addFavInArray(){
+        UIBlockingProgressHUD.show()
+        if idFavArray.count == 0 {UIBlockingProgressHUD.dismiss()
+        } else {
             nftService.fetchMyFavNFT(from: idFavArray){ nftResult in
                 switch nftResult {
                 case .success(let nftFav):
@@ -71,10 +76,14 @@ class FavouritesViewController: UIViewController {
                         self.nftFavArray.append(nftFav)
                         self.nftCollectionView.reloadData()
                         self.updatePlaceHolderNaf()
+                        if self.nftFavArray.count == self.idFavArray.count{UIBlockingProgressHUD.dismiss()}
                     }
-                case .failure(_ ): break
+                case .failure(_ ):
+                    UIBlockingProgressHUD.dismiss()
+                    break
                 }
             }
+        }
     }
     
     private func updatePlaceHolderNaf(){

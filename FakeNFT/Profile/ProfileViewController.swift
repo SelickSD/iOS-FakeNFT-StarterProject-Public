@@ -12,13 +12,14 @@ class ProfileViewController: UIViewController {
     
     private var myFavNftArray: [String] = []
     
-    private let categories = ["Мои NFT","Избранные NFT","О разработчике"]
+    private var categories = ["Мои NFT","Избранные NFT","О разработчике"]
     
     private lazy var profileImage: UIImageView = {
         let profileImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         profileImage.layer.cornerRadius =  profileImage.frame.width / 2
         profileImage.clipsToBounds = true
+        profileImage.contentMode = .scaleAspectFill
         profileImage.image = UIImage(systemName: "person.crop.circle.fill")
         return profileImage
     }()
@@ -26,7 +27,7 @@ class ProfileViewController: UIViewController {
     private lazy var profileNameTitle: UILabel = {
         let profileNameTitle = UILabel()
         profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
-        profileNameTitle.font = .systemFont(ofSize: 22, weight: .bold)
+        profileNameTitle.font = UIFont(name: "SFProText-Bold", size: 22)
         profileNameTitle.textColor = .black
         profileNameTitle.text = "Имя пользователя"
         return profileNameTitle
@@ -37,7 +38,7 @@ class ProfileViewController: UIViewController {
         descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
         descriptionTextView.text = "  Описание пользователя.   "
         descriptionTextView.isEditable = false
-        descriptionTextView.font = .systemFont(ofSize: 13, weight: .medium)
+        descriptionTextView.font = UIFont(name: "SFProText-Regular", size: 13)
         descriptionTextView.textColor = .black
         descriptionTextView.backgroundColor = .white
         return descriptionTextView
@@ -46,12 +47,10 @@ class ProfileViewController: UIViewController {
     private lazy var profileWebTitle: UILabel = {
         let profileWebTitle = UILabel()
         profileWebTitle.translatesAutoresizingMaskIntoConstraints = false
-        profileWebTitle.textColor = .blue
-        profileWebTitle.font = .systemFont(ofSize: 15, weight: .bold)
+        profileWebTitle.textColor = UIColor(hexString: "#0A84FF")
+        profileWebTitle.font = UIFont(name: "SFProText-Regular", size: 15)
         profileWebTitle.text = "Сайт пользователя"
-        
         profileWebTitle.isUserInteractionEnabled = true
-        
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileWebTitleTapped))
         profileWebTitle.addGestureRecognizer(tapGesture)
@@ -70,13 +69,18 @@ class ProfileViewController: UIViewController {
         profileTableView.register(ProfileTableViewCell.self, forCellReuseIdentifier: "ProfileTableViewCell")
         return profileTableView
     }()
-    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.tabBarController?.tabBar.isHidden = false
+        self.categories[0] = "Мои NFT (\(self.myNftArray.count))"
+        self.categories[1] = "Избранные NFT (\(self.myFavNftArray.count))"
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavBar()
         addSubviews()
         setupConstraints()
+        UIBlockingProgressHUD.show()
         nftServise.fetchProfileRequest() { profileResult in
             switch profileResult {
             case .success(let profile):
@@ -88,9 +92,15 @@ class ProfileViewController: UIViewController {
                     self.myNftArray = profile.myNft ?? []
                     self.myFavNftArray = profile.myFavNft ?? []
                     self.navigationItem.rightBarButtonItem?.isEnabled = true
+                    self.categories[0] = "Мои NFT (\(self.myNftArray.count))"
+                    self.categories[1] = "Избранные NFT (\(self.myFavNftArray.count))"
+                    self.profileTableView.reloadData()
+                    UIBlockingProgressHUD.dismiss()
                 }
 
-            case .failure(_ ): break
+            case .failure(_ ):
+                UIBlockingProgressHUD.dismiss()
+                break
             }
     }
                                        }
@@ -165,7 +175,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileTableViewCell", for: indexPath) as! ProfileTableViewCell
         cell.title.text = categories[indexPath.row]
-        let chevronImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
+        let chevronImageView = UIImageView(image: UIImage(systemName: "chevron.forward"))
         chevronImageView.tintColor = .black
         cell.accessoryView = chevronImageView
         return cell

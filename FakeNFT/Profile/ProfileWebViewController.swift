@@ -13,6 +13,7 @@ class ProfileWebViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.tabBarController?.tabBar.isHidden = true
         setupNavBar()
         view.addSubview(webView)
         webView.uiDelegate = self

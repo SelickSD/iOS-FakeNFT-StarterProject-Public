@@ -44,7 +44,7 @@ class FavouritesCollectionViewCell: UICollectionViewCell {
         let nftTitle = UILabel()
         nftTitle.translatesAutoresizingMaskIntoConstraints = false
         nftTitle.textColor = .black
-        nftTitle.font = .systemFont(ofSize: 17, weight: .bold)
+        nftTitle.font = UIFont(name: "SFProText-Bold", size: 17)
         return nftTitle
     }()
     
@@ -52,7 +52,7 @@ class FavouritesCollectionViewCell: UICollectionViewCell {
         let nftPrice = UILabel()
         nftPrice.translatesAutoresizingMaskIntoConstraints = false
         nftPrice.textColor = .black
-        nftPrice.font = .systemFont(ofSize: 15, weight: .medium)
+        nftPrice.font = UIFont(name: "SFProText-Regular", size: 15)
         return nftPrice
     }()
     

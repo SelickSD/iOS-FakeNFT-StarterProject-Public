@@ -37,7 +37,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         let nftTitle = UILabel()
         nftTitle.translatesAutoresizingMaskIntoConstraints = false
         nftTitle.textColor = .black
-        nftTitle.font = .systemFont(ofSize: 17, weight: .bold)
+        nftTitle.font = UIFont(name: "SFProText-Bold", size: 17)
         return nftTitle
     }()
     
@@ -46,7 +46,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         nftAuthorOT.translatesAutoresizingMaskIntoConstraints = false
         nftAuthorOT.textColor = .black
         nftAuthorOT.text = "от"
-        nftAuthorOT.font = .systemFont(ofSize: 15, weight: .medium)
+        nftAuthorOT.font = UIFont(name: "SFProText-Regular", size: 15)
         return nftAuthorOT
     }()
     
@@ -54,7 +54,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         let nftAuthor = UILabel()
         nftAuthor.translatesAutoresizingMaskIntoConstraints = false
         nftAuthor.textColor = .black
-        nftAuthor.font = .systemFont(ofSize: 13, weight: .medium)
+        nftAuthor.font = UIFont(name: "SFProText-Regular", size: 13)
         return nftAuthor
     }()
     
@@ -63,7 +63,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         nftPriceName.translatesAutoresizingMaskIntoConstraints = false
         nftPriceName.textColor = .black
         nftPriceName.text = "Цена"
-        nftPriceName.font = .systemFont(ofSize: 13, weight: .medium)
+        nftPriceName.font = UIFont(name: "SFProText-Regular", size: 13)
         return nftPriceName
     }()
     
@@ -71,7 +71,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         let nftPrice = UILabel()
         nftPrice.translatesAutoresizingMaskIntoConstraints = false
         nftPrice.textColor = .black
-        nftPrice.font = .systemFont(ofSize: 17, weight: .bold)
+        nftPrice.font = UIFont(name: "SFProText-Bold", size: 17)
         return nftPrice
     }()
     

@@ -18,6 +18,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         profileImage.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
         profileImage.layer.cornerRadius =  profileImage.frame.width / 2
+        profileImage.contentMode = .scaleAspectFill
         profileImage.isUserInteractionEnabled = true
         profileImage.clipsToBounds = true
         return profileImage
@@ -26,7 +27,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     private lazy var editChangeImageLabel: UILabel = {
         let editDescriptionTextView = UILabel()
         editDescriptionTextView.translatesAutoresizingMaskIntoConstraints = false
-        editDescriptionTextView.font = .systemFont(ofSize: 10, weight: .medium)
+        editDescriptionTextView.font = UIFont(name: "SFProText-Regular", size: 10)
         editDescriptionTextView.textColor = .white
         editDescriptionTextView.numberOfLines = 2
         editDescriptionTextView.textAlignment = .center
@@ -47,7 +48,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     private lazy var editNameTitle: UILabel = {
         let profileNameTitle = UILabel()
         profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
-        profileNameTitle.font = .systemFont(ofSize: 22, weight: .bold)
+        profileNameTitle.font = UIFont(name: "SFProText-Bold", size: 17)
         profileNameTitle.textColor = .black
         profileNameTitle.text = "Имя"
         return profileNameTitle
@@ -58,7 +59,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editNameTextField.translatesAutoresizingMaskIntoConstraints = false
         editNameTextField.placeholder = "Информация отсутствует"
         editNameTextField.backgroundColor = UIColor(hexString: "#F7F7F8")
-        editNameTextField.font = .systemFont(ofSize: 17, weight: .medium)
+        editNameTextField.font = UIFont(name: "SFProText-Regular", size: 17)
         editNameTextField.textColor = .black
         editNameTextField.layer.cornerRadius = 12
         editNameTextField.layer.borderWidth = 0
@@ -77,7 +78,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     private lazy var editDescriptionTitle: UILabel = {
         let profileNameTitle = UILabel()
         profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
-        profileNameTitle.font = .systemFont(ofSize: 22, weight: .bold)
+        profileNameTitle.font = UIFont(name: "SFProText-Bold", size: 22)
         profileNameTitle.textColor = .black
         profileNameTitle.text = "Описание"
         return profileNameTitle
@@ -87,7 +88,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         let editDescriptionTextView = UITextView()
         editDescriptionTextView.translatesAutoresizingMaskIntoConstraints = false
         editDescriptionTextView.backgroundColor = UIColor(hexString: "#F7F7F8")
-        editDescriptionTextView.font = .systemFont(ofSize: 17, weight: .medium)
+        editDescriptionTextView.font = UIFont(name: "SFProText-Regular", size: 17)
         editDescriptionTextView.isScrollEnabled = true
         editDescriptionTextView.textColor = .black
         editDescriptionTextView.textContainerInset = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
@@ -100,7 +101,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     private lazy var editSiteTitle: UILabel = {
         let profileNameTitle = UILabel()
         profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
-        profileNameTitle.font = .systemFont(ofSize: 22, weight: .bold)
+        profileNameTitle.font = UIFont(name: "SFProText-Bold", size: 22)
         profileNameTitle.textColor = .black
         profileNameTitle.text = "Сайт"
         return profileNameTitle
@@ -111,7 +112,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editSiteTextField.translatesAutoresizingMaskIntoConstraints = false
         editSiteTextField.placeholder = "Информация отсутствует"
         editSiteTextField.backgroundColor = UIColor(hexString: "#F7F7F8")
-        editSiteTextField.font = .systemFont(ofSize: 17, weight: .medium)
+        editSiteTextField.font = UIFont(name: "SFProText-Regular", size: 17)
         editSiteTextField.textColor = .black
         editSiteTextField.layer.cornerRadius = 12
         editSiteTextField.layer.borderWidth = 0
@@ -179,15 +180,15 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         activeTextField?.text = ""
     }
     
-    internal func textFieldDidBeginEditing(_ textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         self.activeTextField = textField
     }
     
-    internal func textFieldDidEndEditing(_ textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         self.activeTextField = nil
     }
     
-    internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
     }
     

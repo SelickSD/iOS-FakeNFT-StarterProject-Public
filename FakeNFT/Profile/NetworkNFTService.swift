@@ -37,7 +37,6 @@ class NetworkNFTService {
     }
     
     func fetchProfileRequest(completion: @escaping (Result<Profile, Error>) -> Void) {
-        UIBlockingProgressHUD.show()
         guard !self.isFetching else { return }
         self.isFetching = true
         guard let url = URL(string: "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/profile/1")
@@ -66,30 +65,24 @@ class NetworkNFTService {
                                               myNft: profileResult.nfts,
                                               myFavNft: profileResult.likes)
                         completion(.success(profile))
-                        UIBlockingProgressHUD.dismiss()
-                    }}
+                    }
+                }
             case .failure(let error):
                 DispatchQueue.main.async {
                     completion(.failure(error))
-                    UIBlockingProgressHUD.dismiss()
-                }}
+                }
+            }
         }
         task.resume()
     }
 
     func fetchMyFavNFT(from  arrayId: [String], completion: @escaping (Result<MyFavNFT, Error>) -> Void) {
-        UIBlockingProgressHUD.show()
-        guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
-            return }
-        guard !arrayId.isEmpty else { UIBlockingProgressHUD.dismiss()
-            return }
+        guard !self.isFetching else { return }
         self.isFetching = true
         for id in arrayId {
-            UIBlockingProgressHUD.show()
             guard let url = URL(string: "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/nft/\(id)")
             else {
                 self.isFetching = false
-                UIBlockingProgressHUD.dismiss()
                 return
             }
             
@@ -113,32 +106,26 @@ class NetworkNFTService {
                                                   price: nftResult.price)
                             completion(.success(nftFav))
                         }
-                        UIBlockingProgressHUD.dismiss()
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
                         completion(.failure(error))
-                        UIBlockingProgressHUD.dismiss()
-                    }}
+                    }
+                }
             }
             task.resume()
         }
     }
     
     func fetchMyNFT(from  arrayId: [String], completion: @escaping (Result<MyNFT, Error>) -> Void) {
-        UIBlockingProgressHUD.show()
-        guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
-            return }
-        guard !arrayId.isEmpty else { UIBlockingProgressHUD.dismiss()
-            return }
+
+        guard !self.isFetching else { return }
         self.isFetching = true
         for id in arrayId {
-            UIBlockingProgressHUD.show()
             print(id)
             guard let url = URL(string: "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/nft/\(id)")
             else {
                 self.isFetching = false
-                UIBlockingProgressHUD.dismiss()
                 return
             }
             
@@ -163,24 +150,23 @@ class NetworkNFTService {
                                                   price: nftResult.price)
                             completion(.success(nftFav))
                         }
-                        UIBlockingProgressHUD.dismiss()
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
                         completion(.failure(error))
-                        UIBlockingProgressHUD.dismiss()
-                    }}
+                    }
+                }
             }
             task.resume()
         }
     }
+    
     func deleteFromFav(from likes: Likes,completion: @escaping (Result<Void, Error>) -> Void) {
 
         let url = "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/profile/1"
         guard let url = URL(string: url)
         else {
             self.isFetching = false
-            UIBlockingProgressHUD.dismiss()
             return
         }
         let parameters = likes.likesArray
@@ -212,36 +198,3 @@ class NetworkNFTService {
     }
 }
 
-extension URLSession {
-    func objectTask<T: Decodable>(
-        for request: URLRequest,
-        completion: @escaping (Result<T, Error>) -> Void
-    ) -> URLSessionTask {
-        let task = dataTask(with: request, completionHandler: { data, response, error in
-            if let error = error {
-                completion(.failure(NetworkError.urlRequestError(error)))
-            }
-            if let responseCode = (response as? HTTPURLResponse)?.statusCode {
-                if 200..<300 ~= responseCode {
-                } else {
-                    completion(.failure(NetworkError.httpStatusCode(responseCode)))
-                }
-            }
-            if let data = data {
-                do {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(T.self, from: data)
-                    completion(.success(result))
-                } catch {
-                    completion(.failure(error))
-                }
-            }
-        })
-        return task
-    }
-}
-
-enum NetworkError: Error {
-    case httpStatusCode(Int)
-    case urlRequestError(Error)
-}

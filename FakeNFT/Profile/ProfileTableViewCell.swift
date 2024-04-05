@@ -7,7 +7,7 @@ class ProfileTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.font = UIFont(name: "SFProText-Bold", size: 17)
         return label
     }()
     

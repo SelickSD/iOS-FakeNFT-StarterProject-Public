@@ -40,7 +40,7 @@ class MyNFTViewController: UIViewController {
         nftPlaceHolderTitle.translatesAutoresizingMaskIntoConstraints = false
         nftPlaceHolderTitle.textColor = .black
         nftPlaceHolderTitle.text = "У Вас ещё нет NFT"
-        nftPlaceHolderTitle.font = .systemFont(ofSize: 17, weight: .bold)
+        nftPlaceHolderTitle.font = UIFont(name: "SFProText-Bold", size: 17)
         nftPlaceHolderTitle.isHidden = true
         return nftPlaceHolderTitle
     }()
@@ -48,11 +48,12 @@ class MyNFTViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        navigationController?.tabBarController?.tabBar.isHidden = true
         setupNavBar()
         addSubviews()
         setupConstraints()
         updatePlaceHolderNaf()
-        addMyNFTArray(from: idArray)
+        addMyNFTArray()
     }
     
     private func addSubviews(){
@@ -114,16 +115,23 @@ class MyNFTViewController: UIViewController {
         
         self.present(alertController, animated: true)
     }
-    private func addMyNFTArray(from myFavNft:[String]){
-        nftService.fetchMyNFT(from: idArray){ nftResult in
-            switch nftResult {
-            case .success(let nftFav):
-                DispatchQueue.main.async {
-                    self.nftArray.append(nftFav)
-                    self.myNftTableView.reloadData()
-                    self.updatePlaceHolderNaf()
+    private func addMyNFTArray(){
+        UIBlockingProgressHUD.show()
+        if idArray.count == 0 {UIBlockingProgressHUD.dismiss()
+        } else {
+            nftService.fetchMyNFT(from: idArray){ nftResult in
+                switch nftResult {
+                case .success(let nftFav):
+                    DispatchQueue.main.async {
+                        self.nftArray.append(nftFav)
+                        self.myNftTableView.reloadData()
+                        self.updatePlaceHolderNaf()
+                        if self.idArray.count == self.nftArray.count{UIBlockingProgressHUD.dismiss()}
+                    }
+                case .failure(_ ):
+                    UIBlockingProgressHUD.dismiss()
+                    break
                 }
-            case .failure(_ ): break
             }
         }
     }
