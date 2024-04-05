@@ -372,6 +372,7 @@
 		4B64F4002BADFFCB00117331 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				4B64F4592BC0719C00117331 /* NetworkService */,
 				4B64F4232BAF461E00117331 /* ProfileModels */,
 				4B64F41E2BAF3F7100117331 /* MyNFT */,
 				4B64F41D2BAF3F6200117331 /* Favourites */,
@@ -439,8 +440,6 @@
 			isa = PBXGroup;
 			children = (
 				4B64F4242BAF465800117331 /* MyNFTModel.swift */,
-				4B64F44B2BB7269500117331 /* NetworkNFTService.swift */,
-				4B64F4502BC0504700117331 /* URLSession + Extension.swift */,
 			);
 			name = ProfileModels;
 			sourceTree = "<group>";
@@ -461,6 +460,15 @@
 				4B64F4552BC06DB000117331 /* SFProText-Regular.ttf */,
 			);
 			path = FontsProfile;
+			sourceTree = "<group>";
+		};
+		4B64F4592BC0719C00117331 /* NetworkService */ = {
+			isa = PBXGroup;
+			children = (
+				4B64F44B2BB7269500117331 /* NetworkNFTService.swift */,
+				4B64F4502BC0504700117331 /* URLSession + Extension.swift */,
+			);
+			path = NetworkService;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
