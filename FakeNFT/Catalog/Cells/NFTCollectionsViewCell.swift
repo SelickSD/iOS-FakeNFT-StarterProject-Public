@@ -4,34 +4,25 @@
 //
 //  Created by Сергей Денисенко on 01.04.2024.
 //
-
 import UIKit
 final class NFTCollectionsViewCell: UICollectionViewCell {
     static let identifier = "NFTCollectionsViewCell"
-
-    private var rating = 3
-
+    private var rating = 0
     private lazy var maneView = UIImageView()
 
     private lazy var likeButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(.white, for: .normal)
-//        button.backgroundColor = UIColor.init(hex: "#1A1B22")
         button.layer.cornerRadius = 16
-//        button.setTitle(cancelButtonName, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
         return button
     }()
 
     private lazy var addToBasketButton: UIButton = {
-
         let button = UIButton()
-
         button.setTitleColor(.white, for: .normal)
-//        button.backgroundColor = UIColor.init(hex: "#1A1B22")
         button.layer.cornerRadius = 16
-//        button.setTitle(cancelButtonName, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(didTapBasketButton), for: .touchUpInside)
         return button
@@ -39,11 +30,9 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
 
     private lazy var ratingStackView: UIStackView = {
         let stack = UIStackView()
-
         stack.axis = .horizontal
         stack.spacing = 2
         stack.distribution = .fillEqually
-//        stack.layer.borderColor = UIColor.lightGray.cgColor
         return stack
     }()
 
@@ -63,25 +52,32 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
         return label
     }()
 
-
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
-//        addRating()
-        drawSelf()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc private func didTapLikeButton() {
+    func configCell(nftItem: NftElement) {
+        rating = nftItem.rating
+        maneView.image = nftItem.images
+        //MARK: TODO
+        likeButton.setImage(UIImage(named: "RedLike"), for: .normal)
+        addToBasketButton.setImage(UIImage(named: "CartAdd"), for: .normal)
+        nameLabel.text = nftItem.name
+        costLabel.text = "\(nftItem.price) ETH"
+        drawSelf()
+    }
 
+    @objc private func didTapLikeButton() {
+        //MARK: TODO
     }
 
     @objc private func didTapBasketButton() {
-
+        //MARK: TODO
     }
 
     private func drawSelf() {
@@ -92,14 +88,6 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
             $0.clipsToBounds = true
             self.addSubview($0)
         }
-
-        //MARK: Удалить
-        maneView.backgroundColor = .lightGray
-        likeButton.setImage(UIImage(named: "RedLike"), for: .normal)
-        addToBasketButton.setImage(UIImage(named: "CartAdd"), for: .normal)
-        nameLabel.text = "Ruby"
-        costLabel.text = "1 ETH"
-
         addRating()
 
         NSLayoutConstraint.activate([

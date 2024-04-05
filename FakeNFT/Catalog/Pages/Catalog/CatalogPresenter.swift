@@ -7,7 +7,6 @@
 import UIKit
 final class CatalogPresenter: CatalogPresenterProtocol {
     weak var view: CatalogViewControllerProtocol?
-
     private var catalogServiceObserver: NSObjectProtocol?
     private let catalogService = CatalogNetWorkService.shared
     private var collections: [Collection] = []

@@ -41,7 +41,7 @@ final class CatalogNetWorkService {
                 case .success(_):
                     completion(imageView)
                 case .failure(let error):
-//MARK: TODO
+                    //MARK: TODO
                     print("Ошибка при загрузке изображения:", error.localizedDescription)
                     completion(nil)
                 }
@@ -86,12 +86,11 @@ final class CatalogNetWorkService {
                             self.isFetching = false
                         }
                     }
-                case .failure(let error):
-                    DispatchQueue.main.async {
-//                        completion(.failure(error))
-                        UIBlockingProgressHUD.dismiss()
-                        self.isFetching = false
-                    }}
+                case .failure(_):
+                    //MARK: TODO
+                    UIBlockingProgressHUD.dismiss()
+                    self.isFetching = false
+                }
             }
             task.resume()
         }
@@ -101,51 +100,50 @@ final class CatalogNetWorkService {
         UIBlockingProgressHUD.show()
         guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
             return }
-        
+
         self.isFetching = true
         let request = URLRequest.makeHTTPRequest(path: "/api/v1/collections",
                                                  httpMethod: "GET", needToken: true)
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<[CollectionResult], Error>) in
-                guard let self = self else { return }
-                switch result {
-                case .success(let body):
-                    DispatchQueue.main.async {
-                        body.forEach{
-                            let createdAt = Date().formatDate(dateString: $0.createdAt)
-                            let name = $0.name
-                            let nfts = $0.nfts
-                            let description = $0.description
-                            let author = $0.author
-                            let id = $0.id
-                            var cardImageView = UIImageView()
-                            self.loadImageFromUrl(from: $0.cover) {imageView in
-                                cardImageView = imageView ?? UIImageView()
-                                self.collections.append(
-                                    Collection(createdAt: createdAt,
-                                               name: name,
-                                               cover: cardImageView.image,
-                                               nfts: nfts,
-                                               description: description,
-                                               author: author,
-                                               id: id)
-                                )
-                                if self.collections.count == body.count {
-                                    NotificationCenter.default.post(
-                                        name: CatalogNetWorkService.didChangeNotificationCatalog,
-                                        object: self,
-                                        userInfo: ["collections": self.collections])
-                                }
+            guard let self = self else { return }
+            switch result {
+            case .success(let body):
+                DispatchQueue.main.async {
+                    body.forEach{
+                        let createdAt = Date().formatDate(dateString: $0.createdAt)
+                        let name = $0.name
+                        let nfts = $0.nfts
+                        let description = $0.description
+                        let author = $0.author
+                        let id = $0.id
+                        var cardImageView = UIImageView()
+                        self.loadImageFromUrl(from: $0.cover) {imageView in
+                            cardImageView = imageView ?? UIImageView()
+                            self.collections.append(
+                                Collection(createdAt: createdAt,
+                                           name: name,
+                                           cover: cardImageView.image,
+                                           nfts: nfts,
+                                           description: description,
+                                           author: author,
+                                           id: id)
+                            )
+                            if self.collections.count == body.count {
+                                NotificationCenter.default.post(
+                                    name: CatalogNetWorkService.didChangeNotificationCatalog,
+                                    object: self,
+                                    userInfo: ["collections": self.collections])
                             }
+                            UIBlockingProgressHUD.dismiss()
+                            self.isFetching = false
                         }
-
-                        UIBlockingProgressHUD.dismiss()
-                        self.isFetching = false
                     }
-                case .failure( _):
-                    UIBlockingProgressHUD.dismiss()
-                    self.isFetching = false
                 }
+            case .failure( _):
+                UIBlockingProgressHUD.dismiss()
+                self.isFetching = false
             }
+        }
         task.resume()
     }
 }

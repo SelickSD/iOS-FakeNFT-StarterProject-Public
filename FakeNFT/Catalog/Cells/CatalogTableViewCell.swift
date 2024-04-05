@@ -7,7 +7,6 @@
 import UIKit
 final class CatalogTableViewCell: UITableViewCell {
     static let identifier = "CatalogTableViewCell"
-
     private lazy var mainImageView = UIImageView()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()

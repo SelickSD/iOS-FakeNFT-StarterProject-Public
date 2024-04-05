@@ -7,10 +7,8 @@
 
 import Foundation
 protocol CollectionScreenPresenterProtocol {
-//    var view: CatalogViewControlledProtocol? { get set }
     func getValueCount() -> Int
+    func getNftItem(index: Int) -> NftElement?
     func getOptions() -> Collection
-//    func getMainInfo() -> (name: String, author: String, description: String)
     func viewDidLoad()
-//    func showSortAlert()
 }

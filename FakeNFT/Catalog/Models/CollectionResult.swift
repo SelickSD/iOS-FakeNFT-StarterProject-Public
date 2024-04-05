@@ -4,11 +4,8 @@
 //
 //  Created by Сергей Денисенко on 27.03.2024.
 //
-
 import Foundation
-
 struct CollectionResult: Codable {
-
     let createdAt: String
     let name: String
     let cover: String

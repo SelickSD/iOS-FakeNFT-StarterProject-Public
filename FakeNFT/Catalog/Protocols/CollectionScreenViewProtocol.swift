@@ -5,8 +5,7 @@
 //  Created by Сергей Денисенко on 03.04.2024.
 //
 
-import UIKit
+import Foundation
 protocol CollectionScreenViewProtocol: AnyObject {
     func updateScrollViewAnimated()
-//    func showAlert(alert: UIAlertController)
 }

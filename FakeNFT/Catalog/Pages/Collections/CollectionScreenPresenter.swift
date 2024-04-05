@@ -7,7 +7,6 @@
 import UIKit
 final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     weak var view: CollectionScreenViewProtocol?
-
     private var collectionServiceObserver: NSObjectProtocol?
     private let collectionService = CatalogNetWorkService.shared
     private var nfts: [NftElement] = []
@@ -28,7 +27,7 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
             }
         }
     }
-
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -42,53 +41,12 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
         return collection
     }
 
-//    func getMainInfo() -> (name: String, author: String, description: String) {
-//        return (collection.name, collection.author, collection.description)
-//    }
-
-    //    func getLabelText(index: Int) -> String {
-    //        let text = "\(collections[index].name)(\(collections[index].nfts.count))"
-    //        return text
-    //    }
-
-    func getValueCount() -> Int {
-//        nfts = collectionService.nfts
-        return nfts.count
+    func getNftItem(index: Int) -> NftElement? {
+        guard index < nfts.count else {return nil}
+        return nfts[index]
     }
 
-    //    func showSortAlert() {
-    //        let sortTitle = NSLocalizedString("catalogView.sortTitle",
-    //                                          comment: "Text displayed like sort alert description")
-    //        let sortName = NSLocalizedString("catalogView.sortName",
-    //                                         comment: "Text displayed like sort alert description")
-    //        let sortNFT = NSLocalizedString("catalogView.sortNFT",
-    //                                        comment: "Text displayed like sort alert description")
-    //        let sortClose = NSLocalizedString("catalogView.sortClose",
-    //                                          comment: "Text displayed like sort alert description")
-    //
-    //        let alert = UIAlertController(
-    //            title: sortTitle,
-    //            message: nil,
-    //            preferredStyle: .actionSheet
-    //        )
-    //
-    //        [UIAlertAction(title: sortName, style: UIAlertAction.Style.default) {_ in },
-    //         UIAlertAction(title: sortNFT, style: UIAlertAction.Style.default) {_ in },
-    //         UIAlertAction(title: sortClose, style: UIAlertAction.Style.cancel) {_ in }
-    //        ].forEach{
-    //            alert.addAction($0)
-    //        }
-    //        view?.showAlert(alert: alert)
-    //    }
-
-    //    private func showConnectError(message: String) {
-    //        let alert = UIAlertController(
-    //            title: "Сетевая ошибка",
-    //            message: message,
-    //            preferredStyle: .alert
-    //        )
-    //        let action = UIAlertAction(title: "Отмена", style: .destructive) {_ in }
-    //        alert.addAction(action)
-    //        view?.showAlert(alert: alert)
-    //    }
+    func getValueCount() -> Int {
+        return nfts.count
+    }
 }

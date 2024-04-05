@@ -8,7 +8,6 @@ import Foundation
 protocol CatalogPresenterProtocol {
     var view: CatalogViewControllerProtocol? { get set }
     func getValueCount() -> Int
-//    func getImagesForCell(index: Int) -> Collection?
     func getLabelText(index: Int) -> String
     func viewDidLoad()
     func showSortAlert()

@@ -8,7 +8,6 @@
 import Foundation
 
 struct NftElementResult: Codable {
-
     let createdAt: String
     let name: String
     let images: [String]
