@@ -3,6 +3,13 @@ import Foundation
 import UIKit
 import Kingfisher
 
+protocol NetworkNFTServiceProtocol{
+    func fetchProfileRequest(completion: @escaping (Result<Profile, Error>) -> Void)
+    func fetchMyFavNFT(from  arrayId: [String], completion: @escaping (Result<MyFavNFT, Error>) -> Void)
+    func fetchMyNFT(from  arrayId: [String], completion: @escaping (Result<MyNFT, Error>) -> Void)
+    func deleteFromFav(from likes: Likes,completion: @escaping (Result<Void, Error>) -> Void)
+}
+
 class NetworkNFTService {
     
     private var isFetching = false

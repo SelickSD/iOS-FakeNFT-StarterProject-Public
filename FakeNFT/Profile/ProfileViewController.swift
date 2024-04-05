@@ -40,6 +40,7 @@ class ProfileViewController: UIViewController {
         descriptionTextView.isEditable = false
         descriptionTextView.font = UIFont(name: "SFProText-Regular", size: 13)
         descriptionTextView.textColor = .black
+        descriptionTextView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
         descriptionTextView.backgroundColor = .white
         return descriptionTextView
     }()
