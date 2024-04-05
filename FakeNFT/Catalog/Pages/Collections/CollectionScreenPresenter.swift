@@ -23,7 +23,10 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
         ) { [weak self] _ in
             guard let self = self
             else { return }
-            self.view?.updateTableViewAnimated()
+            nfts = collectionService.nfts
+            if nfts.count == collection.nfts.count {
+                self.view?.updateScrollViewAnimated()
+            }
         }
     }
 
@@ -32,17 +35,8 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     }
 
     func viewDidLoad() {
-//        guard !collection.nfts.isEmpty else {return}
-//        if self.nfts.count == 0 {
-//
-//            self.collectionService.fetchNfts(collectionElement: collection.nfts, completion: { item in
-//                switch Result<Any, <#Failure: Error#>> {
-//                case .success(let body):
-//                    self.nfts.append(body)
-//                }
-//            })
-//
-//        }
+        collectionService.resetNft()
+        collectionService.fetchNfts(collectionElement: collection.nfts) { _ in }
     }
 
     func getOptions() -> (urlCover: URL, options: KingfisherOptionsInfo)? {
@@ -65,8 +59,7 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     //    }
 
     func getValueCount() -> Int {
-        nfts = collectionService.nfts
-        print(collectionService.nfts.count)
+//        nfts = collectionService.nfts
         return nfts.count
     }
 

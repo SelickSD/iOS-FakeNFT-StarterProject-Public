@@ -78,7 +78,6 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
-
         drawSelf()
     }
 
@@ -91,10 +90,8 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         fatalError("init(coder:) has not been implemented")
     }
 
-    func updateTableViewAnimated() {
-        print(#function)
+    func updateScrollViewAnimated() {
         let count = presenter.getValueCount()
-
         collectionsCollectionView.performBatchUpdates {
             let indexPath = (0 ..< count).map { IndexPath(item: $0, section: 0) }
             self.collectionsCollectionView.insertItems(at: indexPath)

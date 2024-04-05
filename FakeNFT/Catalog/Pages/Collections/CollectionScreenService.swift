@@ -19,6 +19,10 @@ final class CollectionScreenService {
 
     private init() {}
 
+    func resetNft() {
+        nfts = []
+    }
+
     func loadImageFromUrl(from urlString: String, completion: @escaping (UIImageView?) -> Void) {
         guard let url = URL(string: urlString) else {
             completion(nil)
@@ -51,7 +55,7 @@ final class CollectionScreenService {
         self.isFetching = true
 
         for item in collectionElement {
-            let request = URLRequest.makeHTTPRequest(path: "/api/v1/nft/\(collectionElement)",
+            let request = URLRequest.makeHTTPRequest(path: "/api/v1/nft/\(item)",
                                                      httpMethod: "GET", needToken: true)
 
             let task = URLSession.shared.objectTask(for: request) { (result: Result<NftElementResult, Error>) in
@@ -69,6 +73,11 @@ final class CollectionScreenService {
                                                         description: body.description,
                                                         author: body.author,
                                                         id: body.id)
+                            self.nfts.append(nftElement)
+                            NotificationCenter.default.post(
+                                name: CollectionScreenService.didChangeNotification,
+                                object: self,
+                                userInfo: ["collections": self.nfts])
                             completion(.success(nftElement))
                             UIBlockingProgressHUD.dismiss()
                             self.isFetching = false

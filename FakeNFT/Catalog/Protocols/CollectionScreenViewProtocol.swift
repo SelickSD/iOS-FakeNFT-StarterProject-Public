@@ -7,6 +7,6 @@
 
 import UIKit
 protocol CollectionScreenViewProtocol: AnyObject {
-    func updateTableViewAnimated()
+    func updateScrollViewAnimated()
 //    func showAlert(alert: UIAlertController)
 }

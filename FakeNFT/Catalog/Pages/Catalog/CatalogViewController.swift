@@ -76,6 +76,7 @@ extension CatalogViewController: UITableViewDelegate {
         guard let collectionElement = presenter.getCollectionsElement(index: indexPath.row) else {return}
         let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement)
         let collectionsViewController = CollectionScreenViewController(presenter: collectionScreenPresenter)
+        collectionScreenPresenter.view = collectionsViewController
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem?.tintColor = .black
         self.navigationController?.pushViewController(collectionsViewController, animated: true)
