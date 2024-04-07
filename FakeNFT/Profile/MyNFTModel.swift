@@ -2,6 +2,7 @@ import UIKit
 
 struct Profile {
     let profileImage: UIImage?
+    let profileImageUrl: String?
     let profileName: String?
     let profileDescription: String?
     let profileSite: String?
@@ -35,6 +36,7 @@ struct MyFavNFT {
     let rating: Int?
     let isLike: Bool?
     let price: Double?
+    let id: String?
 }
 
 struct ProfileResult: Codable {
@@ -45,6 +47,13 @@ struct ProfileResult: Codable {
     let nfts: [String]
     let likes: [String]
     let id: String
+}
+
+struct ProfileEdit: Encodable {
+    let profileImageUrl: String?
+    let profileName: String?
+    let profileDescription: String?
+    let profileSite: String?
 }
 
 struct NftFromID: Codable {

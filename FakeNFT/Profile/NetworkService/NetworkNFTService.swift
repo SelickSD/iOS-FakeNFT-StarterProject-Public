@@ -35,7 +35,7 @@ class NetworkNFTService {
                     
                     
                 case .failure(let error):
-    
+                    
                     print("Ошибка при загрузке изображения:", error.localizedDescription)
                     completion(nil)
                 }
@@ -66,6 +66,7 @@ class NetworkNFTService {
                         profileImageView = imageView ?? UIImageView(image: UIImage(systemName: ""))
                         
                         let profile = Profile(profileImage: profileImageView.image,
+                                              profileImageUrl: profileResult.avatar,
                                               profileName: profileResult.name,
                                               profileDescription: profileResult.description,
                                               profileSite: profileResult.website,
@@ -82,7 +83,7 @@ class NetworkNFTService {
         }
         task.resume()
     }
-
+    
     func fetchMyFavNFT(from  arrayId: [String], completion: @escaping (Result<MyFavNFT, Error>) -> Void) {
         guard !self.isFetching else { return }
         self.isFetching = true
@@ -110,7 +111,8 @@ class NetworkNFTService {
                                                   title: nftResult.name,
                                                   rating: nftResult.rating,
                                                   isLike: true,
-                                                  price: nftResult.price)
+                                                  price: nftResult.price,
+                                                  id: id)
                             completion(.success(nftFav))
                         }
                     }
@@ -125,7 +127,7 @@ class NetworkNFTService {
     }
     
     func fetchMyNFT(from  arrayId: [String], completion: @escaping (Result<MyNFT, Error>) -> Void) {
-
+        
         guard !self.isFetching else { return }
         self.isFetching = true
         for id in arrayId {
@@ -140,7 +142,6 @@ class NetworkNFTService {
             request.httpMethod = "GET"
             request.setValue("application/json", forHTTPHeaderField: "Accept")
             request.setValue("\(self.token)", forHTTPHeaderField: "X-Practicum-Mobile-Token")
-            
             let task = URLSession.shared.objectTask(for: request) { (result: Result<MyNFTResult, Error>) in
                 switch result {
                 case .success(let nftResult):
@@ -151,10 +152,10 @@ class NetworkNFTService {
                             
                             let nftFav = MyNFT(author: nftResult.author,
                                                image: nftImageView.image,
-                                                  title: nftResult.name,
-                                                  rating: nftResult.rating,
-                                                  isLike: false,
-                                                  price: nftResult.price)
+                                               title: nftResult.name,
+                                               rating: nftResult.rating,
+                                               isLike: false,
+                                               price: nftResult.price)
                             completion(.success(nftFav))
                         }
                     }
@@ -168,26 +169,25 @@ class NetworkNFTService {
         }
     }
     
-    func deleteFromFav(from likes: Likes,completion: @escaping (Result<Void, Error>) -> Void) {
-
-        let url = "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/profile/1"
-        guard let url = URL(string: url)
+    func updateArrayFav(from likes: Likes,completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        guard let url = URL(string: "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/profile/1")
         else {
             self.isFetching = false
             return
         }
-        let parameters = likes.likesArray
+        let parameters = [
+            "likes" : likes.likesArray
+        ]
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("\(self.token)", forHTTPHeaderField: "X-Practicum-Mobile-Token")
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
-        do{
-            request.httpBody = try JSONEncoder().encode(parameters)
-        }catch{
-            print("Ошибка при кодирование параметров", error.localizedDescription)
-        }
+        let bodysParam = parameters.map{"\($0)=\($1)"}.joined(separator: "&")
+        request.httpBody = bodysParam.data(using: .utf8)
+        
         let task = URLSession.shared.dataTask(with: request) { (_, response, error) in
             if let error = error {
                 completion(.failure(NetworkError.urlRequestError(error)))
@@ -203,5 +203,45 @@ class NetworkNFTService {
         
         task.resume()
     }
+    
+    func updateProfile(from profileEdit: ProfileEdit,completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        guard let url = URL(string: "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/profile/1")
+        else {
+            self.isFetching = false
+            return
+        }
+        let parameters = [
+            "name": profileEdit.profileName ?? "",
+            "avatar": profileEdit.profileImageUrl ?? "",
+            "description": profileEdit.profileDescription ?? "",
+            "website": profileEdit.profileSite ?? ""
+        ]
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("\(self.token)", forHTTPHeaderField: "X-Practicum-Mobile-Token")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        let bodysParam = parameters.map{"\($0)=\($1)"}.joined(separator: "&")
+        request.httpBody = bodysParam.data(using: .utf8)
+        DispatchQueue.main.async {
+            let task = URLSession.shared.dataTask(with: request) { (_, response, error) in
+                if let error = error {
+                    completion(.failure(NetworkError.urlRequestError(error)))
+                }
+                if let responseCode = (response as? HTTPURLResponse)?.statusCode {
+                    if 200..<300 ~= responseCode {
+                    } else {
+                        completion(.failure(NetworkError.httpStatusCode(responseCode)))
+                    }
+                }
+                completion(.success(()))
+            }
+            
+            task.resume()
+        }
+    }
+
 }
 

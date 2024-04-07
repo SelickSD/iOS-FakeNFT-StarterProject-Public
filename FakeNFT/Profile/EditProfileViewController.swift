@@ -13,6 +13,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     
     private let network = NetworkNFTService()
     
+    private var avatarUrl: String?
+    
     private lazy var profileImage: UIImageView = {
         let profileImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
         profileImage.translatesAutoresizingMaskIntoConstraints = false
@@ -138,6 +140,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     init(state: Profile) {
         super.init(nibName: nil, bundle: nil)
         profileImage.image = state.profileImage
+        avatarUrl = state.profileImageUrl
         editNameTextField.text = state.profileName
         editDescriptionTextView.text = state.profileDescription
         editSiteTextField.text = state.profileSite
@@ -164,13 +167,20 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func dismissController(){
+        UIBlockingProgressHUD.show()
         if editNameTextField.text != "", editDescriptionTextView.text != "", editSiteTextField.text != ""{
             delegate?.updateProfile(from: Profile(profileImage: profileImage.image,
+                                                  profileImageUrl: avatarUrl,
                                                   profileName: editNameTextField.text,
                                                   profileDescription: editDescriptionTextView.text,
                                                   profileSite: editSiteTextField.text,
                                                   myNft: [],
                                                  myFavNft: []))
+            network.updateProfile(from: ProfileEdit(profileImageUrl: avatarUrl,
+                                                    profileName: editNameTextField.text,
+                                                    profileDescription: editDescriptionTextView.text,
+                                                    profileSite: editSiteTextField.text)){_ in }
+            UIBlockingProgressHUD.dismiss()
             dismiss(animated: true)
         }
   
@@ -203,19 +213,28 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         print("загрузить изображение")
         let alertController = UIAlertController(title: .none, message: "Хотите загрузить новое изображение?", preferredStyle: .alert)
         alertController.addTextField { textField in
-            textField.placeholder = "Введите url изображение .jpg"
+            textField.placeholder = "Введите url изображения в формате .jpg или .png"
         }
         let downloadImage = UIAlertAction(title: "Загрузить новое изображение?", style: .default) { _ in
             UIBlockingProgressHUD.show()
             guard let textField = alertController.textFields?.first else {return}
-            if let text = textField.text{
+            if let text = textField.text, text.hasSuffix(".jpg") || text.hasSuffix(".png"){
                 DispatchQueue.main.async {
                     self.network.loadImageFromUrl(from: text){ imageView in
                         self.profileImage.image = imageView?.image ?? UIImage(systemName: "")
+                        self.avatarUrl = text
                         UIBlockingProgressHUD.dismiss()
 //                    https://beautyhack.ru/assets/images/2019/10/phoenix_txt.jpg
+//                    https://beautyhack.ru/assets/images/2019/10/nyet212-98_2018_161949_hd.jpg
                     }
-                }}
+                }
+            } else {
+                let alertController = UIAlertController(title: "Ошибка", message: "Неверный формат, ссылка должна оканчиваться на .jpg или .png", preferredStyle: .alert)
+                let messageAlert = UIAlertAction(title: "OK", style: .default)
+                alertController.addAction(messageAlert)
+                self.present(alertController, animated: true)
+                UIBlockingProgressHUD.dismiss()
+            }
         }
         
         let cancel = UIAlertAction(title: "Отменить", style: .destructive)

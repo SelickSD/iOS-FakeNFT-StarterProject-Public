@@ -4,13 +4,15 @@ import WebKit
 
 class ProfileViewController: UIViewController {
     
-    private var profile: Profile?
+
 
     private let nftServise = NetworkNFTService()
     
     private var myNftArray: [String] = []
     
     private var myFavNftArray: [String] = []
+    
+    private var avatarUrl: String?
     
     private var categories = ["Мои NFT","Избранные NFT","О разработчике"]
     
@@ -87,6 +89,7 @@ class ProfileViewController: UIViewController {
             case .success(let profile):
                 DispatchQueue.main.async {
                     self.profileImage.image = profile.profileImage
+                    self.avatarUrl = profile.profileImageUrl
                     self.profileNameTitle.text = profile.profileName
                     self.descriptionTextView.text = profile.profileDescription
                     self.profileWebTitle.text = profile.profileSite
@@ -108,6 +111,7 @@ class ProfileViewController: UIViewController {
     @objc private func editProfileInfo(){
         let editProfileInfoNav = EditProfileViewController(state: .init(
             profileImage: profileImage.image,
+            profileImageUrl: avatarUrl,
             profileName: profileNameTitle.text,
             profileDescription: descriptionTextView.text,
             profileSite: profileWebTitle.text,
@@ -191,12 +195,14 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
             let NFTNav = MyNFTViewController()
+            NFTNav.idArray = myNftArray
             self.navigationController?.pushViewController(NFTNav, animated: true)
             
         }
         if indexPath.row == 1 {
             let favouritesNav = FavouritesViewController()
             favouritesNav.idFavArray = myFavNftArray
+            print(myFavNftArray)
             self.navigationController?.pushViewController(favouritesNav, animated: true)
             
         }
@@ -210,6 +216,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
 extension ProfileViewController: EditProfileViewControllerDelegate {
     func updateProfile(from profile: Profile) {
         profileImage.image = profile.profileImage
+        avatarUrl = profile.profileImageUrl
         profileNameTitle.text = profile.profileName
         descriptionTextView.text = profile.profileDescription
         profileWebTitle.text = profile.profileSite

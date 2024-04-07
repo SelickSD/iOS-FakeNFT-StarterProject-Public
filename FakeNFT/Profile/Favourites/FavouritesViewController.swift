@@ -135,6 +135,8 @@ extension FavouritesViewController: UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(FavouritesCollectionViewCell.self)", for: indexPath) as? FavouritesCollectionViewCell else{return FavouritesCollectionViewCell()}
         cell.configure(with: nftFavArray[indexPath.row])
+        cell.delegate = self
+        cell.indexPath = indexPath
         return cell
     }
 }
@@ -147,5 +149,17 @@ extension FavouritesViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 7
+    }
+}
+
+extension FavouritesViewController: FavouritesCollectionCellDelegate {
+    func deleteFromFav(indexPath: IndexPath) {
+        let id = nftFavArray[indexPath.row].id
+        nftFavArray.removeAll(where: {$0.id == id})
+        idFavArray.removeAll(where: {$0 == id})
+        nftCollectionView.reloadData()
+        nftService.updateArrayFav(from: .init(likesArray: idFavArray)){_ in}
+        print("Удалить из избранного")
+        updatePlaceHolderNaf()
     }
 }
