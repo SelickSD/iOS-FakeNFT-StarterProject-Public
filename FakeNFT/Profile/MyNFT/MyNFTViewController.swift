@@ -3,7 +3,7 @@ import UIKit
 
 class MyNFTViewController: UIViewController {
     
-    private var nftService = NetworkNFTService()
+    private var nftService: NetworkNFTServiceProtocol
     
     var idArray: [String] = [
 //        "ca34d35a-4507-47d9-9312-5ea7053994c0",
@@ -51,6 +51,15 @@ class MyNFTViewController: UIViewController {
         nftPlaceHolderTitle.isHidden = true
         return nftPlaceHolderTitle
     }()
+    
+    init(nftService: NetworkNFTServiceProtocol) {
+        self.nftService = nftService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

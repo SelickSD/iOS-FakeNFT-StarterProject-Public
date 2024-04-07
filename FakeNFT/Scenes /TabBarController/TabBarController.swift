@@ -3,7 +3,7 @@ import Foundation
 import UIKit
 
 class TabBarController: UITabBarController{
-    let profileVC = ProfileViewController()
+    let profileVC = ProfileViewController(nftServise: NetworkNFTService())
     let catalogVC = CatalogViewController()
     let shoppingСart = ShoppingСartViewController()
     let statisticVC = StatisticViewController()

@@ -4,13 +4,15 @@ import UIKit
 import Kingfisher
 
 protocol NetworkNFTServiceProtocol{
+    func loadImageFromUrl(from urlString: String, completion: @escaping (UIImageView?) -> Void)
     func fetchProfileRequest(completion: @escaping (Result<Profile, Error>) -> Void)
     func fetchMyFavNFT(from  arrayId: [String], completion: @escaping (Result<MyFavNFT, Error>) -> Void)
     func fetchMyNFT(from  arrayId: [String], completion: @escaping (Result<MyNFT, Error>) -> Void)
-    func deleteFromFav(from likes: Likes,completion: @escaping (Result<Void, Error>) -> Void)
+    func updateArrayFav(from likes: Likes,completion: @escaping (Result<Void, Error>) -> Void)
+    func updateProfile(from profileEdit: ProfileEdit,completion: @escaping (Result<Void, Error>) -> Void)
 }
 
-class NetworkNFTService {
+class NetworkNFTService: NetworkNFTServiceProtocol{
     
     private var isFetching = false
     
@@ -73,11 +75,13 @@ class NetworkNFTService {
                                               myNft: profileResult.nfts,
                                               myFavNft: profileResult.likes)
                         completion(.success(profile))
+                        self.isFetching = false
                     }
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
                     completion(.failure(error))
+                    self.isFetching = false
                 }
             }
         }
@@ -114,11 +118,13 @@ class NetworkNFTService {
                                                   price: nftResult.price,
                                                   id: id)
                             completion(.success(nftFav))
+                            self.isFetching = false
                         }
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
                         completion(.failure(error))
+                        self.isFetching = false
                     }
                 }
             }
@@ -157,11 +163,13 @@ class NetworkNFTService {
                                                isLike: false,
                                                price: nftResult.price)
                             completion(.success(nftFav))
+                            self.isFetching = false
                         }
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
                         completion(.failure(error))
+                        self.isFetching = false
                     }
                 }
             }
@@ -176,21 +184,20 @@ class NetworkNFTService {
             self.isFetching = false
             return
         }
-        let parameters = [
-            "likes" : likes.likesArray
-        ]
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("\(self.token)", forHTTPHeaderField: "X-Practicum-Mobile-Token")
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
-        let bodysParam = parameters.map{"\($0)=\($1)"}.joined(separator: "&")
-        request.httpBody = bodysParam.data(using: .utf8)
+        let bodysParam = likes.likesArray.map{"\($0)"}.joined(separator: ",")
+        let requestBody = "likes=\(bodysParam)"
+        request.httpBody = requestBody.data(using: .utf8)
         
         let task = URLSession.shared.dataTask(with: request) { (_, response, error) in
             if let error = error {
                 completion(.failure(NetworkError.urlRequestError(error)))
+                self.isFetching = false
             }
             if let responseCode = (response as? HTTPURLResponse)?.statusCode {
                 if 200..<300 ~= responseCode {
@@ -199,6 +206,7 @@ class NetworkNFTService {
                 }
             }
             completion(.success(()))
+            self.isFetching = false
         }
         
         task.resume()
@@ -229,6 +237,7 @@ class NetworkNFTService {
             let task = URLSession.shared.dataTask(with: request) { (_, response, error) in
                 if let error = error {
                     completion(.failure(NetworkError.urlRequestError(error)))
+                    self.isFetching = false
                 }
                 if let responseCode = (response as? HTTPURLResponse)?.statusCode {
                     if 200..<300 ~= responseCode {
@@ -237,6 +246,7 @@ class NetworkNFTService {
                     }
                 }
                 completion(.success(()))
+                self.isFetching = false
             }
             
             task.resume()

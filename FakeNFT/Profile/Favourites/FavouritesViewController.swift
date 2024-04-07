@@ -4,9 +4,11 @@ import Foundation
 
 class FavouritesViewController: UIViewController {
     
-    private let nftService = NetworkNFTService()
+    private let nftService: NetworkNFTServiceProtocol
     
     var idFavArray: [String] = []
+    
+    var newIdFavArray: (([String]) -> Void)?
     
     private var nftFavArray: [MyFavNFT] = [
 //        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melisa", rating: 0, isLike: true, price: 3.54),
@@ -53,6 +55,15 @@ class FavouritesViewController: UIViewController {
         myFavNftPlaceHolderTitle.isHidden = true
         return myFavNftPlaceHolderTitle
     }()
+    
+    init(nftService: NetworkNFTServiceProtocol) {
+        self.nftService = nftService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         navigationController?.tabBarController?.tabBar.isHidden = true
@@ -159,6 +170,7 @@ extension FavouritesViewController: FavouritesCollectionCellDelegate {
         idFavArray.removeAll(where: {$0 == id})
         nftCollectionView.reloadData()
         nftService.updateArrayFav(from: .init(likesArray: idFavArray)){_ in}
+        newIdFavArray?(idFavArray)
         print("Удалить из избранного")
         updatePlaceHolderNaf()
     }

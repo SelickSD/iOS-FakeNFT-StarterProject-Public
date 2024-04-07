@@ -11,7 +11,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     
     weak var delegate: EditProfileViewControllerDelegate?
     
-    private let network = NetworkNFTService()
+    private let network: NetworkNFTServiceProtocol
     
     private var avatarUrl: String?
     
@@ -137,7 +137,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
         return clearButton
     }()
-    init(state: Profile) {
+    init(state: Profile, network: NetworkNFTServiceProtocol) {
+        self.network = network
         super.init(nibName: nil, bundle: nil)
         profileImage.image = state.profileImage
         avatarUrl = state.profileImageUrl

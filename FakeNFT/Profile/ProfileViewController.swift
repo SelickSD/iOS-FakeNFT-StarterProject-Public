@@ -6,7 +6,7 @@ class ProfileViewController: UIViewController {
     
 
 
-    private let nftServise = NetworkNFTService()
+    private let nftServise: NetworkNFTServiceProtocol
     
     private var myNftArray: [String] = []
     
@@ -72,10 +72,21 @@ class ProfileViewController: UIViewController {
         profileTableView.register(ProfileTableViewCell.self, forCellReuseIdentifier: "ProfileTableViewCell")
         return profileTableView
     }()
+    
+    init(nftServise: NetworkNFTServiceProtocol) {
+        self.nftServise = nftServise
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.tabBarController?.tabBar.isHidden = false
         self.categories[0] = "Мои NFT (\(self.myNftArray.count))"
         self.categories[1] = "Избранные NFT (\(self.myFavNftArray.count))"
+        self.profileTableView.reloadData()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,7 +128,7 @@ class ProfileViewController: UIViewController {
             profileSite: profileWebTitle.text,
             myNft: [],
             myFavNft: []
-))
+        ), network: nftServise)
         editProfileInfoNav.delegate = self
         let navController = UINavigationController(rootViewController: editProfileInfoNav)
         present(navController, animated: true, completion: nil)
@@ -194,14 +205,17 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
-            let NFTNav = MyNFTViewController()
+            let NFTNav = MyNFTViewController(nftService: nftServise)
             NFTNav.idArray = myNftArray
             self.navigationController?.pushViewController(NFTNav, animated: true)
             
         }
         if indexPath.row == 1 {
-            let favouritesNav = FavouritesViewController()
+            let favouritesNav = FavouritesViewController(nftService: nftServise)
             favouritesNav.idFavArray = myFavNftArray
+            favouritesNav.newIdFavArray = { [weak self] arrayId in
+                self?.myFavNftArray = arrayId
+            }
             print(myFavNftArray)
             self.navigationController?.pushViewController(favouritesNav, animated: true)
             
