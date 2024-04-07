@@ -43,6 +43,7 @@ final class StatisticTableViewCell: UITableViewCell {
     private lazy var nameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.font = UIFont.boldSystemFont(ofSize: 22)
+        nameLabel.numberOfLines = 1
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         return nameLabel
     }()
@@ -71,11 +72,7 @@ final class StatisticTableViewCell: UITableViewCell {
         contentContainer.addSubview(userImageView)
         contentContainer.addSubview(nameLabel)
         contentContainer.addSubview(scoreLabel)
-        
-        
         contentView.backgroundColor = .clear
-        
-        
         
         NSLayoutConstraint.activate([
             contentContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -93,6 +90,7 @@ final class StatisticTableViewCell: UITableViewCell {
             
             nameLabel.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 8),
             nameLabel.centerYAnchor.constraint(equalTo: contentContainer.centerYAnchor),
+            nameLabel.widthAnchor.constraint(equalToConstant: 186),
             
             scoreLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             scoreLabel.centerYAnchor.constraint(equalTo: contentContainer.centerYAnchor)

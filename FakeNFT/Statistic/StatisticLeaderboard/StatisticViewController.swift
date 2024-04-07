@@ -53,7 +53,9 @@ final class StatisticViewController: UIViewController {
         sortButton = UIBarButtonItem(image: UIImage(named: "Sort"), style: .plain, target: self, action: #selector(sortButtonTapped))
         sortButton?.tintColor = .black
         guard let sortButton = sortButton else { return }
+        navigationController?.navigationBar.tintColor = .black
         navigationItem.rightBarButtonItem = sortButton
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
     
     @objc private func sortButtonTapped() {
@@ -103,5 +105,11 @@ extension StatisticViewController: UITableViewDataSource {
 extension StatisticViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 88
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = statisticModel.getUser(at: indexPath)
+        let userInfoVC = UserInfoViewController(userId: user.id)
+        navigationController?.pushViewController(userInfoVC, animated: true)
     }
 }
