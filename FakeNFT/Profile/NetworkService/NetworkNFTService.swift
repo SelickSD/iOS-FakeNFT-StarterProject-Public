@@ -189,8 +189,13 @@ class NetworkNFTService: NetworkNFTServiceProtocol{
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("\(self.token)", forHTTPHeaderField: "X-Practicum-Mobile-Token")
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        
-        let bodysParam = likes.likesArray.map{"\($0)"}.joined(separator: ",")
+        var bodysParam: String = "null"
+        if !likes.likesArray.isEmpty{
+            bodysParam = likes.likesArray.map{"\($0)"}.joined(separator: ",")
+            
+        }else{
+            bodysParam = "null"
+        }
         let requestBody = "likes=\(bodysParam)"
         request.httpBody = requestBody.data(using: .utf8)
         
