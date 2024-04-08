@@ -38,8 +38,16 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
         } completion: { _ in }
     }
 
-    func showAlert(alert: UIAlertController) {
-        present(alert, animated: true)
+    func showAlert(alert: AlertMessage) {
+        let alertController = UIAlertController(title: alert.title,
+                                      message: alert.message,
+                                      preferredStyle: alert.preferredStyle)
+        alert.action.forEach{
+            alertController.addAction(UIAlertAction(title: $0.actionTitle,
+                                                    style: $0.actionStyle,
+                                                    handler: $0.handler))
+        }
+        present(alertController, animated: true)
     }
 
     @objc private func sortTapped() {

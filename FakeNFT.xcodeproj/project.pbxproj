@@ -52,6 +52,8 @@
 		4465A0E72BC0338F000AFE89 /* CatalogNetWorkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465A0E62BC0338F000AFE89 /* CatalogNetWorkService.swift */; };
 		4465A0EB2BC099BD000AFE89 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465A0EA2BC099BD000AFE89 /* WebViewController.swift */; };
 		4465A0F32BC430DB000AFE89 /* LikesNftResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465A0F22BC430DB000AFE89 /* LikesNftResult.swift */; };
+		4465A0F52BC43EB5000AFE89 /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465A0F42BC43EB5000AFE89 /* AlertMessage.swift */; };
+		4465A0F72BC44192000AFE89 /* AlertActionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465A0F62BC44192000AFE89 /* AlertActionEvent.swift */; };
 		44E4C0B02BB1CB49008081B9 /* CatalogTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0AF2BB1CB49008081B9 /* CatalogTableViewCell.swift */; };
 		44E4C0B42BB36E82008081B9 /* CatalogPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0B32BB36E82008081B9 /* CatalogPresenter.swift */; };
 		44E4C0B62BB36F93008081B9 /* CatalogPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4C0B52BB36F93008081B9 /* CatalogPresenterProtocol.swift */; };
@@ -138,6 +140,8 @@
 		4465A0E62BC0338F000AFE89 /* CatalogNetWorkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogNetWorkService.swift; sourceTree = "<group>"; };
 		4465A0EA2BC099BD000AFE89 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		4465A0F22BC430DB000AFE89 /* LikesNftResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesNftResult.swift; sourceTree = "<group>"; };
+		4465A0F42BC43EB5000AFE89 /* AlertMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertMessage.swift; sourceTree = "<group>"; };
+		4465A0F62BC44192000AFE89 /* AlertActionEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertActionEvent.swift; sourceTree = "<group>"; };
 		44E4C0AF2BB1CB49008081B9 /* CatalogTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogTableViewCell.swift; sourceTree = "<group>"; };
 		44E4C0B32BB36E82008081B9 /* CatalogPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogPresenter.swift; sourceTree = "<group>"; };
 		44E4C0B52BB36F93008081B9 /* CatalogPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogPresenterProtocol.swift; sourceTree = "<group>"; };
@@ -460,6 +464,8 @@
 				4465A0E02BBDB775000AFE89 /* NftElement.swift */,
 				4465A0E22BBDB855000AFE89 /* NftElementResult.swift */,
 				4465A0F22BC430DB000AFE89 /* LikesNftResult.swift */,
+				4465A0F42BC43EB5000AFE89 /* AlertMessage.swift */,
+				4465A0F62BC44192000AFE89 /* AlertActionEvent.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -748,6 +754,7 @@
 				3F6806D729CBC50A00B4F915 /* CellsReusingUtils.swift in Sources */,
 				4465A0D22BBB4155000AFE89 /* NFTCollectionsViewCell.swift in Sources */,
 				0C79EE612A76DCD600EE90EA /* NftByIdRequest.swift in Sources */,
+				4465A0F72BC44192000AFE89 /* AlertActionEvent.swift in Sources */,
 				E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */,
 				4465A0EB2BC099BD000AFE89 /* WebViewController.swift in Sources */,
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
@@ -755,6 +762,7 @@
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,
 				44E4C0BC2BB37504008081B9 /* CatalogViewControllerProtocol.swift in Sources */,
+				4465A0F52BC43EB5000AFE89 /* AlertMessage.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
 				4B64F40D2BAE00D700117331 /* ShoppingСartViewController.swift in Sources */,
 				44E4C0B42BB36E82008081B9 /* CatalogPresenter.swift in Sources */,

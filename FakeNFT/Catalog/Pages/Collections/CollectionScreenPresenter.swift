@@ -4,7 +4,7 @@
 //
 //  Created by Сергей Денисенко on 03.04.2024.
 //
-import UIKit
+import Foundation
 final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     weak var view: CollectionScreenViewProtocol?
     private var collectionServiceObserver: NSObjectProtocol?

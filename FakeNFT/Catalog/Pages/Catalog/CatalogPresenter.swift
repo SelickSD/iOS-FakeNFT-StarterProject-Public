@@ -4,7 +4,7 @@
 //
 //  Created by Сергей Денисенко on 26.03.2024.
 //
-import UIKit
+import Foundation
 final class CatalogPresenter: CatalogPresenterProtocol {
     weak var view: CatalogViewControllerProtocol?
     private var catalogServiceObserver: NSObjectProtocol?
@@ -56,27 +56,27 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     }
 
     func showSortAlert() {
-        let sortTitle = NSLocalizedString("catalogView.sortTitle",
-                                          comment: "Text displayed like sort alert description")
-        let sortName = NSLocalizedString("catalogView.sortName",
-                                         comment: "Text displayed like sort alert description")
-        let sortNFT = NSLocalizedString("catalogView.sortNFT",
-                                        comment: "Text displayed like sort alert description")
-        let sortClose = NSLocalizedString("catalogView.sortClose",
-                                          comment: "Text displayed like sort alert description")
 
-        let alert = UIAlertController(
-            title: sortTitle,
-            message: nil,
-            preferredStyle: .actionSheet
-        )
+        let sortNameAlert = AlertActionEvent(actionTitle: NSLocalizedString("catalogView.sortName",
+                                                                            comment: "Text displayed like sort alert description"),
+                                             actionStyle: .default,
+                                             handler: {_ in })
 
-        [UIAlertAction(title: sortName, style: UIAlertAction.Style.default) {_ in },
-         UIAlertAction(title: sortNFT, style: UIAlertAction.Style.default) {_ in },
-         UIAlertAction(title: sortClose, style: UIAlertAction.Style.cancel) {_ in }
-        ].forEach{
-            alert.addAction($0)
-        }
+        let sortNFTAlert = AlertActionEvent(actionTitle: NSLocalizedString("catalogView.sortNFT",
+                                                                           comment: "Text displayed like sort alert description"),
+                                            actionStyle: .default,
+                                             handler: {_ in })
+        let sortCloseAlert = AlertActionEvent(actionTitle: NSLocalizedString("catalogView.sortClose",
+                                                                             comment: "Text displayed like sort alert description"),
+                                              actionStyle: .cancel,
+                                               handler: {_ in })
+
+        let alert = AlertMessage(title: NSLocalizedString("catalogView.sortTitle",
+                                                          comment: "Text displayed like sort alert description"),
+                                 message: nil,
+                                 preferredStyle: .actionSheet,
+                                 action: [sortNameAlert, sortNFTAlert, sortCloseAlert])
+
         view?.showAlert(alert: alert)
     }
 
@@ -85,13 +85,16 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     }
 
     private func showConnectError(message: String) {
-        let alert = UIAlertController(
-            title: "Сетевая ошибка",
-            message: message,
-            preferredStyle: .alert
-        )
-        let action = UIAlertAction(title: "Отмена", style: .destructive) {_ in }
-        alert.addAction(action)
+        let action = AlertActionEvent(actionTitle: "Отмена",
+                                      actionStyle: .destructive,
+                                      handler: {_ in })
+
+
+        let alert = AlertMessage(title: "Сетевая ошибка",
+                                 message: message,
+                                 preferredStyle: .alert,
+                                 action: [action])
+
         view?.showAlert(alert: alert)
     }
 
@@ -100,8 +103,8 @@ final class CatalogPresenter: CatalogPresenterProtocol {
             switch likesResult {
             case .success(let likes):
                 self.likes = likes
-            case .failure(_):
-                break
+            case .failure(let error):
+                self.showConnectError(message: "\(error)")
             }
         }
     }

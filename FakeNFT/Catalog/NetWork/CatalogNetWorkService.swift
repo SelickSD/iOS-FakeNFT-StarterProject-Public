@@ -41,9 +41,7 @@ final class CatalogNetWorkService {
                 switch result {
                 case .success(_):
                     completion(imageView)
-                case .failure(let error):
-                    //MARK: TODO
-                    print("Ошибка при загрузке изображения:", error.localizedDescription)
+                case .failure(_):
                     completion(nil)
                 }
             }
@@ -87,7 +85,6 @@ final class CatalogNetWorkService {
                         }
                     }
                 case .failure(_):
-                    //MARK: TODO
                     UIBlockingProgressHUD.dismiss()
                     self.isFetching = false
                 }
@@ -160,7 +157,6 @@ final class CatalogNetWorkService {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let body):
-
                     completion(.success(body.likes))
                     UIBlockingProgressHUD.dismiss()
                     self.isFetching = false
