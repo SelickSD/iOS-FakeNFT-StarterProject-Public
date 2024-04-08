@@ -5,7 +5,6 @@
 //  Created by Никита on 07.04.2024.
 //
 
-import Foundation
 import UIKit
 import ProgressHUD
 import Kingfisher

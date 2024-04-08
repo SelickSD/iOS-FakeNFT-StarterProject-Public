@@ -5,7 +5,6 @@
 //  Created by Никита on 07.04.2024.
 //
 
-import Foundation
 import UIKit
 
 final class UserInfoCollectionCell: UITableViewCell, ReuseIdentifying {
@@ -44,6 +43,10 @@ final class UserInfoCollectionCell: UITableViewCell, ReuseIdentifying {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func set(count: Int) {
+        countLabel.text = "(\(count))"
+    }
+    
     private func setupViews() {
         selectionStyle = .none
         accessoryView = customDisclosureIndicator
@@ -62,9 +65,5 @@ final class UserInfoCollectionCell: UITableViewCell, ReuseIdentifying {
             countLabel.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 8),
             countLabel.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
         ])
-    }
-    
-    func set(count: Int) {
-        countLabel.text = "(\(count))"
     }
 }
