@@ -126,7 +126,7 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
 
     private func addRating() {
         for item in 1...5 {
-            var starView = UIImageView()
+            let starView = UIImageView()
             starView.translatesAutoresizingMaskIntoConstraints = false
             starView.clipsToBounds = true
             if item > rating {
