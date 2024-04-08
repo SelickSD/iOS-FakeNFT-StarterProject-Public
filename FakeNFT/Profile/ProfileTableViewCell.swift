@@ -2,7 +2,7 @@
 import UIKit
 
 class ProfileTableViewCell: UITableViewCell {
-
+    
     lazy var title: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false

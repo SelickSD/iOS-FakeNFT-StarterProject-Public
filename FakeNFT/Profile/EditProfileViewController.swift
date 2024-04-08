@@ -176,7 +176,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
                                                   profileDescription: editDescriptionTextView.text,
                                                   profileSite: editSiteTextField.text,
                                                   myNft: [],
-                                                 myFavNft: []))
+                                                  myFavNft: []))
             network.updateProfile(from: ProfileEdit(profileImageUrl: avatarUrl,
                                                     profileName: editNameTextField.text,
                                                     profileDescription: editDescriptionTextView.text,
@@ -207,7 +207,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(loadingNewImage))
         tapGesture.cancelsTouchesInView = false
         editChangeImageLabel.addGestureRecognizer(tapGesture)
-     
+        
     }
     
     @objc private func loadingNewImage(){
@@ -224,8 +224,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
                         self.profileImage.image = imageView?.image ?? UIImage(systemName: "")
                         self.avatarUrl = text
                         UIBlockingProgressHUD.dismiss()
-//                    https://beautyhack.ru/assets/images/2019/10/phoenix_txt.jpg
-//                    https://beautyhack.ru/assets/images/2019/10/nyet212-98_2018_161949_hd.jpg
+                        //                    https://beautyhack.ru/assets/images/2019/10/phoenix_txt.jpg
+                        //                    https://beautyhack.ru/assets/images/2019/10/nyet212-98_2018_161949_hd.jpg
                     }
                 }
             } else {

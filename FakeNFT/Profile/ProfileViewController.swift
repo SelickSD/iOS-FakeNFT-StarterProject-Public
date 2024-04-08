@@ -111,13 +111,13 @@ class ProfileViewController: UIViewController {
                     self.profileTableView.reloadData()
                     UIBlockingProgressHUD.dismiss()
                 }
-
+                
             case .failure(_ ):
                 UIBlockingProgressHUD.dismiss()
                 break
             }
+        }
     }
-                                       }
     @objc private func editProfileInfo(){
         let editProfileInfoNav = EditProfileViewController(state: .init(
             profileImage: profileImage.image,
