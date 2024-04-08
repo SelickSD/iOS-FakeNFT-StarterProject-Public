@@ -121,7 +121,7 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
             costLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             costLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
             costLabel.widthAnchor.constraint(equalToConstant: 68)
-            ])
+        ])
     }
 
     private func addRating() {

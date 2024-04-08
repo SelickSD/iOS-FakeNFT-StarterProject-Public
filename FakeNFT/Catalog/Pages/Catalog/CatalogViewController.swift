@@ -24,11 +24,11 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
         self.presenter = presenter
         super .init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func updateTableViewAnimated() {
         let count = presenter.getValueCount()
 
@@ -40,8 +40,8 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
 
     func showAlert(alert: AlertMessage) {
         let alertController = UIAlertController(title: alert.title,
-                                      message: alert.message,
-                                      preferredStyle: alert.preferredStyle)
+                                                message: alert.message,
+                                                preferredStyle: alert.preferredStyle)
         alert.action.forEach{
             alertController.addAction(UIAlertAction(title: $0.actionTitle,
                                                     style: $0.actionStyle,
@@ -108,7 +108,7 @@ extension CatalogViewController: UITableViewDataSource {
         cell.configCell(catalogItem: catalogItem)
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 179
     }

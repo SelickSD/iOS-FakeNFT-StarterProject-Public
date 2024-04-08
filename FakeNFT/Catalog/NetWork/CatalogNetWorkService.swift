@@ -13,29 +13,29 @@ final class CatalogNetWorkService {
     private (set) var nfts: [NftElement] = []
     private (set) var collections: [Collection] = []
     private (set) var likes: [String] = []
-
+    
     private let urlSession = URLSession.shared
     private var isFetching = false
     private var task: URLSessionTask?
-
+    
     private init() {}
-
+    
     func resetNft() {
         nfts = []
     }
-
+    
     func resetCollections() {
         collections = []
     }
-
+    
     func loadImageFromUrl(from urlString: String, completion: @escaping (UIImageView?) -> Void) {
         guard let url = URL(string: urlString) else {
             completion(nil)
             return
         }
-
+        
         let imageView = UIImageView()
-
+        
         DispatchQueue.main.async {
             imageView.kf.setImage(with: url) { result in
                 switch result {
@@ -47,19 +47,19 @@ final class CatalogNetWorkService {
             }
         }
     }
-
+    
     func fetchNfts(collectionElement: [String]) {
         UIBlockingProgressHUD.show()
         guard !self.isFetching,
               !collectionElement.isEmpty else { UIBlockingProgressHUD.dismiss()
             return }
-
+        
         self.isFetching = true
-
+        
         for item in collectionElement {
             let request = URLRequest.makeHTTPRequest(path: "/api/v1/nft/\(item)",
                                                      httpMethod: "GET", needToken: true)
-
+            
             let task = URLSession.shared.objectTask(for: request) { (result: Result<NftElementResult, Error>) in
                 switch result {
                 case .success(let body):
@@ -92,12 +92,12 @@ final class CatalogNetWorkService {
             task.resume()
         }
     }
-
+    
     func fetchCollections() {
         UIBlockingProgressHUD.show()
         guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
             return }
-
+        
         self.isFetching = true
         let request = URLRequest.makeHTTPRequest(path: "/api/v1/collections",
                                                  httpMethod: "GET", needToken: true)
@@ -143,12 +143,12 @@ final class CatalogNetWorkService {
         }
         task.resume()
     }
-
+    
     func fetchLikes(completion: @escaping (Result<[String], Error>) -> Void) {
         UIBlockingProgressHUD.show()
         guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
             return }
-
+        
         self.isFetching = true
         let request = URLRequest.makeHTTPRequest(path: "/api/v1/profile/1",
                                                  httpMethod: "GET", needToken: true)

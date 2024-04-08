@@ -12,7 +12,7 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     private var nfts: [NftElement] = []
     private let collection: Collection
     private var likes: [String]
-
+    
     init(collection: Collection, likes: [String]) {
         self.collection = collection
         self.likes = likes
@@ -25,6 +25,8 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
             else { return }
             nfts = collectionService.nfts
             if nfts.count == collection.nfts.count {
+                let sortedCollections = sotrNFTElements(elements:  nfts)
+                nfts = sortedCollections
                 self.view?.updateScrollViewAnimated()
             }
         }
@@ -33,16 +35,16 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-
+    
     func viewDidLoad() {
         collectionService.resetNft()
         collectionService.fetchNfts(collectionElement: collection.nfts)
     }
-
+    
     func getOptions() -> Collection {
         return collection
     }
-
+    
     func getNftItem(index: Int) -> (nftElement: NftElement, isLikes: Bool)? {
         guard index < nfts.count else {return nil}
         if likes.contains(nfts[index].id) {
@@ -51,8 +53,23 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
             return (nfts[index], false)
         }
     }
-
+    
     func getValueCount() -> Int {
         return nfts.count
+    }
+    
+    private func sotrNFTElements(elements: [NftElement]) -> [NftElement] {
+        var sortedNftElements: [NftElement] = []
+        var idNfts: [String] = []
+        elements.forEach{
+            idNfts.append($0.id)
+        }
+        let sortElementId = idNfts.sorted()
+        for item in sortElementId {
+            sortedNftElements.append(elements.first(where: { element in
+                element.id == item
+            }) ?? elements[0])
+        }
+        return sortedNftElements
     }
 }
