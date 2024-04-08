@@ -10,6 +10,7 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     private var catalogServiceObserver: NSObjectProtocol?
     private let catalogService = CatalogNetWorkService.shared
     private var collections: [Collection] = []
+    private var likes: [String] = []
 
     init() {
         catalogServiceObserver = NotificationCenter.default.addObserver(
@@ -20,6 +21,7 @@ final class CatalogPresenter: CatalogPresenterProtocol {
             guard let self = self
             else { return }
             self.view?.updateTableViewAnimated()
+            fetchLikes()
         }
     }
 
@@ -78,6 +80,10 @@ final class CatalogPresenter: CatalogPresenterProtocol {
         view?.showAlert(alert: alert)
     }
 
+    func getLikes() -> [String] {
+        return likes
+    }
+
     private func showConnectError(message: String) {
         let alert = UIAlertController(
             title: "Сетевая ошибка",
@@ -87,5 +93,16 @@ final class CatalogPresenter: CatalogPresenterProtocol {
         let action = UIAlertAction(title: "Отмена", style: .destructive) {_ in }
         alert.addAction(action)
         view?.showAlert(alert: alert)
+    }
+
+    private func fetchLikes() {
+        catalogService.fetchLikes() { likesResult in
+            switch likesResult {
+            case .success(let likes):
+                self.likes = likes
+            case .failure(_):
+                break
+            }
+        }
     }
 }

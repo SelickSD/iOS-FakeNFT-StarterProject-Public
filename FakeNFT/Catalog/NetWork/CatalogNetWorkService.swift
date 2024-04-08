@@ -12,6 +12,7 @@ final class CatalogNetWorkService {
     static let shared = CatalogNetWorkService()
     private (set) var nfts: [NftElement] = []
     private (set) var collections: [Collection] = []
+    private (set) var likes: [String] = []
 
     private let urlSession = URLSession.shared
     private var isFetching = false
@@ -141,6 +142,33 @@ final class CatalogNetWorkService {
             case .failure( _):
                 UIBlockingProgressHUD.dismiss()
                 self.isFetching = false
+            }
+        }
+        task.resume()
+    }
+
+    func fetchLikes(completion: @escaping (Result<[String], Error>) -> Void) {
+        UIBlockingProgressHUD.show()
+        guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
+            return }
+
+        self.isFetching = true
+        let request = URLRequest.makeHTTPRequest(path: "/api/v1/profile/1",
+                                                 httpMethod: "GET", needToken: true)
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikesNftResult, Error>) in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let body):
+
+                    completion(.success(body.likes))
+                    UIBlockingProgressHUD.dismiss()
+                    self.isFetching = false
+                case .failure(let error):
+                    completion(.failure(error))
+                    UIBlockingProgressHUD.dismiss()
+                    self.isFetching = false
+                }
             }
         }
         task.resume()

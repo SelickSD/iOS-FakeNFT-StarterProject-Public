@@ -11,9 +11,11 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     private let collectionService = CatalogNetWorkService.shared
     private var nfts: [NftElement] = []
     private let collection: Collection
+    private var likes: [String]
 
-    init(collection: Collection) {
+    init(collection: Collection, likes: [String]) {
         self.collection = collection
+        self.likes = likes
         collectionServiceObserver = NotificationCenter.default.addObserver(
             forName: CatalogNetWorkService.didChangeNotificationCollections,
             object: nil,
@@ -41,9 +43,13 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
         return collection
     }
 
-    func getNftItem(index: Int) -> NftElement? {
+    func getNftItem(index: Int) -> (nftElement: NftElement, isLikes: Bool)? {
         guard index < nfts.count else {return nil}
-        return nfts[index]
+        if likes.contains(nfts[index].id) {
+            return (nfts[index], true)
+        } else {
+            return (nfts[index], false)
+        }
     }
 
     func getValueCount() -> Int {

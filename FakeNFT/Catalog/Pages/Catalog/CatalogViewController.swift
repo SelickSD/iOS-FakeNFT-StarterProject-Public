@@ -74,7 +74,8 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
 extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let collectionElement = presenter.getCollectionsElement(index: indexPath.row) else {return}
-        let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement)
+        let likes = presenter.getLikes()
+        let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement, likes: likes)
         let collectionsViewController = CollectionScreenViewController(presenter: collectionScreenPresenter)
         collectionScreenPresenter.view = collectionsViewController
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)

@@ -189,7 +189,7 @@ extension CollectionScreenViewController: UICollectionViewDataSource {
                                                             for: indexPath) as? NFTCollectionsViewCell else {
             return UICollectionViewCell()
         }
-        cell.configCell(nftItem: nftItem)
+        cell.configCell(nftItem: nftItem.nftElement, isLikes: nftItem.isLikes)
         return cell
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 protocol CollectionScreenPresenterProtocol {
     func getValueCount() -> Int
-    func getNftItem(index: Int) -> NftElement?
+    func getNftItem(index: Int) -> (nftElement: NftElement, isLikes: Bool)?
     func getOptions() -> Collection
     func viewDidLoad()
 }

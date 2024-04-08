@@ -12,4 +12,5 @@ protocol CatalogPresenterProtocol {
     func viewDidLoad()
     func showSortAlert()
     func getCollectionsElement(index: Int) -> Collection?
+    func getLikes() -> [String] 
 }

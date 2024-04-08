@@ -61,11 +61,14 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configCell(nftItem: NftElement) {
+    func configCell(nftItem: NftElement, isLikes: Bool) {
         rating = nftItem.rating
         maneView.image = nftItem.images
-        //MARK: TODO
-        likeButton.setImage(UIImage(named: "RedLike"), for: .normal)
+        if isLikes {
+            likeButton.setImage(UIImage(named: "RedLike"), for: .normal)
+        } else {
+            likeButton.setImage(UIImage(named: "WhiteLike"), for: .normal)
+        }
         addToBasketButton.setImage(UIImage(named: "CartAdd"), for: .normal)
         nameLabel.text = nftItem.name
         costLabel.text = "\(nftItem.price) ETH"
