@@ -182,8 +182,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
                                                     profileDescription: editDescriptionTextView.text,
                                                     profileSite: editSiteTextField.text)){_ in
                 UIBlockingProgressHUD.dismiss()
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true)
+                }
             }
-            dismiss(animated: true)
+            
         }
     }
     
