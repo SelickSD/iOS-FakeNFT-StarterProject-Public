@@ -1,8 +1,7 @@
 
 import UIKit
-import Foundation
 
-class FavouritesViewController: UIViewController {
+final class FavouritesViewController: UIViewController {
     
     private let nftService: NetworkNFTServiceProtocol
     

@@ -4,8 +4,6 @@ import WebKit
 
 class ProfileViewController: UIViewController {
     
-
-
     private let nftServise: NetworkNFTServiceProtocol
     
     private var myNftArray: [String] = []
@@ -83,6 +81,7 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         navigationController?.tabBarController?.tabBar.isHidden = false
         self.categories[0] = "Мои NFT (\(self.myNftArray.count))"
         self.categories[1] = "Избранные NFT (\(self.myFavNftArray.count))"

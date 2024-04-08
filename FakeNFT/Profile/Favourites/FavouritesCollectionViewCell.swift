@@ -5,7 +5,7 @@ protocol FavouritesCollectionCellDelegate: AnyObject {
     func deleteFromFav(indexPath: IndexPath)
 }
 
-class FavouritesCollectionViewCell: UICollectionViewCell {
+final class FavouritesCollectionViewCell: UICollectionViewCell {
     
     var id: String = ""
     

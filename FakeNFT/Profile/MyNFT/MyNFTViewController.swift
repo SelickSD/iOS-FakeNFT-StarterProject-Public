@@ -5,14 +5,7 @@ class MyNFTViewController: UIViewController {
     
     private var nftService: NetworkNFTServiceProtocol
     
-    var idArray: [String] = [
-//        "ca34d35a-4507-47d9-9312-5ea7053994c0",
-//                "cc74e9ab-2189-465f-a1a6-8405e07e9fe4",
-//                "28829968-8639-4e08-8853-2f30fcf09783",
-//                "3434c774-0e0f-476e-a314-24f4f0dfed86",
-//                "9e472edf-ed51-4901-8cfc-8eb3f617519f",
-//                "1ce4f491-877d-48d0-9428-0e0129a80ec9"
-    ]
+    var idArray: [String] = []
     
     private var nftArray: [MyNFT] = [
 //        MyNFT(author: "Jonh", image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 0, isLike: true, price: 3.54),

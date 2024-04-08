@@ -180,11 +180,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
             network.updateProfile(from: ProfileEdit(profileImageUrl: avatarUrl,
                                                     profileName: editNameTextField.text,
                                                     profileDescription: editDescriptionTextView.text,
-                                                    profileSite: editSiteTextField.text)){_ in }
-            UIBlockingProgressHUD.dismiss()
+                                                    profileSite: editSiteTextField.text)){_ in
+                UIBlockingProgressHUD.dismiss()
+            }
             dismiss(animated: true)
         }
-  
     }
     
     @objc func clearTextField(_ textField: UITextField) {
@@ -211,7 +211,6 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func loadingNewImage(){
-        print("загрузить изображение")
         let alertController = UIAlertController(title: .none, message: "Хотите загрузить новое изображение?", preferredStyle: .alert)
         alertController.addTextField { textField in
             textField.placeholder = "Введите url изображения в формате .jpg или .png"
