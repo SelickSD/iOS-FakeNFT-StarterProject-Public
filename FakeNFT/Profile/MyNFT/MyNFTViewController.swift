@@ -99,12 +99,14 @@ class MyNFTViewController: UIViewController {
             
         }
         let ratingFilter = UIAlertAction(title: "По рейтингу", style: .default) { _ in
+            UIBlockingProgressHUD.show()
             self.nftArray = self.nftArray.sorted{ $0.rating ?? 0 > $1.rating ?? 0 }
             self.myNftTableView.reloadData()
             self.updatePlaceHolderNaf()
             UIBlockingProgressHUD.dismiss()
         }
         let nameFilter = UIAlertAction(title: "По названию", style: .default) { _ in
+            UIBlockingProgressHUD.show()
             self.nftArray = self.nftArray.sorted{ $1.title ?? "" > $0.title ?? "" }
             self.myNftTableView.reloadData()
             self.updatePlaceHolderNaf()
