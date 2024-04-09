@@ -35,6 +35,7 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
         catalogTableView.performBatchUpdates {
             let indexPath = (0 ..< count).map { IndexPath(item: $0, section: 0) }
             self.catalogTableView.insertRows(at: indexPath, with: .automatic)
+            UIBlockingProgressHUD.dismiss()
         } completion: { _ in }
     }
 

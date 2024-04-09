@@ -130,7 +130,6 @@ final class CatalogNetWorkService {
                                     object: self,
                                     userInfo: ["collections": self.collections])
                             }
-                            UIBlockingProgressHUD.dismiss()
                             self.isFetching = false
                         }
                     }
