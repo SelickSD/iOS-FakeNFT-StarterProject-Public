@@ -7,22 +7,7 @@ class MyNFTViewController: UIViewController {
     
     var idArray: [String] = []
     
-    private var nftArray: [MyNFT] = [
-        //        MyNFT(author: "Jonh", image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 0, isLike: true, price: 3.54),
-        //        MyNFT(author: "Elsa", image: UIImage(systemName: "person.crop.circle.fill"), title: "Archie", rating: 2, isLike: false, price: 5.64),
-        //        MyNFT(author: "Piter", image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 3, isLike: true, price: 7.54),
-        //        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, isLike: false, price: 1.54),
-        //        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 3, isLike: false, price: 12.54),
-        //        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 2, isLike: false, price: 14.54),
-        //        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Stiphe", rating: 5, isLike: false, price: 20.54),
-        //        MyNFT(author: "Jonh", image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 0, isLike: true, price: 3.54),
-        //        MyNFT(author: "Elsa", image: UIImage(systemName: "person.crop.circle.fill"), title: "Archie", rating: 2, isLike: false, price: 5.64),
-        //        MyNFT(author: "Piter", image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 3, isLike: true, price: 7.54),
-        //        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, isLike: false, price: 1.54),
-        //        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 3, isLike: false, price: 12.54),
-        //        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 2, isLike: false, price: 14.54),
-        //        MyNFT(author: "Sarah", image: UIImage(systemName: "person.crop.circle.fill"), title: "Stiphe", rating: 5, isLike: false, price: 20.54)
-    ]
+    private var nftArray: [MyNFT] = []
     
     private lazy var myNftTableView: UITableView = {
         let profileTableView = UITableView()
@@ -106,13 +91,24 @@ class MyNFTViewController: UIViewController {
         let alertController = UIAlertController(title: "Cортировка", message: .none,  preferredStyle: .actionSheet)
         
         let priceFilter = UIAlertAction(title: "По цене", style: .default) { _ in
+            UIBlockingProgressHUD.show()
+            self.nftArray = self.nftArray.sorted{ $0.price ?? 0 > $1.price ?? 0 }
+            self.myNftTableView.reloadData()
+            self.updatePlaceHolderNaf()
+            UIBlockingProgressHUD.dismiss()
             
         }
         let ratingFilter = UIAlertAction(title: "По рейтингу", style: .default) { _ in
-            
+            self.nftArray = self.nftArray.sorted{ $0.rating ?? 0 > $1.rating ?? 0 }
+            self.myNftTableView.reloadData()
+            self.updatePlaceHolderNaf()
+            UIBlockingProgressHUD.dismiss()
         }
         let nameFilter = UIAlertAction(title: "По названию", style: .default) { _ in
-            
+            self.nftArray = self.nftArray.sorted{ $1.title ?? "" > $0.title ?? "" }
+            self.myNftTableView.reloadData()
+            self.updatePlaceHolderNaf()
+            UIBlockingProgressHUD.dismiss()
         }
         
         let cancel = UIAlertAction(title: "Закрыть", style: .cancel)
