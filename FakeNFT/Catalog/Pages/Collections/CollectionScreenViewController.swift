@@ -107,9 +107,15 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.backBarButtonItem?.tintColor = .black
+        navigationController?.tabBarController?.tabBar.isHidden = true
         navigationController?.pushViewController(webView, animated: true)
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.tabBarController?.tabBar.isHidden = false
+    }
+
     private func setMainInfo() {
         let options = presenter.getOptions()
         mainImageView.image = options.cover
