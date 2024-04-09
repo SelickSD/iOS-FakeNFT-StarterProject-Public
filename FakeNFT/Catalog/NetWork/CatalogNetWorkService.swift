@@ -9,6 +9,7 @@ import Kingfisher
 final class CatalogNetWorkService {
     static let didChangeNotificationCollections = Notification.Name(rawValue: "CollectionScreenServiceDidChange")
     static let didChangeNotificationCatalog = Notification.Name(rawValue: "CatalogServiceDidChange")
+    static let didNetWorkErrorDetected = Notification.Name(rawValue: "didNetWorkErrorDetected")
     static let shared = CatalogNetWorkService()
     private (set) var nfts: [NftElement] = []
     private (set) var collections: [Collection] = []
@@ -79,12 +80,15 @@ final class CatalogNetWorkService {
                             NotificationCenter.default.post(
                                 name: CatalogNetWorkService.didChangeNotificationCollections,
                                 object: self,
-                                userInfo: ["collections": self.nfts])
+                                userInfo: nil)
                             self.isFetching = false
                         }
                     }
-                case .failure(_):
-                    UIBlockingProgressHUD.dismiss()
+                case .failure(let error):
+                    NotificationCenter.default.post(
+                        name: CatalogNetWorkService.didNetWorkErrorDetected,
+                        object: self,
+                        userInfo: ["error": error])
                     self.isFetching = false
                 }
             }
@@ -134,8 +138,11 @@ final class CatalogNetWorkService {
                         }
                     }
                 }
-            case .failure( _):
-                UIBlockingProgressHUD.dismiss()
+            case .failure(let error):
+                NotificationCenter.default.post(
+                    name: CatalogNetWorkService.didNetWorkErrorDetected,
+                    object: self,
+                    userInfo: ["error": error])
                 self.isFetching = false
             }
         }

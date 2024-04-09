@@ -30,6 +30,21 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
                 self.view?.updateScrollViewAnimated()
             }
         }
+
+        collectionServiceObserver = NotificationCenter.default.addObserver(
+            forName: CatalogNetWorkService.didNetWorkErrorDetected,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self = self
+            else { return }
+            if let error = notification.userInfo?["error"] {
+                self.showConnectError(message: "\(error)")
+            } else {
+                self.showConnectError(message: "Проблемы сети")
+            }
+            UIBlockingProgressHUD.dismiss()
+        }
     }
     
     deinit {
@@ -71,5 +86,19 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
             }) ?? elements[0])
         }
         return sortedNftElements
+    }
+    
+    private func showConnectError(message: String) {
+        let action = AlertActionEvent(actionTitle: "Отмена",
+                                      actionStyle: .destructive,
+                                      handler: {_ in })
+
+
+        let alert = AlertMessage(title: "Сетевая ошибка",
+                                 message: message,
+                                 preferredStyle: .alert,
+                                 action: [action])
+
+        view?.showAlert(alert: alert)
     }
 }

@@ -8,4 +8,5 @@
 import Foundation
 protocol CollectionScreenViewProtocol: AnyObject {
     func updateScrollViewAnimated()
+    func showAlert(alert: AlertMessage)
 }

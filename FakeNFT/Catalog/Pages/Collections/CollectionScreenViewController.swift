@@ -88,7 +88,19 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
             UIBlockingProgressHUD.dismiss()
         } completion: { _ in }
     }
-    
+
+    func showAlert(alert: AlertMessage) {
+        let alertController = UIAlertController(title: alert.title,
+                                                message: alert.message,
+                                                preferredStyle: alert.preferredStyle)
+        alert.action.forEach{
+            alertController.addAction(UIAlertAction(title: $0.actionTitle,
+                                                    style: $0.actionStyle,
+                                                    handler: $0.handler))
+        }
+        present(alertController, animated: true)
+    }
+
     @objc private func didTapLinkButton() {
         let stringUrl = "https://practicum.yandex.ru/ios-developer/"
         let webView = WebViewController(stringUrl: stringUrl)
