@@ -4,13 +4,13 @@ import WebKit
 
 class ProfileViewController: UIViewController {
     
-    private var profile: Profile?
-
-    private let nftServise = NetworkNFTService()
+    private let nftServise: NetworkNFTServiceProtocol
     
     private var myNftArray: [String] = []
     
     private var myFavNftArray: [String] = []
+    
+    private var avatarUrl: String?
     
     private var categories = ["Мои NFT","Избранные NFT","О разработчике"]
     
@@ -40,6 +40,7 @@ class ProfileViewController: UIViewController {
         descriptionTextView.isEditable = false
         descriptionTextView.font = UIFont(name: "SFProText-Regular", size: 13)
         descriptionTextView.textColor = .black
+        descriptionTextView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
         descriptionTextView.backgroundColor = .white
         return descriptionTextView
     }()
@@ -69,10 +70,22 @@ class ProfileViewController: UIViewController {
         profileTableView.register(ProfileTableViewCell.self, forCellReuseIdentifier: "ProfileTableViewCell")
         return profileTableView
     }()
+    
+    init(nftServise: NetworkNFTServiceProtocol) {
+        self.nftServise = nftServise
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         navigationController?.tabBarController?.tabBar.isHidden = false
         self.categories[0] = "Мои NFT (\(self.myNftArray.count))"
         self.categories[1] = "Избранные NFT (\(self.myFavNftArray.count))"
+        self.profileTableView.reloadData()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,6 +99,7 @@ class ProfileViewController: UIViewController {
             case .success(let profile):
                 DispatchQueue.main.async {
                     self.profileImage.image = profile.profileImage
+                    self.avatarUrl = profile.profileImageUrl
                     self.profileNameTitle.text = profile.profileName
                     self.descriptionTextView.text = profile.profileDescription
                     self.profileWebTitle.text = profile.profileSite
@@ -97,22 +111,23 @@ class ProfileViewController: UIViewController {
                     self.profileTableView.reloadData()
                     UIBlockingProgressHUD.dismiss()
                 }
-
+                
             case .failure(_ ):
                 UIBlockingProgressHUD.dismiss()
                 break
             }
+        }
     }
-                                       }
     @objc private func editProfileInfo(){
         let editProfileInfoNav = EditProfileViewController(state: .init(
             profileImage: profileImage.image,
+            profileImageUrl: avatarUrl,
             profileName: profileNameTitle.text,
             profileDescription: descriptionTextView.text,
             profileSite: profileWebTitle.text,
             myNft: [],
             myFavNft: []
-))
+        ), network: nftServise)
         editProfileInfoNav.delegate = self
         let navController = UINavigationController(rootViewController: editProfileInfoNav)
         present(navController, animated: true, completion: nil)
@@ -189,13 +204,18 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
-            let NFTNav = MyNFTViewController()
+            let NFTNav = MyNFTViewController(nftService: nftServise)
+            NFTNav.idArray = myNftArray
             self.navigationController?.pushViewController(NFTNav, animated: true)
             
         }
         if indexPath.row == 1 {
-            let favouritesNav = FavouritesViewController()
+            let favouritesNav = FavouritesViewController(nftService: nftServise)
             favouritesNav.idFavArray = myFavNftArray
+            favouritesNav.newIdFavArray = { [weak self] arrayId in
+                self?.myFavNftArray = arrayId
+            }
+            print(myFavNftArray)
             self.navigationController?.pushViewController(favouritesNav, animated: true)
             
         }
@@ -209,6 +229,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
 extension ProfileViewController: EditProfileViewControllerDelegate {
     func updateProfile(from profile: Profile) {
         profileImage.image = profile.profileImage
+        avatarUrl = profile.profileImageUrl
         profileNameTitle.text = profile.profileName
         descriptionTextView.text = profile.profileDescription
         profileWebTitle.text = profile.profileSite

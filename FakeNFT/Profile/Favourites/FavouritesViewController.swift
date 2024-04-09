@@ -1,12 +1,13 @@
 
 import UIKit
-import Foundation
 
-class FavouritesViewController: UIViewController {
+final class FavouritesViewController: UIViewController {
     
-    private let nftService = NetworkNFTService()
+    private let nftService: NetworkNFTServiceProtocol
     
     var idFavArray: [String] = []
+    
+    var newIdFavArray: (([String]) -> Void)?
     
     private var nftFavArray: [MyFavNFT] = [
 //        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melisa", rating: 0, isLike: true, price: 3.54),
@@ -53,6 +54,15 @@ class FavouritesViewController: UIViewController {
         myFavNftPlaceHolderTitle.isHidden = true
         return myFavNftPlaceHolderTitle
     }()
+    
+    init(nftService: NetworkNFTServiceProtocol) {
+        self.nftService = nftService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         navigationController?.tabBarController?.tabBar.isHidden = true
@@ -135,6 +145,8 @@ extension FavouritesViewController: UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(FavouritesCollectionViewCell.self)", for: indexPath) as? FavouritesCollectionViewCell else{return FavouritesCollectionViewCell()}
         cell.configure(with: nftFavArray[indexPath.row])
+        cell.delegate = self
+        cell.indexPath = indexPath
         return cell
     }
 }
@@ -147,5 +159,18 @@ extension FavouritesViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 7
+    }
+}
+
+extension FavouritesViewController: FavouritesCollectionCellDelegate {
+    func deleteFromFav(indexPath: IndexPath) {
+        let id = nftFavArray[indexPath.row].id
+        nftFavArray.removeAll(where: {$0.id == id})
+        idFavArray.removeAll(where: {$0 == id})
+        nftCollectionView.reloadData()
+        nftService.updateArrayFav(from: .init(likesArray: idFavArray)){_ in}
+        newIdFavArray?(idFavArray)
+        print("Удалить из избранного")
+        updatePlaceHolderNaf()
     }
 }

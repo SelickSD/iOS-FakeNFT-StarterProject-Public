@@ -11,7 +11,9 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     
     weak var delegate: EditProfileViewControllerDelegate?
     
-    private let network = NetworkNFTService()
+    private let network: NetworkNFTServiceProtocol
+    
+    private var avatarUrl: String?
     
     private lazy var profileImage: UIImageView = {
         let profileImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
@@ -135,9 +137,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
         return clearButton
     }()
-    init(state: Profile) {
+    init(state: Profile, network: NetworkNFTServiceProtocol) {
+        self.network = network
         super.init(nibName: nil, bundle: nil)
         profileImage.image = state.profileImage
+        avatarUrl = state.profileImageUrl
         editNameTextField.text = state.profileName
         editDescriptionTextView.text = state.profileDescription
         editSiteTextField.text = state.profileSite
@@ -164,16 +168,26 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func dismissController(){
+        UIBlockingProgressHUD.show()
         if editNameTextField.text != "", editDescriptionTextView.text != "", editSiteTextField.text != ""{
             delegate?.updateProfile(from: Profile(profileImage: profileImage.image,
+                                                  profileImageUrl: avatarUrl,
                                                   profileName: editNameTextField.text,
                                                   profileDescription: editDescriptionTextView.text,
                                                   profileSite: editSiteTextField.text,
                                                   myNft: [],
-                                                 myFavNft: []))
-            dismiss(animated: true)
+                                                  myFavNft: []))
+            network.updateProfile(from: ProfileEdit(profileImageUrl: avatarUrl,
+                                                    profileName: editNameTextField.text,
+                                                    profileDescription: editDescriptionTextView.text,
+                                                    profileSite: editSiteTextField.text)){_ in
+                UIBlockingProgressHUD.dismiss()
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true)
+                }
+            }
+            
         }
-  
     }
     
     @objc func clearTextField(_ textField: UITextField) {
@@ -196,26 +210,32 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(loadingNewImage))
         tapGesture.cancelsTouchesInView = false
         editChangeImageLabel.addGestureRecognizer(tapGesture)
-     
+        
     }
     
     @objc private func loadingNewImage(){
-        print("загрузить изображение")
         let alertController = UIAlertController(title: .none, message: "Хотите загрузить новое изображение?", preferredStyle: .alert)
         alertController.addTextField { textField in
-            textField.placeholder = "Введите url изображение .jpg"
+            textField.placeholder = "Введите url изображения в формате .jpg или .png"
         }
         let downloadImage = UIAlertAction(title: "Загрузить новое изображение?", style: .default) { _ in
             UIBlockingProgressHUD.show()
             guard let textField = alertController.textFields?.first else {return}
-            if let text = textField.text{
+            if let text = textField.text, text.hasSuffix(".jpg") || text.hasSuffix(".png"){
                 DispatchQueue.main.async {
                     self.network.loadImageFromUrl(from: text){ imageView in
                         self.profileImage.image = imageView?.image ?? UIImage(systemName: "")
+                        self.avatarUrl = text
                         UIBlockingProgressHUD.dismiss()
-//                    https://beautyhack.ru/assets/images/2019/10/phoenix_txt.jpg
                     }
-                }}
+                }
+            } else {
+                let alertController = UIAlertController(title: "Ошибка", message: "Неверный формат, ссылка должна оканчиваться на .jpg или .png", preferredStyle: .alert)
+                let messageAlert = UIAlertAction(title: "OK", style: .default)
+                alertController.addAction(messageAlert)
+                self.present(alertController, animated: true)
+                UIBlockingProgressHUD.dismiss()
+            }
         }
         
         let cancel = UIAlertAction(title: "Отменить", style: .destructive)

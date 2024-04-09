@@ -3,6 +3,8 @@ import UIKit
 
 final class MyNFTTableViewCell: UITableViewCell {
     
+    var id: String = ""
+    
     private lazy var nftImage: UIImageView = {
         let nftImage = UIImageView()
         nftImage.translatesAutoresizingMaskIntoConstraints = false

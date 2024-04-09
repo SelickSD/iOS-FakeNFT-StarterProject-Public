@@ -1,7 +1,17 @@
 
 import UIKit
 
-class FavouritesCollectionViewCell: UICollectionViewCell {
+protocol FavouritesCollectionCellDelegate: AnyObject {
+    func deleteFromFav(indexPath: IndexPath)
+}
+
+final class FavouritesCollectionViewCell: UICollectionViewCell {
+    
+    var id: String = ""
+    
+    var indexPath: IndexPath?
+    
+    weak var delegate: FavouritesCollectionCellDelegate?
     
     lazy var nftCellView: UIView = {
         let view = UIView()
@@ -15,6 +25,7 @@ class FavouritesCollectionViewCell: UICollectionViewCell {
         nftImage.translatesAutoresizingMaskIntoConstraints = false
         nftImage.layer.cornerRadius = 12
         nftImage.clipsToBounds = true
+        nftImage.isUserInteractionEnabled = true
         nftImage.image = UIImage(systemName: "person.crop.circle.fill")
         nftImage.backgroundColor = .lightGray
         return nftImage
@@ -24,8 +35,10 @@ class FavouritesCollectionViewCell: UICollectionViewCell {
         let nftLikeButton = UIButton()
         nftLikeButton.translatesAutoresizingMaskIntoConstraints = false
         nftLikeButton.clipsToBounds = true
+        nftLikeButton.isUserInteractionEnabled = true
         nftLikeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         nftLikeButton.tintColor = .red
+        nftLikeButton.addTarget(self, action: #selector(heartButtonTapped), for: .touchUpInside)
         return nftLikeButton
     }()
     
@@ -73,6 +86,11 @@ class FavouritesCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    @objc private func heartButtonTapped(){
+        guard let indexPath = indexPath else { return }
+        delegate?.deleteFromFav(indexPath: indexPath)
+    }
+    
     func configure(with nftFav: MyFavNFT){
         addSubview()
         setupConstraint()
@@ -82,8 +100,9 @@ class FavouritesCollectionViewCell: UICollectionViewCell {
             nftPrice.text = "\(price)" + " ETH"
         }
         addStarRating(from: nftFav.rating ?? 0)
- 
+        id = nftFav.id ?? ""
     }
+    
     func addStarRating(from rating: Int){
         for index in 0...4 {
             stackViewStarImage.addArrangedSubview(UIImageView(image: UIImage(systemName:"star.fill")))
