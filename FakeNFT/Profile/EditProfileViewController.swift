@@ -227,8 +227,6 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
                         self.profileImage.image = imageView?.image ?? UIImage(systemName: "")
                         self.avatarUrl = text
                         UIBlockingProgressHUD.dismiss()
-                        //                    https://beautyhack.ru/assets/images/2019/10/phoenix_txt.jpg
-                        //                    https://beautyhack.ru/assets/images/2019/10/nyet212-98_2018_161949_hd.jpg
                     }
                 }
             } else {
