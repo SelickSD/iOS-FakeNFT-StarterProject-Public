@@ -62,6 +62,7 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         view.dataSource = self
         view.register(NFTCollectionsViewCell.self, forCellWithReuseIdentifier: NFTCollectionsViewCell.identifier)
         view.backgroundColor = .white
+        view.isScrollEnabled = false
         return view
     }()
     
@@ -131,33 +132,34 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         mainImageView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         
         [mainImageView, titleLabel, authorLabel,
-         linkButton, descriptionLabel, backgroundScrollView].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.clipsToBounds = true
-            view.addSubview($0)
-        }
-        
-        [contentView, collectionsCollectionView].forEach{
+         linkButton, descriptionLabel, backgroundScrollView,
+         contentView, collectionsCollectionView].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.clipsToBounds = true
         }
+
+        view.addSubview(backgroundScrollView)
         backgroundScrollView.addSubview(contentView)
-        contentView.addSubview(collectionsCollectionView)
-        
+
+        [mainImageView, titleLabel, authorLabel,
+         linkButton, descriptionLabel, collectionsCollectionView].forEach{
+            contentView.addSubview($0)
+        }
+
         let equalHeight = contentView.heightAnchor.constraint(equalToConstant: 850)
         equalHeight.priority = UILayoutPriority(250)
         
         NSLayoutConstraint.activate([
-            mainImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            mainImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mainImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mainImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            mainImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            mainImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             mainImageView.heightAnchor.constraint(equalToConstant: 310),
             
             titleLabel.topAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            
-            authorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+
+            authorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             authorLabel.widthAnchor.constraint(equalToConstant: 112),
             
@@ -166,11 +168,11 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
             linkButton.widthAnchor.constraint(equalToConstant: 120),
             linkButton.centerYAnchor.constraint(equalTo: authorLabel.centerYAnchor),
             
-            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: 10),
             
-            backgroundScrollView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
+            backgroundScrollView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -185,7 +187,7 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
             collectionsCollectionView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
             collectionsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            collectionsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            collectionsCollectionView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 }
