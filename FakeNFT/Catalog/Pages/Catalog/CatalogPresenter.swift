@@ -57,15 +57,12 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     }
     
     func getCollectionsElement(index: Int) -> Collection? {
-        guard index <= collections.count else { return nil}
+        guard index < collections.count else { return nil }
         return collections[index]
     }
-    
-    func getImagesForCell(index: Int) -> Collection {
-        return collections[index]
-    }
-    
+
     func getLabelText(index: Int) -> String {
+        guard index < collections.count else { return "" }
         let text = "\(collections[index].name)(\(collections[index].nfts.count))"
         return text
     }
