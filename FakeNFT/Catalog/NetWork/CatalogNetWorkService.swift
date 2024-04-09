@@ -80,7 +80,6 @@ final class CatalogNetWorkService {
                                 name: CatalogNetWorkService.didChangeNotificationCollections,
                                 object: self,
                                 userInfo: ["collections": self.nfts])
-                            UIBlockingProgressHUD.dismiss()
                             self.isFetching = false
                         }
                     }

@@ -85,6 +85,7 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         collectionsCollectionView.performBatchUpdates {
             let indexPath = (0 ..< count).map { IndexPath(item: $0, section: 0) }
             self.collectionsCollectionView.insertItems(at: indexPath)
+            UIBlockingProgressHUD.dismiss()
         } completion: { _ in }
     }
     
