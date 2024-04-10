@@ -29,6 +29,7 @@ class WebViewController: UIViewController {
         webView.uiDelegate = self
         webView.navigationDelegate = self
         webView.translatesAutoresizingMaskIntoConstraints = false
+        navigationController?.navigationBar.isHidden = false
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -36,6 +37,10 @@ class WebViewController: UIViewController {
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         loadRequest()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.isHidden = true
     }
 }
 

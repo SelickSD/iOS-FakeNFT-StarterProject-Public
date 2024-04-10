@@ -25,7 +25,7 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         label.text = "Автор коллекции:"
         return label
     }()
-    
+
     private lazy var linkButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(UIColor.init(hexString: "#0A84FF"), for: .normal)
@@ -33,7 +33,18 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         button.addTarget(self, action: #selector(didTapLinkButton), for: .touchUpInside)
         return button
     }()
-    
+
+    private lazy var backButton: UIButton = {
+        let button = UIButton()
+        button.tintColor = .black
+        button.setImage(UIImage(named: "Backward"), for: .normal)
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.imageEdgeInsets = UIEdgeInsets(top: 26, left: 26, bottom: 26, right: 26)
+        button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+        return button
+    }()
+
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
@@ -98,6 +109,10 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         present(alertController, animated: true)
     }
 
+    @objc private func didTapBackButton() {
+        navigationController?.popViewController(animated: true)
+    }
+
     @objc private func didTapLinkButton() {
         let stringUrl = "https://practicum.yandex.ru/ios-developer/"
         let webView = WebViewController(stringUrl: stringUrl)
@@ -125,12 +140,13 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         
         [mainImageView, titleLabel, authorLabel,
          linkButton, descriptionLabel, backgroundScrollView,
-         contentView, collectionsCollectionView].forEach{
+         contentView, collectionsCollectionView, backButton].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.clipsToBounds = true
         }
 
         view.addSubview(backgroundScrollView)
+        view.addSubview(backButton)
         backgroundScrollView.addSubview(contentView)
 
         [mainImageView, titleLabel, authorLabel,
@@ -142,6 +158,11 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         equalHeight.priority = UILayoutPriority(250)
         
         NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 9),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 9),
+            backButton.heightAnchor.constraint(equalToConstant: 24),
+            backButton.widthAnchor.constraint(equalToConstant: 24),
+
             mainImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             mainImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             mainImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -164,7 +185,7 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: 10),
             
-            backgroundScrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: -100),
+            backgroundScrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: -50),
             backgroundScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
