@@ -30,13 +30,13 @@ final class CatalogNetWorkService {
     }
     
     func loadImageFromUrl(from urlString: String, completion: @escaping (UIImageView?) -> Void) {
-        guard let url = URL(string: urlString) else {
-            completion(nil)
-            return
-        }
-        
+        guard let newUrlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                  let url = URL(string: newUrlString) else {
+                      completion(nil)
+                      return
+                  }
+
         let imageView = UIImageView()
-        
         DispatchQueue.main.async {
             imageView.kf.setImage(with: url) { result in
                 switch result {
@@ -96,54 +96,40 @@ final class CatalogNetWorkService {
         }
     }
     
-    func fetchCollections() {
+    func fetchCollections(completion: @escaping (Result<[Collection], Error>) -> Void) {
         UIBlockingProgressHUD.show()
         guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
             return }
-        
+
         self.isFetching = true
         let request = URLRequest.makeHTTPRequest(path: "/api/v1/collections",
                                                  httpMethod: "GET", needToken: true)
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<[CollectionResult], Error>) in
             guard let self = self else { return }
-            switch result {
-            case .success(let body):
-                DispatchQueue.main.async {
-                    body.forEach{
-                        let createdAt = Date().formatDate(dateString: $0.createdAt)
-                        let name = $0.name
-                        let nfts = $0.nfts
-                        let description = $0.description
-                        let author = $0.author
-                        let id = $0.id
-                        var cardImageView = UIImageView()
-                        self.loadImageFromUrl(from: $0.cover) {imageView in
-                            cardImageView = imageView ?? UIImageView()
-                            self.collections.append(
-                                Collection(createdAt: createdAt,
-                                           name: name,
-                                           cover: cardImageView.image,
-                                           nfts: nfts,
-                                           description: description,
-                                           author: author,
-                                           id: id)
-                            )
-                            if self.collections.count == body.count {
-                                NotificationCenter.default.post(
-                                    name: CatalogNetWorkService.didChangeNotificationCatalog,
-                                    object: self,
-                                    userInfo: ["collections": self.collections])
-                            }
-                            self.isFetching = false
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let body):
+                    for item in body {
+                        var imageView = UIImageView()
+                        self.loadImageFromUrl(from: item.cover) { image in
+                            imageView = image ?? UIImageView()
                         }
+                        self.collections.append(
+                            Collection(createdAt: Date().formatDate(dateString: item.createdAt),
+                                       name: item.name,
+                                       cover: imageView.image,
+                                       nfts: item.nfts,
+                                       description: item.description,
+                                       author: item.author,
+                                       id: item.id)
+                        )
                     }
+                    completion(.success(self.collections))
+                    self.isFetching = false
+                case .failure(let error):
+                    completion(.failure(error))
+                    self.isFetching = false
                 }
-            case .failure(let error):
-                NotificationCenter.default.post(
-                    name: CatalogNetWorkService.didNetWorkErrorDetected,
-                    object: self,
-                    userInfo: ["error": error])
-                self.isFetching = false
             }
         }
         task.resume()

@@ -20,6 +20,11 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
         setupUIBarButtonItem()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.tabBarController?.tabBar.isHidden = false
+    }
+
     init(presenter: CatalogPresenterProtocol) {
         self.presenter = presenter
         super .init(nibName: nil, bundle: nil)
@@ -89,6 +94,7 @@ extension CatalogViewController: UITableViewDelegate {
         collectionScreenPresenter.view = collectionsViewController
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem?.tintColor = .black
+        navigationController?.tabBarController?.tabBar.isHidden = true
         self.navigationController?.pushViewController(collectionsViewController, animated: true)
     }
 }

@@ -42,11 +42,7 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         return label
     }()
     
-    private lazy var backgroundScrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
-    }()
+    private lazy var backgroundScrollView = UIScrollView()
     
     private lazy var contentView: UIView = {
         let view = UIView()
@@ -112,11 +108,6 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         navigationController?.pushViewController(webView, animated: true)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.tabBarController?.tabBar.isHidden = false
-    }
-
     private func setMainInfo() {
         let options = presenter.getOptions()
         mainImageView.image = options.cover
@@ -128,6 +119,7 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
     private func drawSelf() {
         view.backgroundColor = .white
         setMainInfo()
+        mainImageView.backgroundColor = .lightGray
         mainImageView.layer.cornerRadius = 12
         mainImageView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         
@@ -146,7 +138,7 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
             contentView.addSubview($0)
         }
 
-        let equalHeight = contentView.heightAnchor.constraint(equalToConstant: 850)
+        let equalHeight = contentView.heightAnchor.constraint(equalToConstant: 990)
         equalHeight.priority = UILayoutPriority(250)
         
         NSLayoutConstraint.activate([
@@ -172,7 +164,7 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: 10),
             
-            backgroundScrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundScrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: -100),
             backgroundScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
