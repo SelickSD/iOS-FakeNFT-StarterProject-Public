@@ -9,9 +9,9 @@ import Foundation
 
 struct CollectionCellModel: Hashable {
     let imageUrls: [URL]
-    let isLiked: Bool
+    var isLiked: Bool
     let name: String
     let rating: Int
     let price: Double
-    let inOrder: Bool
+    var inOrder: Bool
 }

@@ -18,12 +18,14 @@ final class CollectionCell: UICollectionViewCell, ReuseIdentifying {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 12
         imageView.layer.masksToBounds = true
+        imageView.isUserInteractionEnabled = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
 
     private lazy var likeButton = {
         let button = UIButton()
+        button.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -31,6 +33,7 @@ final class CollectionCell: UICollectionViewCell, ReuseIdentifying {
     private lazy var addToCartButton = {
         let button = UIButton(type: .system)
         button.tintColor = .segmentActive
+        button.addTarget(self, action: #selector(cartButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -148,16 +151,26 @@ final class CollectionCell: UICollectionViewCell, ReuseIdentifying {
         addToCartButton.setImage(cellModel.inOrder ? UIImage(named: "cart_remove") : UIImage(named: "cart_add"), for: .normal)
         likeButton.setImage(cellModel.isLiked ? UIImage(named: "like_active") : UIImage(named: "like_no_active"), for: .normal)
         imageView.kf.setImage(with: cellModel.imageUrls[0])
-        for i in 1...5 {
-            if i <= cellModel.rating {
-                let ratingImage = UIImageView(image: UIImage(named: "star_active"))
-                ratingStackView.addArrangedSubview(ratingImage)
-            } else {
-                let ratingImage = UIImageView(image: UIImage(named: "star_no_active"))
-                ratingStackView.addArrangedSubview(ratingImage)
+        if ratingStackView.arrangedSubviews.count == 0 {
+            for i in 1...5 {
+                if i <= cellModel.rating {
+                    let ratingImage = UIImageView(image: UIImage(named: "star_active"))
+                    ratingStackView.addArrangedSubview(ratingImage)
+                } else {
+                    let ratingImage = UIImageView(image: UIImage(named: "star_no_active"))
+                    ratingStackView.addArrangedSubview(ratingImage)
+                }
             }
+            let spacer = UIView()
+            ratingStackView.addArrangedSubview(spacer)
         }
-        let spacer = UIView()
-        ratingStackView.addArrangedSubview(spacer)
+    }
+    
+    @objc private func likeButtonTapped() {
+        cellModel?.isLiked.toggle()
+    }
+    
+    @objc private func cartButtonTapped() {
+        cellModel?.inOrder.toggle()
     }
 }
