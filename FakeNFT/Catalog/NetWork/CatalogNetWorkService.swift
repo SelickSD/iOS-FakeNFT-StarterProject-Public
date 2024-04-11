@@ -96,45 +96,59 @@ final class CatalogNetWorkService {
         }
     }
     
-    func fetchCollections(completion: @escaping (Result<[Collection], Error>) -> Void) {
-        UIBlockingProgressHUD.show()
-        guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
-            return }
+    func fetchCollections() {
+            UIBlockingProgressHUD.show()
+            guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
+                return }
 
-        self.isFetching = true
-        let request = URLRequest.makeHTTPRequest(path: "/api/v1/collections",
-                                                 httpMethod: "GET", needToken: true)
-        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<[CollectionResult], Error>) in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
+            self.isFetching = true
+            let request = URLRequest.makeHTTPRequest(path: "/api/v1/collections",
+                                                     httpMethod: "GET", needToken: true)
+            let task = urlSession.objectTask(for: request) { [weak self] (result: Result<[CollectionResult], Error>) in
+                guard let self = self else { return }
                 switch result {
                 case .success(let body):
-                    for item in body {
-                        var imageView = UIImageView()
-                        self.loadImageFromUrl(from: item.cover) { image in
-                            imageView = image ?? UIImageView()
+                    DispatchQueue.main.async {
+                        body.forEach{
+                            let createdAt = Date().formatDate(dateString: $0.createdAt)
+                            let name = $0.name
+                            let nfts = $0.nfts
+                            let description = $0.description
+                            let author = $0.author
+                            let id = $0.id
+                            var cardImageView = UIImageView()
+                            self.loadImageFromUrl(from: $0.cover) {imageView in
+                                cardImageView = imageView ?? UIImageView()
+                                self.collections.append(
+                                    Collection(createdAt: createdAt,
+                                               name: name,
+                                               cover: cardImageView.image,
+                                               nfts: nfts,
+                                               description: description,
+                                               author: author,
+                                               id: id)
+                                )
+                                if self.collections.count == body.count {
+                                    NotificationCenter.default.post(
+                                        name: CatalogNetWorkService.didChangeNotificationCatalog,
+                                        object: self,
+                                        userInfo: ["collections": self.collections])
+                                }
+                                self.isFetching = false
+                            }
                         }
-                        self.collections.append(
-                            Collection(createdAt: Date().formatDate(dateString: item.createdAt),
-                                       name: item.name,
-                                       cover: imageView.image,
-                                       nfts: item.nfts,
-                                       description: item.description,
-                                       author: item.author,
-                                       id: item.id)
-                        )
                     }
-                    completion(.success(self.collections))
-                    self.isFetching = false
                 case .failure(let error):
-                    completion(.failure(error))
+                    NotificationCenter.default.post(
+                        name: CatalogNetWorkService.didNetWorkErrorDetected,
+                        object: self,
+                        userInfo: ["error": error])
                     self.isFetching = false
                 }
             }
+            task.resume()
         }
-        task.resume()
-    }
-    
+
     func fetchLikes(completion: @escaping (Result<[String], Error>) -> Void) {
         UIBlockingProgressHUD.show()
         guard !self.isFetching else { UIBlockingProgressHUD.dismiss()

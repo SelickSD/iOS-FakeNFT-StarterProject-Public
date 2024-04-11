@@ -135,7 +135,7 @@ final class CollectionScreenViewController: UIViewController,
             count = screenRealHeight - safeArea
         }
 
-        return count
+        return count + 10
     }
 
     private func drawSelf() {

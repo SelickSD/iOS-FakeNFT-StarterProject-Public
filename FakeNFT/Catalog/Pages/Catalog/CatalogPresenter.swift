@@ -7,12 +7,44 @@
 import Foundation
 final class CatalogPresenter: CatalogPresenterProtocol {
     weak var view: CatalogViewControllerProtocol?
+    private var catalogServiceObserver: NSObjectProtocol?
     private let catalogService = CatalogNetWorkService.shared
     private var collections: [Collection] = []
     private var likes: [String] = []
-    
-    init() {}
-    
+
+    init() {
+            catalogServiceObserver = NotificationCenter.default.addObserver(
+                forName: CatalogNetWorkService.didChangeNotificationCatalog,
+                object: nil,
+                queue: .main
+            ) { [weak self] notification in
+                guard let self = self
+                else { return }
+                if let body = notification.userInfo?["collections"] {
+                    collections = body as! [Collection]
+                } else {
+                    return
+                }
+                self.view?.updateTableViewAnimated()
+                fetchLikes()
+            }
+
+            catalogServiceObserver = NotificationCenter.default.addObserver(
+                forName: CatalogNetWorkService.didNetWorkErrorDetected,
+                object: nil,
+                queue: .main
+            ) { [weak self] notification in
+                guard let self = self
+                else { return }
+                if let error = notification.userInfo?["error"] {
+                    self.showConnectError(message: "\(error)")
+                } else {
+                    self.showConnectError(message: "Проблемы сети")
+                }
+                UIBlockingProgressHUD.dismiss()
+            }
+        }
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -20,21 +52,10 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     func viewDidLoad() {
         catalogService.resetCollections()
         if collections.count == 0 {
-            catalogService.fetchCollections(){ result in
-                switch result {
-                case .success(let body):
-                    self.collections = body
-                    self.view?.updateTableViewAnimated()
-                    self.fetchLikes()
-                    UIBlockingProgressHUD.dismiss()
-                case .failure(let error):
-                    self.showConnectError(message: "\(error)")
-                    UIBlockingProgressHUD.dismiss()
-                }
-            }
+            catalogService.fetchCollections()
         }
     }
-    
+
     func getCollectionsElement(index: Int) -> Collection? {
         guard index < collections.count else { return nil }
         return collections[index]
