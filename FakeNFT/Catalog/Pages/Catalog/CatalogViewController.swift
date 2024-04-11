@@ -25,11 +25,6 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
         navigationController?.tabBarController?.tabBar.isHidden = false
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        navigationController?.navigationBar.isHidden = false
-    }
-
     init(presenter: CatalogPresenterProtocol) {
         self.presenter = presenter
         super .init(nibName: nil, bundle: nil)
@@ -97,11 +92,10 @@ extension CatalogViewController: UITableViewDelegate {
         let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement, likes: likes)
         let collectionsViewController = CollectionScreenViewController(presenter: collectionScreenPresenter)
         collectionScreenPresenter.view = collectionsViewController
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: nil, action: nil)// UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         self.navigationItem.backBarButtonItem?.tintColor = .black
         navigationController?.tabBarController?.tabBar.isHidden = true
-        navigationController?.navigationBar.isHidden = true
         self.navigationController?.pushViewController(collectionsViewController, animated: true)
     }
 }

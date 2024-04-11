@@ -38,10 +38,6 @@ class WebViewController: UIViewController {
         ])
         loadRequest()
     }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.navigationBar.isHidden = true
-    }
 }
 
 extension WebViewController: WKUIDelegate, WKNavigationDelegate{

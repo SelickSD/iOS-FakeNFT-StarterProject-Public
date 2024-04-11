@@ -5,10 +5,12 @@
 //  Created by Сергей Денисенко on 01.04.2024.
 //
 import UIKit
-final class CollectionScreenViewController: UIViewController, CollectionScreenViewProtocol {
+final class CollectionScreenViewController: UIViewController,
+                                            CollectionScreenViewProtocol,
+                                            UIScrollViewDelegate {
     private let presenter: CollectionScreenPresenterProtocol
     private lazy var mainImageView = UIImageView()
-    
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
@@ -16,7 +18,7 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         label.textAlignment = .left
         return label
     }()
-    
+
     private lazy var authorLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
@@ -34,17 +36,6 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         return button
     }()
 
-    private lazy var backButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = .black
-        button.setImage(UIImage(named: "Backward"), for: .normal)
-        button.contentVerticalAlignment = .fill
-        button.contentHorizontalAlignment = .fill
-        button.imageEdgeInsets = UIEdgeInsets(top: 26, left: 26, bottom: 26, right: 26)
-        button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
-        return button
-    }()
-
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
@@ -52,15 +43,20 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         label.textAlignment = .justified
         return label
     }()
-    
-    private lazy var backgroundScrollView = UIScrollView()
-    
+
+    private lazy var backgroundScrollView = {
+        let view = UIScrollView()
+        view.delegate = self
+        view.contentSize = view.bounds.size
+        return view
+    }()
+
     private lazy var contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
-    
+
     private lazy var collectionsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -72,22 +68,22 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         view.isScrollEnabled = false
         return view
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
         drawSelf()
     }
-    
+
     init(presenter: CollectionScreenPresenterProtocol) {
         self.presenter = presenter
         super .init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func updateScrollViewAnimated() {
         let count = presenter.getValueCount()
         collectionsCollectionView.performBatchUpdates {
@@ -109,14 +105,10 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         present(alertController, animated: true)
     }
 
-    @objc private func didTapBackButton() {
-        navigationController?.popViewController(animated: true)
-    }
-
     @objc private func didTapLinkButton() {
         let stringUrl = "https://practicum.yandex.ru/ios-developer/"
         let webView = WebViewController(stringUrl: stringUrl)
-        
+
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.backBarButtonItem?.tintColor = .black
         navigationController?.tabBarController?.tabBar.isHidden = true
@@ -130,23 +122,37 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
         linkButton.setTitle(options.author, for: .normal)
         descriptionLabel.text = options.description
     }
-    
+
+    private func getSafeAriaCount() -> CGFloat {
+        let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        let window = scene?.windows.first
+        let safeFrame = window?.safeAreaLayoutGuide.layoutFrame
+        let screenHeight = window?.frame.height
+        let safeAreaHeight = safeFrame?.height
+
+        var count = 0.0
+        if let screenRealHeight = screenHeight, let safeArea = safeAreaHeight {
+            count = screenRealHeight - safeArea
+        }
+
+        return count
+    }
+
     private func drawSelf() {
         view.backgroundColor = .white
         setMainInfo()
         mainImageView.backgroundColor = .lightGray
         mainImageView.layer.cornerRadius = 12
         mainImageView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-        
+
         [mainImageView, titleLabel, authorLabel,
          linkButton, descriptionLabel, backgroundScrollView,
-         contentView, collectionsCollectionView, backButton].forEach{
+         contentView, collectionsCollectionView].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.clipsToBounds = true
         }
 
         view.addSubview(backgroundScrollView)
-        view.addSubview(backButton)
         backgroundScrollView.addSubview(contentView)
 
         [mainImageView, titleLabel, authorLabel,
@@ -154,20 +160,26 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
             contentView.addSubview($0)
         }
 
-        let equalHeight = contentView.heightAnchor.constraint(equalToConstant: 990)
-        equalHeight.priority = UILayoutPriority(250)
-        
+        let count = getSafeAriaCount()
+
         NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 9),
-            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 9),
-            backButton.heightAnchor.constraint(equalToConstant: 24),
-            backButton.widthAnchor.constraint(equalToConstant: 24),
+            backgroundScrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            contentView.topAnchor.constraint(equalTo: backgroundScrollView.topAnchor, constant: -count),
+            contentView.leadingAnchor.constraint(equalTo: backgroundScrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: backgroundScrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: backgroundScrollView.bottomAnchor),
+            contentView.heightAnchor.constraint(equalToConstant: 850),
+            contentView.widthAnchor.constraint(equalTo: view.widthAnchor),
 
             mainImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             mainImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             mainImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             mainImageView.heightAnchor.constraint(equalToConstant: 310),
-            
+
             titleLabel.topAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: 16),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -175,28 +187,16 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
             authorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             authorLabel.widthAnchor.constraint(equalToConstant: 112),
-            
+
             linkButton.heightAnchor.constraint(equalToConstant: 20),
             linkButton.leadingAnchor.constraint(equalTo: authorLabel.trailingAnchor, constant: 4),
             linkButton.widthAnchor.constraint(equalToConstant: 120),
             linkButton.centerYAnchor.constraint(equalTo: authorLabel.centerYAnchor),
-            
+
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: 10),
-            
-            backgroundScrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: -50),
-            backgroundScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            contentView.topAnchor.constraint(equalTo: backgroundScrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: backgroundScrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: backgroundScrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: backgroundScrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            equalHeight,
-            
+
             collectionsCollectionView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
             collectionsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -207,15 +207,15 @@ final class CollectionScreenViewController: UIViewController, CollectionScreenVi
 
 //MARK: -UICollectionViewDataSource
 extension CollectionScreenViewController: UICollectionViewDataSource {
-    
+
     func numberOfSections(in: UICollectionView) -> Int {
         return 1
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return presenter.getValueCount()
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let nftItem = presenter.getNftItem(index: indexPath.row),
@@ -236,12 +236,12 @@ extension CollectionScreenViewController: UICollectionViewDelegateFlowLayout {
                                rightInset: 0,
                                cellSpacing: 10)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         return getSize(collectionView: collectionView)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         UIEdgeInsets(top: params.cellSpacing,
@@ -249,7 +249,7 @@ extension CollectionScreenViewController: UICollectionViewDelegateFlowLayout {
                      bottom: params.cellSpacing,
                      right: params.rightInset)
     }
-    
+
     private func getSize(collectionView: UICollectionView) -> CGSize {
         let availableWidth = collectionView.frame.width - params.paddingWidth
         let cellWidth =  availableWidth / CGFloat(params.cellCount)
