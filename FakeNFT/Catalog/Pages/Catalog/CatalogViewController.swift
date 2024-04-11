@@ -93,6 +93,7 @@ extension CatalogViewController: UITableViewDelegate {
         let collectionsViewController = CollectionScreenViewController(presenter: collectionScreenPresenter)
         collectionScreenPresenter.view = collectionsViewController
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage().withTintColor(.clear), for: .default)
 
         self.navigationItem.backBarButtonItem?.tintColor = .black
         navigationController?.tabBarController?.tabBar.isHidden = true
