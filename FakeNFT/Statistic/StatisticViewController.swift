@@ -1,4 +1,3 @@
-
 import UIKit
 
 class StatisticViewController: UIViewController {
@@ -8,7 +7,6 @@ class StatisticViewController: UIViewController {
         view.backgroundColor = .white
         // Do any additional setup after loading the view.
     }
-    
 
     /*
     // MARK: - Navigation

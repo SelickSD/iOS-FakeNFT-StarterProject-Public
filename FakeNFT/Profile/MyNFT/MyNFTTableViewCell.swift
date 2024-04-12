@@ -1,10 +1,9 @@
-
 import UIKit
 
 final class MyNFTTableViewCell: UITableViewCell {
-    
+
     var id: String = ""
-    
+
     private lazy var nftImage: UIImageView = {
         let nftImage = UIImageView()
         nftImage.translatesAutoresizingMaskIntoConstraints = false
@@ -14,7 +13,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         nftImage.backgroundColor = .lightGray
         return nftImage
     }()
-    
+
     private lazy var nftLikeButton: UIButton = {
         let nftLikeButton = UIButton()
         nftLikeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -23,7 +22,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         nftLikeButton.tintColor = .white
         return nftLikeButton
     }()
-    
+
     private lazy var stackViewStarImage: UIStackView = {
         let stackViewStarImage = UIStackView()
         stackViewStarImage.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +33,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         stackViewStarImage.backgroundColor = .white
         return stackViewStarImage
     }()
-    
+
     private lazy var nftTitle: UILabel = {
         let nftTitle = UILabel()
         nftTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -42,7 +41,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         nftTitle.font = UIFont(name: "SFProText-Bold", size: 17)
         return nftTitle
     }()
-    
+
     private lazy var nftAuthorOT: UILabel = {
         let nftAuthorOT = UILabel()
         nftAuthorOT.translatesAutoresizingMaskIntoConstraints = false
@@ -51,7 +50,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         nftAuthorOT.font = UIFont(name: "SFProText-Regular", size: 15)
         return nftAuthorOT
     }()
-    
+
     private lazy var nftAuthor: UILabel = {
         let nftAuthor = UILabel()
         nftAuthor.translatesAutoresizingMaskIntoConstraints = false
@@ -59,7 +58,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         nftAuthor.font = UIFont(name: "SFProText-Regular", size: 13)
         return nftAuthor
     }()
-    
+
     private lazy var nftPriceName: UILabel = {
         let nftPriceName = UILabel()
         nftPriceName.translatesAutoresizingMaskIntoConstraints = false
@@ -68,7 +67,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         nftPriceName.font = UIFont(name: "SFProText-Regular", size: 13)
         return nftPriceName
     }()
-    
+
     private lazy var nftPrice: UILabel = {
         let nftPrice = UILabel()
         nftPrice.translatesAutoresizingMaskIntoConstraints = false
@@ -76,7 +75,7 @@ final class MyNFTTableViewCell: UITableViewCell {
         nftPrice.font = UIFont(name: "SFProText-Bold", size: 17)
         return nftPrice
     }()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupContentView()
@@ -84,19 +83,19 @@ final class MyNFTTableViewCell: UITableViewCell {
     }
     override func prepareForReuse() {
         super.prepareForReuse()
-        for subview in stackViewStarImage.arrangedSubviews{
+        for subview in stackViewStarImage.arrangedSubviews {
             stackViewStarImage.removeArrangedSubview(subview)
             subview.removeFromSuperview()
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
-    func configure(with nft: MyNFT){
+
+    func configure(with nft: MyNFT) {
         nftTitle.text = nft.title
-        if let price = nft.price{
+        if let price = nft.price {
             nftPrice.text = "\(price)" + " ETH"
         }
         nftAuthor.text = nft.author
@@ -104,10 +103,10 @@ final class MyNFTTableViewCell: UITableViewCell {
         nftLikeButton.tintColor = likeColor
         addStarRating(from: nft.rating ?? 0)
     }
-    
-    func addStarRating(from rating: Int){
+
+    func addStarRating(from rating: Int) {
         for index in 0...4 {
-            stackViewStarImage.addArrangedSubview(UIImageView(image: UIImage(systemName:"star.fill")))
+            stackViewStarImage.addArrangedSubview(UIImageView(image: UIImage(systemName: "star.fill")))
             stackViewStarImage.arrangedSubviews[index].tintColor = UIColor(hexString: "#e1e3e6")
             print(index)
         }
@@ -115,8 +114,8 @@ final class MyNFTTableViewCell: UITableViewCell {
             stackViewStarImage.arrangedSubviews[index].tintColor = UIColor.yellow
         }
     }
-    
-    private func setupContentView(){
+
+    private func setupContentView() {
         contentView.addSubview(nftImage)
         nftImage.addSubview(nftLikeButton)
         contentView.addSubview(stackViewStarImage)
@@ -127,40 +126,40 @@ final class MyNFTTableViewCell: UITableViewCell {
         contentView.addSubview(nftPrice)
         contentView.layer.masksToBounds = true
         contentView.backgroundColor = .white
-        
+
     }
-    private func setupTableCellConstraints(){
+    private func setupTableCellConstraints() {
         NSLayoutConstraint.activate([
             nftImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             nftImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             nftImage.heightAnchor.constraint(equalToConstant: 108),
             nftImage.widthAnchor.constraint(equalToConstant: 108),
-            
+
             nftLikeButton.topAnchor.constraint(equalTo: nftImage.topAnchor, constant: 12),
             nftLikeButton.trailingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: -11.36),
             nftLikeButton.heightAnchor.constraint(equalToConstant: 18),
             nftLikeButton.widthAnchor.constraint(equalToConstant: 21),
-            
+
             nftTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 23),
             nftTitle.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),
-            
+
             stackViewStarImage.topAnchor.constraint(equalTo: nftTitle.bottomAnchor, constant: 4),
             stackViewStarImage.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),
             stackViewStarImage.heightAnchor.constraint(equalToConstant: 12),
             stackViewStarImage.widthAnchor.constraint(equalToConstant: 68),
-            
+
             nftAuthorOT.topAnchor.constraint(equalTo: stackViewStarImage.bottomAnchor, constant: 4),
             nftAuthorOT.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),
-            
+
             nftAuthor.topAnchor.constraint(equalTo: stackViewStarImage.bottomAnchor, constant: 4),
             nftAuthor.leadingAnchor.constraint(equalTo: nftAuthorOT.trailingAnchor, constant: 4),
-            
+
             nftPriceName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 33),
             nftPriceName.leadingAnchor.constraint(equalTo: nftPrice.leadingAnchor),
-            
+
             nftPrice.topAnchor.constraint(equalTo: nftPriceName.bottomAnchor, constant: 4),
             nftPrice.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -39)
         ])
     }
-    
+
 }

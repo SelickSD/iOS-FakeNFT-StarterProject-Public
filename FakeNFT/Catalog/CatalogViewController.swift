@@ -1,4 +1,3 @@
-
 import UIKit
 
 class CatalogViewController: UIViewController {
@@ -8,7 +7,6 @@ class CatalogViewController: UIViewController {
         view.backgroundColor = .white
         // Do any additional setup after loading the view.
     }
-    
 
     /*
     // MARK: - Navigation
