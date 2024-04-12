@@ -1,15 +1,16 @@
 //
-//  CollectionResult.swift
+//  NftElementResult.swift
 //  FakeNFT
 //
-//  Created by Сергей Денисенко on 27.03.2024.
+//  Created by Сергей Денисенко on 03.04.2024.
 //
 import Foundation
-struct CollectionResult: Codable {
+struct NftElementResult: Codable {
     let createdAt: String
     let name: String
-    let cover: String
-    let nfts: [String]
+    let images: [String]
+    let rating: Int?
+    let price: Double?
     let description: String
     let author: String
     var id: String
@@ -17,8 +18,9 @@ struct CollectionResult: Codable {
     private enum CodingKeys : String, CodingKey {
         case createdAt
         case name
-        case cover
-        case nfts
+        case images
+        case rating
+        case price
         case description
         case author
         case id
