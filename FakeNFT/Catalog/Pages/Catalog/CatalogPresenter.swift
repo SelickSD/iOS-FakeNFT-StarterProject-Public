@@ -11,6 +11,7 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     private let catalogService = CatalogNetWorkService.shared
     private var collections: [Collection] = []
     private var likes: [String] = []
+    private var sortedCollections: [Collection] = []
 
     init() {
             catalogServiceObserver = NotificationCenter.default.addObserver(
@@ -22,6 +23,7 @@ final class CatalogPresenter: CatalogPresenterProtocol {
                 else { return }
                 if let body = notification.userInfo?["collections"] {
                     collections = body as! [Collection]
+                    sortedCollections = collections
                 } else {
                     return
                 }
@@ -51,24 +53,24 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     
     func viewDidLoad() {
         catalogService.resetCollections()
-        if collections.count == 0 {
+        if sortedCollections.count == 0 {
             catalogService.fetchCollections()
         }
     }
 
     func getCollectionsElement(index: Int) -> Collection? {
-        guard index < collections.count else { return nil }
-        return collections[index]
+        guard index < sortedCollections.count else { return nil }
+        return sortedCollections[index]
     }
 
     func getLabelText(index: Int) -> String {
-        guard index < collections.count else { return "" }
-        let text = "\(collections[index].name)(\(collections[index].nfts.count))"
+        guard index < sortedCollections.count else { return "" }
+        let text = "\(sortedCollections[index].name)(\(sortedCollections[index].nfts.count))"
         return text
     }
     
     func getValueCount() -> Int {
-        return collections.count
+        return sortedCollections.count
     }
     
     func showSortAlert() {
@@ -76,17 +78,26 @@ final class CatalogPresenter: CatalogPresenterProtocol {
         let sortNameAlert = AlertActionEvent(actionTitle: NSLocalizedString("catalogView.sortName",
                                                                             comment: "Text displayed like sort alert description"),
                                              actionStyle: .default,
-                                             handler: {_ in })
-        
+                                             handler: {_ in
+            self.sortByName()
+            self.view?.sortCollection()
+        })
+
         let sortNFTAlert = AlertActionEvent(actionTitle: NSLocalizedString("catalogView.sortNFT",
                                                                            comment: "Text displayed like sort alert description"),
                                             actionStyle: .default,
-                                            handler: {_ in })
+                                            handler: {_ in
+            self.sortByCountNfts()
+            self.view?.sortCollection()
+        })
         let sortCloseAlert = AlertActionEvent(actionTitle: NSLocalizedString("catalogView.sortClose",
                                                                              comment: "Text displayed like sort alert description"),
                                               actionStyle: .cancel,
-                                              handler: {_ in })
-        
+                                              handler: {_ in
+            self.sortedCollections = self.collections
+            self.view?.sortCollection()
+        })
+
         let alert = AlertMessage(title: NSLocalizedString("catalogView.sortTitle",
                                                           comment: "Text displayed like sort alert description"),
                                  message: nil,
@@ -99,7 +110,49 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     func getLikes() -> [String] {
         return likes
     }
-    
+
+    private func sortByName() {
+        var stringArray: [String] = []
+        sortedCollections = []
+        self.collections.forEach{
+            stringArray.append($0.name)
+        }
+        var tmpArray = collections
+        let sortedStringArray = stringArray.sorted()
+        sortedStringArray.forEach{
+            var count = 0
+            for item in tmpArray {
+                if item.name == $0 {
+                    sortedCollections.append(item)
+                    tmpArray.remove(at: count)
+                    break
+                }
+                count += 1
+            }
+        }
+    }
+
+    private func sortByCountNfts() {
+        var intArray: [Int] = []
+        sortedCollections = []
+        self.collections.forEach{
+            intArray.append($0.nfts.count)
+        }
+        var tmpArray = collections
+        let sortedIntArray = intArray.sorted()
+        sortedIntArray.forEach{
+            var count = 0
+            for item in tmpArray {
+                if item.nfts.count == $0 {
+                    sortedCollections.append(item)
+                    tmpArray.remove(at: count)
+                    break
+                }
+                count += 1
+            }
+        }
+    }
+
     private func showConnectError(message: String) {
         let action = AlertActionEvent(actionTitle: "Отмена",
                                       actionStyle: .destructive,

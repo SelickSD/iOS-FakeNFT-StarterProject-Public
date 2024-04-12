@@ -56,6 +56,10 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
         present(alertController, animated: true)
     }
 
+    func sortCollection() {
+        catalogTableView.reloadData()
+    }
+
     @objc private func sortTapped() {
         presenter.showSortAlert()
     }

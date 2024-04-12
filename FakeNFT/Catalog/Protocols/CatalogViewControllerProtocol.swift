@@ -8,4 +8,5 @@ import Foundation
 protocol CatalogViewControllerProtocol: AnyObject {
     func updateTableViewAnimated()
     func showAlert(alert: AlertMessage)
+    func sortCollection()
 }
