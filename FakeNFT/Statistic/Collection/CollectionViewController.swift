@@ -13,6 +13,8 @@ final class CollectionViewController: UIViewController {
 
     private var nftIds: [String] = []
     private var nfts: [Nft] = []
+    private var order: Order?
+    private var profile: Profile?
 
     private lazy var collectionView: UICollectionView = {
         let layout = NftCollectionLayout()
@@ -39,12 +41,16 @@ final class CollectionViewController: UIViewController {
         setupUI()
 
         collectionModel.fetchNftCollection()
+        collectionModel.fetchOrder()
+        collectionModel.fetchLikes()
     }
 
     private func setupViewModel() {
         collectionModel.reloadCollectionViewClosure = { [weak self] in
             DispatchQueue.main.async {
                 self?.nfts = self?.collectionModel.nftCollection ?? []
+                self?.order = self?.collectionModel.cart
+                self?.profile = self?.collectionModel.profile
                 self?.collectionView.reloadData()
             }
         }
@@ -98,14 +104,22 @@ extension CollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: CollectionCell = collectionView.dequeueReusableCell(indexPath: indexPath)
         let nft = nfts[indexPath.item]
+        let inOrder = order?.nfts.contains(nft.id) ?? false
+        let isLiked = profile?.likes.contains(nft.id) ?? false
         let cellModel = CollectionCellModel(
             imageUrls: nft.images,
-            isLiked: false,
+            isLiked: isLiked,
             name: nft.name,
             rating: nft.rating,
             price: Double(nft.price),
-            inOrder: false
+            inOrder: inOrder
         )
+        cell.onCartTap = { [weak self] in
+            self?.collectionModel.changeCartState(nfts: self?.order?.nfts ?? [], newNftId: nft.id) 
+        }
+        cell.onLikeTap = {[weak self] in
+            self?.collectionModel.setLikes(likedNfts: self?.profile?.likes ?? [], likedId: nft.id)
+        }
         cell.cellModel = cellModel
         return cell
     }

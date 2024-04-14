@@ -11,8 +11,11 @@ final class CollectionCell: UICollectionViewCell, ReuseIdentifying {
     var cellModel: CollectionCellModel? {
         didSet {
             updateView()
+            
         }
     }
+    var onLikeTap: (() -> ())?
+    var onCartTap: (() -> ())?
 
     private lazy var imageView = {
         let imageView = UIImageView()
@@ -167,10 +170,10 @@ final class CollectionCell: UICollectionViewCell, ReuseIdentifying {
     }
     
     @objc private func likeButtonTapped() {
-        cellModel?.isLiked.toggle()
+        onLikeTap?()
     }
     
     @objc private func cartButtonTapped() {
-        cellModel?.inOrder.toggle()
+        onCartTap?()
     }
 }

@@ -28,8 +28,8 @@ final class NftCollectionLayout: UICollectionViewCompositionalLayout {
             } else {
                 group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 3)
             }
-            group.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
-            group.interItemSpacing = .fixed(10)
+            group.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 0)
+            group.interItemSpacing = .fixed(12)
             let section = NSCollectionLayoutSection(group: group)
             section.interGroupSpacing = 28
             section.contentInsets.top = 24
