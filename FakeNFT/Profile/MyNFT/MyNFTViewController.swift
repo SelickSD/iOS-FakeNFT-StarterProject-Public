@@ -84,25 +84,22 @@ class MyNFTViewController: UIViewController {
         navigationItem.rightBarButtonItem?.tintColor = .black
     }
     private func sortByPrice() {
-        UIBlockingProgressHUD.show()
         self.nftArray = self.nftArray.sorted { $0.price ?? 0 > $1.price ?? 0 }
         self.myNftTableView.reloadData()
         self.updatePlaceHolderNaf()
-        UIBlockingProgressHUD.dismiss()
+        SortingMethod.sortMethod = .sortByPrice
     }
     private func sortByRating() {
-        UIBlockingProgressHUD.show()
         self.nftArray = self.nftArray.sorted { $0.rating ?? 0 > $1.rating ?? 0 }
         self.myNftTableView.reloadData()
         self.updatePlaceHolderNaf()
-        UIBlockingProgressHUD.dismiss()
+        SortingMethod.sortMethod = .sortByRating
     }
     private func sortByName() {
-        UIBlockingProgressHUD.show()
         self.nftArray = self.nftArray.sorted { $1.title ?? "" > $0.title ?? "" }
         self.myNftTableView.reloadData()
         self.updatePlaceHolderNaf()
-        UIBlockingProgressHUD.dismiss()
+        SortingMethod.sortMethod = .sortByName
     }
     @objc private func dismissNav() {
         self.navigationController?.popViewController(animated: true)
@@ -112,15 +109,12 @@ class MyNFTViewController: UIViewController {
 
         let priceFilter = UIAlertAction(title: "По цене", style: .default) { _ in
             self.sortByPrice()
-            SortingMethod.sortMethod = .sortByPrice
         }
         let ratingFilter = UIAlertAction(title: "По рейтингу", style: .default) { _ in
             self.sortByRating()
-            SortingMethod.sortMethod = .sortByRating
         }
         let nameFilter = UIAlertAction(title: "По названию", style: .default) { _ in
             self.sortByName()
-            SortingMethod.sortMethod = .sortByName
         }
 
         let cancel = UIAlertAction(title: "Закрыть", style: .cancel)
