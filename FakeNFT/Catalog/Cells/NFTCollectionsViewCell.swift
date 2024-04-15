@@ -12,6 +12,7 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
     private var rating = 0
     private lazy var maneView = UIImageView()
     private var isLikes = false
+    private var isInBasket = false
 
     private lazy var likeButton: UIButton = {
         let button = UIButton()
@@ -64,17 +65,22 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configCell(nftItem: NftElement, isLikes: Bool) {
+    func configCell(nftItem: NftElement, isLikes: Bool, isInBasket: Bool) {
         rating = nftItem.rating
         nftsId = nftItem.id
         maneView.image = nftItem.images
         self.isLikes = isLikes
+        self.isInBasket = isInBasket
         if isLikes {
             likeButton.setImage(UIImage(named: "RedLike"), for: .normal)
         } else {
             likeButton.setImage(UIImage(named: "WhiteLike"), for: .normal)
         }
-        addToBasketButton.setImage(UIImage(named: "CartAdd"), for: .normal)
+        if isInBasket {
+            addToBasketButton.setImage(UIImage(named: "CartDel"), for: .normal)
+        } else {
+            addToBasketButton.setImage(UIImage(named: "CartAdd"), for: .normal)
+        }
         nameLabel.text = nftItem.name
         costLabel.text = "\(nftItem.price) ETH"
         drawSelf()
@@ -91,7 +97,13 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
     }
 
     @objc private func didTapBasketButton() {
-        //MARK: TODO
+        if isInBasket {
+            addToBasketButton.setImage(UIImage(named: "CartAdd"), for: .normal)
+        } else {
+            addToBasketButton.setImage(UIImage(named: "CartDel"), for: .normal)
+        }
+        isInBasket.toggle()
+        delegate?.didTapBasketButton(ntfsId: nftsId)
     }
 
     private func drawSelf() {

@@ -8,4 +8,5 @@
 import Foundation
 protocol CatalogPresenterDelegate: AnyObject {
     func putLikes(nftId: String)
+    func putBasket(nftId: String)
 }

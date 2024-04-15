@@ -7,6 +7,6 @@
 
 import Foundation
 protocol CollectionScreenDelegate: AnyObject {
-    func didTapLikeButton (ntfsId: String)
-
+    func didTapLikeButton(ntfsId: String)
+    func didTapBasketButton(ntfsId: String)
 }

@@ -12,6 +12,7 @@ final class CatalogPresenter: CatalogPresenterProtocol,
     private let catalogService = CatalogNetWorkService.shared
     private var collections: [Collection] = []
     private var likes: [String] = []
+    private var basketNfts: [String] = []
     private var sortedCollections: [Collection] = []
 
     init() {
@@ -29,7 +30,7 @@ final class CatalogPresenter: CatalogPresenterProtocol,
                     return
                 }
                 self.view?.updateTableViewAnimated()
-                fetchLikes()
+                self.fetchLikes()
             }
 
             catalogServiceObserver = NotificationCenter.default.addObserver(
@@ -112,8 +113,11 @@ final class CatalogPresenter: CatalogPresenterProtocol,
         return likes
     }
 
+    func getBasketNfts() -> [String] {
+        return basketNfts
+    }
+
     func putLikes(nftId: String) {
-        print(likes.count)
         if let index = likes.firstIndex(of: nftId) {
             likes.remove(at: index)
         } else {
@@ -122,12 +126,28 @@ final class CatalogPresenter: CatalogPresenterProtocol,
         catalogService.putLikes(likes: likes ) { result in
             switch result {
             case .success(_):
-                print(self.likes.count)
                 break
             case .failure(let error):
                 self.showConnectError(message: "\(error)")
             }
         }
+    }
+
+    func putBasket(nftId: String) {
+        if let index = basketNfts.firstIndex(of: nftId) {
+            basketNfts.remove(at: index)
+        } else {
+            basketNfts.append(nftId)
+        }
+        catalogService.putBasket(basketNfts: basketNfts) { result in
+            switch result {
+            case .success(_):
+                break
+            case .failure(let error):
+                self.showConnectError(message: "\(error)")
+            }
+        }
+
     }
 
     private func sortByName() {
@@ -190,8 +210,24 @@ final class CatalogPresenter: CatalogPresenterProtocol,
         catalogService.fetchLikes() { likesResult in
             switch likesResult {
             case .success(let likes):
+                UIBlockingProgressHUD.dismiss()
                 self.likes = likes
+                self.fetchBasketNfts()
             case .failure(let error):
+                UIBlockingProgressHUD.dismiss()
+                self.showConnectError(message: "\(error)")
+            }
+        }
+    }
+
+    private func fetchBasketNfts() {
+        catalogService.fetchBasketNfts() { basketResult in
+            switch basketResult {
+            case .success(let basketNfts):
+                UIBlockingProgressHUD.dismiss()
+                self.basketNfts = basketNfts
+            case .failure(let error):
+                UIBlockingProgressHUD.dismiss()
                 self.showConnectError(message: "\(error)")
             }
         }

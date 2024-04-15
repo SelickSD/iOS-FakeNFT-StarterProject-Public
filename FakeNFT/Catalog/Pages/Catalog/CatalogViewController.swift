@@ -93,7 +93,8 @@ extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let collectionElement = presenter.getCollectionsElement(index: indexPath.row) else {return}
         let likes = presenter.getLikes()
-        let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement, likes: likes)
+        let basketNfts = presenter.getBasketNfts()
+        let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement, likes: likes, basketNfts: basketNfts)
         collectionScreenPresenter.delegate = presenter as? CatalogPresenter
         let collectionsViewController = CollectionScreenViewController(presenter: collectionScreenPresenter)
         collectionScreenPresenter.view = collectionsViewController

@@ -13,8 +13,8 @@ final class CatalogNetWorkService {
     static let shared = CatalogNetWorkService()
     private (set) var nfts: [NftElement] = []
     private (set) var collections: [Collection] = []
-    private (set) var likes: [String] = []
-    
+//    private (set) var likes: [String] = []
+
     private let urlSession = URLSession.shared
     private var isFetching = false
     private var task: URLSessionTask?
@@ -163,11 +163,33 @@ final class CatalogNetWorkService {
                 switch result {
                 case .success(let body):
                     completion(.success(body.likes))
-                    UIBlockingProgressHUD.dismiss()
                     self.isFetching = false
                 case .failure(let error):
                     completion(.failure(error))
-                    UIBlockingProgressHUD.dismiss()
+                    self.isFetching = false
+                }
+            }
+        }
+        task.resume()
+    }
+
+    func fetchBasketNfts(completion: @escaping (Result<[String], Error>) -> Void) {
+        UIBlockingProgressHUD.show()
+        guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
+            return }
+
+        self.isFetching = true
+        let request = URLRequest.makeHTTPRequest(path: "/api/v1/orders/1",
+                                                 httpMethod: "GET", needToken: true)
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<BasketNftsResult, Error>) in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let body):
+                    completion(.success(body.nfts))
+                    self.isFetching = false
+                case .failure(let error):
+                    completion(.failure(error))
                     self.isFetching = false
                 }
             }
@@ -179,19 +201,51 @@ final class CatalogNetWorkService {
 
         guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
             return }
-
         self.isFetching = true
         var request = URLRequest.makeHTTPRequest(path: "/api/v1/profile/1",
                                                  httpMethod: "PUT", needToken: true)
-
         var bodysParam: String = "null"
         if !likes.isEmpty {
             bodysParam = likes.map {"\($0)"}.joined(separator: ",")
         } else {
             bodysParam = "null"
         }
-        print("likes=\(bodysParam)")
         let requestBody = "likes=\(bodysParam)"
+        request.httpBody = requestBody.data(using: .utf8)
+
+        let task = URLSession.shared.dataTask(with: request) { (_, response, error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    completion(.failure(NetworkError.urlRequestError(error)))
+                    self.isFetching = false
+                }
+                if let responseCode = (response as? HTTPURLResponse)?.statusCode {
+                    if 200..<300 ~= responseCode {
+                    } else {
+                        completion(.failure(NetworkError.httpStatusCode(responseCode)))
+                    }
+                }
+                completion(.success(()))
+                self.isFetching = false
+            }
+        }
+        task.resume()
+    }
+
+    func putBasket(basketNfts: [String], completion: @escaping (Result<Void, Error>) -> Void) {
+
+        guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
+            return }
+        self.isFetching = true
+        var request = URLRequest.makeHTTPRequest(path: "/api/v1/orders/1",
+                                                 httpMethod: "PUT", needToken: true)
+        var bodysParam: String = "null"
+        if !basketNfts.isEmpty {
+            bodysParam = basketNfts.map {"\($0)"}.joined(separator: ",")
+        } else {
+            bodysParam = "null"
+        }
+        let requestBody = "nfts=\(bodysParam)"
         request.httpBody = requestBody.data(using: .utf8)
 
         let task = URLSession.shared.dataTask(with: request) { (_, response, error) in

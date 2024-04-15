@@ -13,10 +13,12 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     private var nfts: [NftElement] = []
     private let collection: Collection
     private var likes: [String]
+    private var basketNfts: [String]
 
-    init(collection: Collection, likes: [String]) {
+    init(collection: Collection, likes: [String], basketNfts: [String]) {
         self.collection = collection
         self.likes = likes
+        self.basketNfts = basketNfts
         collectionServiceObserver = NotificationCenter.default.addObserver(
             forName: CatalogNetWorkService.didChangeNotificationCollections,
             object: nil,
@@ -61,13 +63,20 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
         return collection
     }
     
-    func getNftItem(index: Int) -> (nftElement: NftElement, isLikes: Bool)? {
+    func getNftItem(index: Int) -> (nftElement: NftElement, isLikes: Bool, isInBasket: Bool)? {
         guard index < nfts.count else {return nil}
+        let nftElement = nfts[index]
+        var isLikes = false
+        var isInBasket = false
         if likes.contains(nfts[index].id) {
-            return (nfts[index], true)
-        } else {
-            return (nfts[index], false)
+           isLikes = true
         }
+
+        if basketNfts.contains(nfts[index].id) {
+            isInBasket = true
+        }
+
+        return (nftElement, isLikes, isInBasket)
     }
     
     func getValueCount() -> Int {
@@ -76,6 +85,10 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
 
     func putLikes(nftId: String) {
         delegate?.putLikes(nftId: nftId)
+    }
+
+    func putBasket(nftId: String) {
+        delegate?.putBasket(nftId: nftId)
     }
 
     private func sotrNFTElements(elements: [NftElement]) -> [NftElement] {

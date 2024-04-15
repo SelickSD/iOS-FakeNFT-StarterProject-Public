@@ -13,4 +13,5 @@ protocol CatalogPresenterProtocol {
     func showSortAlert()
     func getCollectionsElement(index: Int) -> Collection?
     func getLikes() -> [String] 
+    func getBasketNfts() -> [String]
 }

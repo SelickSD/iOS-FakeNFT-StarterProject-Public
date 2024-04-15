@@ -224,7 +224,7 @@ extension CollectionScreenViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.delegate = self
-        cell.configCell(nftItem: nftItem.nftElement, isLikes: nftItem.isLikes)
+        cell.configCell(nftItem: nftItem.nftElement, isLikes: nftItem.isLikes, isInBasket: nftItem.isInBasket)
         return cell
     }
 }
@@ -263,5 +263,8 @@ extension CollectionScreenViewController: UICollectionViewDelegateFlowLayout {
 extension CollectionScreenViewController: CollectionScreenDelegate {
     func didTapLikeButton(ntfsId: String) {
         presenter.putLikes(nftId: ntfsId)
+    }
+    func didTapBasketButton(ntfsId: String) {
+        presenter.putBasket(nftId: ntfsId)
     }
 }
