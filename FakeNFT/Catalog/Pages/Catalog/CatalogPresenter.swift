@@ -16,43 +16,43 @@ final class CatalogPresenter: CatalogPresenterProtocol,
     private var sortedCollections: [Collection] = []
 
     init() {
-            catalogServiceObserver = NotificationCenter.default.addObserver(
-                forName: CatalogNetWorkService.didChangeNotificationCatalog,
-                object: nil,
-                queue: .main
-            ) { [weak self] notification in
-                guard let self = self
-                else { return }
-                if let body = notification.userInfo?["collections"] {
-                    collections = body as! [Collection]
-                    sortedCollections = collections
-                } else {
-                    return
-                }
-                self.view?.updateTableViewAnimated()
-                self.fetchLikes()
+        catalogServiceObserver = NotificationCenter.default.addObserver(
+            forName: CatalogNetWorkService.didChangeNotificationCatalog,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self = self
+            else { return }
+            if let body = notification.userInfo?["collections"] {
+                collections = body as! [Collection]
+                sortedCollections = collections
+            } else {
+                return
             }
-
-            catalogServiceObserver = NotificationCenter.default.addObserver(
-                forName: CatalogNetWorkService.didNetWorkErrorDetected,
-                object: nil,
-                queue: .main
-            ) { [weak self] notification in
-                guard let self = self
-                else { return }
-                if let error = notification.userInfo?["error"] {
-                    self.showConnectError(message: "\(error)")
-                } else {
-                    self.showConnectError(message: "Проблемы сети")
-                }
-                UIBlockingProgressHUD.dismiss()
-            }
+            self.view?.updateTableViewAnimated()
+            self.fetchLikes()
         }
+
+        catalogServiceObserver = NotificationCenter.default.addObserver(
+            forName: CatalogNetWorkService.didNetWorkErrorDetected,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self = self
+            else { return }
+            if let error = notification.userInfo?["error"] {
+                self.showConnectError(message: "\(error)")
+            } else {
+                self.showConnectError(message: "Проблемы сети")
+            }
+            UIBlockingProgressHUD.dismiss()
+        }
+    }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
     func viewDidLoad() {
         catalogService.resetCollections()
         if sortedCollections.count == 0 {
@@ -70,13 +70,13 @@ final class CatalogPresenter: CatalogPresenterProtocol,
         let text = "\(sortedCollections[index].name)(\(sortedCollections[index].nfts.count))"
         return text
     }
-    
+
     func getValueCount() -> Int {
         return sortedCollections.count
     }
-    
+
     func showSortAlert() {
-        
+
         let sortNameAlert = AlertActionEvent(actionTitle: NSLocalizedString("catalogView.sortName",
                                                                             comment: "Text displayed like sort alert description"),
                                              actionStyle: .default,
@@ -105,10 +105,10 @@ final class CatalogPresenter: CatalogPresenterProtocol,
                                  message: nil,
                                  preferredStyle: .actionSheet,
                                  action: [sortNameAlert, sortNFTAlert, sortCloseAlert])
-        
+
         view?.showAlert(alert: alert)
     }
-    
+
     func getLikes() -> [String] {
         return likes
     }
@@ -147,7 +147,6 @@ final class CatalogPresenter: CatalogPresenterProtocol,
                 self.showConnectError(message: "\(error)")
             }
         }
-
     }
 
     private func sortByName() {
@@ -196,16 +195,15 @@ final class CatalogPresenter: CatalogPresenterProtocol,
         let action = AlertActionEvent(actionTitle: "Отмена",
                                       actionStyle: .destructive,
                                       handler: {_ in })
-        
-        
+
         let alert = AlertMessage(title: "Сетевая ошибка",
                                  message: message,
                                  preferredStyle: .alert,
                                  action: [action])
-        
+
         view?.showAlert(alert: alert)
     }
-    
+
     private func fetchLikes() {
         catalogService.fetchLikes() { likesResult in
             switch likesResult {

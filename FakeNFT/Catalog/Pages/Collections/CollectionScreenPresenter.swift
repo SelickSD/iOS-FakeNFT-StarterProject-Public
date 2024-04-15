@@ -49,27 +49,27 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
             UIBlockingProgressHUD.dismiss()
         }
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
     func viewDidLoad() {
         collectionService.resetNft()
         collectionService.fetchNfts(collectionElement: collection.nfts)
     }
-    
+
     func getOptions() -> Collection {
         return collection
     }
-    
+
     func getNftItem(index: Int) -> (nftElement: NftElement, isLikes: Bool, isInBasket: Bool)? {
         guard index < nfts.count else {return nil}
         let nftElement = nfts[index]
         var isLikes = false
         var isInBasket = false
         if likes.contains(nfts[index].id) {
-           isLikes = true
+            isLikes = true
         }
 
         if basketNfts.contains(nfts[index].id) {
@@ -78,7 +78,7 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
 
         return (nftElement, isLikes, isInBasket)
     }
-    
+
     func getValueCount() -> Int {
         return nfts.count
     }
@@ -105,12 +105,11 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
         }
         return sortedNftElements
     }
-    
+
     private func showConnectError(message: String) {
         let action = AlertActionEvent(actionTitle: "Отмена",
                                       actionStyle: .destructive,
                                       handler: {_ in })
-
 
         let alert = AlertMessage(title: "Сетевая ошибка",
                                  message: message,
