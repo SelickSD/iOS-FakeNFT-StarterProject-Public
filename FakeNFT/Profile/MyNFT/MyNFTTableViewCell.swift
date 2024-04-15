@@ -94,6 +94,7 @@ final class MyNFTTableViewCell: UITableViewCell {
     }
 
     func configure(with nft: MyNFT) {
+        nftImage.image = nft.image
         nftTitle.text = nft.title
         if let price = nft.price {
             nftPrice.text = "\(price)" + " ETH"
@@ -140,8 +141,9 @@ final class MyNFTTableViewCell: UITableViewCell {
             nftLikeButton.heightAnchor.constraint(equalToConstant: 18),
             nftLikeButton.widthAnchor.constraint(equalToConstant: 21),
 
-            nftTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 23),
+            nftTitle.topAnchor.constraint(equalTo: nftImage.topAnchor, constant: 23),
             nftTitle.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),
+            nftTitle.widthAnchor.constraint(equalToConstant: 100),
 
             stackViewStarImage.topAnchor.constraint(equalTo: nftTitle.bottomAnchor, constant: 4),
             stackViewStarImage.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),
@@ -151,10 +153,12 @@ final class MyNFTTableViewCell: UITableViewCell {
             nftAuthorOT.topAnchor.constraint(equalTo: stackViewStarImage.bottomAnchor, constant: 4),
             nftAuthorOT.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),
 
-            nftAuthor.topAnchor.constraint(equalTo: stackViewStarImage.bottomAnchor, constant: 4),
+            nftAuthor.topAnchor.constraint(equalTo: stackViewStarImage.bottomAnchor, constant: 5),
             nftAuthor.leadingAnchor.constraint(equalTo: nftAuthorOT.trailingAnchor, constant: 4),
+            nftAuthor.bottomAnchor.constraint(equalTo: nftAuthorOT.bottomAnchor),
+            nftAuthor.widthAnchor.constraint(equalToConstant: 88),
 
-            nftPriceName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 33),
+            nftPriceName.topAnchor.constraint(equalTo: nftImage.topAnchor, constant: 33),
             nftPriceName.leadingAnchor.constraint(equalTo: nftPrice.leadingAnchor),
 
             nftPrice.topAnchor.constraint(equalTo: nftPriceName.bottomAnchor, constant: 4),

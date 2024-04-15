@@ -8,29 +8,7 @@ final class FavouritesViewController: UIViewController {
 
     var newIdFavArray: (([String]) -> Void)?
 
-    private var nftFavArray: [MyFavNFT] = [
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melisa", rating: 0, isLike: true, price: 3.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Piter", rating: 2, isLike: true, price: 5.64),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 3, isLike: true, price: 7.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 4, isLike: true, price: 10.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, isLike: true, price: 1.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 4, isLike: true, price: 15.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 4, isLike: true, price: 1.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melisa", rating: 0, isLike: true, price: 3.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Piter", rating: 2, isLike: true, price: 5.64),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 3, isLike: true, price: 7.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 4, isLike: true, price: 1.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, isLike: true, price: 54.10),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 4, isLike: true, price: 10.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 4, isLike: true, price: 11.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melisa", rating: 0, isLike: true, price: 3.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Piter", rating: 2, isLike: true, price: 5.64),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Pixi", rating: 3, isLike: true, price: 7.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Melissa", rating: 4, isLike: true, price: 14.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "April", rating: 4, isLike: true, price: 12.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Lilo", rating: 4, isLike: true, price: 10.54),
-//        MyFavNFT(image: UIImage(systemName: "person.crop.circle.fill"), title: "Daisy", rating: 4, isLike: true, price: 10.54),
-    ]
+    private var nftFavArray: [MyFavNFT] = []
 
     private lazy var nftCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -85,7 +63,8 @@ final class FavouritesViewController: UIViewController {
                         self.nftFavArray.append(nftFav)
                         self.nftCollectionView.reloadData()
                         self.updatePlaceHolderNaf()
-                        if self.nftFavArray.count == self.idFavArray.count {UIBlockingProgressHUD.dismiss()}
+                        if self.nftFavArray.count == self.idFavArray.count {UIBlockingProgressHUD.dismiss()
+                        }
                     }
                 case .failure:
                     UIBlockingProgressHUD.dismiss()

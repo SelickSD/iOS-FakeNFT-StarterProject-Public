@@ -83,6 +83,27 @@ class MyNFTViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "text.justify.left"), style: .plain, target: self, action: #selector(filter))
         navigationItem.rightBarButtonItem?.tintColor = .black
     }
+    private func sortByPrice() {
+        UIBlockingProgressHUD.show()
+        self.nftArray = self.nftArray.sorted { $0.price ?? 0 > $1.price ?? 0 }
+        self.myNftTableView.reloadData()
+        self.updatePlaceHolderNaf()
+        UIBlockingProgressHUD.dismiss()
+    }
+    private func sortByRating() {
+        UIBlockingProgressHUD.show()
+        self.nftArray = self.nftArray.sorted { $0.rating ?? 0 > $1.rating ?? 0 }
+        self.myNftTableView.reloadData()
+        self.updatePlaceHolderNaf()
+        UIBlockingProgressHUD.dismiss()
+    }
+    private func sortByName() {
+        UIBlockingProgressHUD.show()
+        self.nftArray = self.nftArray.sorted { $1.title ?? "" > $0.title ?? "" }
+        self.myNftTableView.reloadData()
+        self.updatePlaceHolderNaf()
+        UIBlockingProgressHUD.dismiss()
+    }
     @objc private func dismissNav() {
         self.navigationController?.popViewController(animated: true)
     }
@@ -90,26 +111,16 @@ class MyNFTViewController: UIViewController {
         let alertController = UIAlertController(title: "Cортировка", message: .none, preferredStyle: .actionSheet)
 
         let priceFilter = UIAlertAction(title: "По цене", style: .default) { _ in
-            UIBlockingProgressHUD.show()
-            self.nftArray = self.nftArray.sorted { $0.price ?? 0 > $1.price ?? 0 }
-            self.myNftTableView.reloadData()
-            self.updatePlaceHolderNaf()
-            UIBlockingProgressHUD.dismiss()
-
+            self.sortByPrice()
+            SortingMethod.sortMethod = .sortByPrice
         }
         let ratingFilter = UIAlertAction(title: "По рейтингу", style: .default) { _ in
-            UIBlockingProgressHUD.show()
-            self.nftArray = self.nftArray.sorted { $0.rating ?? 0 > $1.rating ?? 0 }
-            self.myNftTableView.reloadData()
-            self.updatePlaceHolderNaf()
-            UIBlockingProgressHUD.dismiss()
+            self.sortByRating()
+            SortingMethod.sortMethod = .sortByRating
         }
         let nameFilter = UIAlertAction(title: "По названию", style: .default) { _ in
-            UIBlockingProgressHUD.show()
-            self.nftArray = self.nftArray.sorted { $1.title ?? "" > $0.title ?? "" }
-            self.myNftTableView.reloadData()
-            self.updatePlaceHolderNaf()
-            UIBlockingProgressHUD.dismiss()
+            self.sortByName()
+            SortingMethod.sortMethod = .sortByName
         }
 
         let cancel = UIAlertAction(title: "Закрыть", style: .cancel)
@@ -126,21 +137,32 @@ class MyNFTViewController: UIViewController {
         if idArray.count == 0 {UIBlockingProgressHUD.dismiss()
         } else {
             nftService.fetchMyNFT(from: idArray) { nftResult in
+
                 switch nftResult {
-                case .success(let nftFav):
+                    case .success(let nftFav):
                     DispatchQueue.main.async {
                         self.nftArray.append(nftFav)
                         self.myNftTableView.reloadData()
                         self.updatePlaceHolderNaf()
-                        if self.idArray.count == self.nftArray.count {UIBlockingProgressHUD.dismiss()}
+                        if self.idArray.count == self.nftArray.count {
+                            switch SortingMethod.sortMethod {
+                            case .sortByPrice:
+                                self.sortByPrice()
+                            case .sortByRating:
+                                self.sortByRating()
+                            case .sortByName:
+                                self.sortByName()
+                            }
+                            UIBlockingProgressHUD.dismiss()
+                            }
                     }
-                case .failure:
-                    UIBlockingProgressHUD.dismiss()
+                    case .failure:
+                        UIBlockingProgressHUD.dismiss()
+                    }
                 }
             }
         }
     }
-}
 extension MyNFTViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return nftArray.count
