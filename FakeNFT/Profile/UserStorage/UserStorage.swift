@@ -10,7 +10,7 @@ struct SortingMethod {
     static var sortMethod: Method {
         get {
             guard let method = UserDefaults.standard.string(forKey: "sorting_method") else {
-                return .sortByPrice
+                return .sortByName
             }
             return Method(rawValue: method) ?? .sortByName
         }
