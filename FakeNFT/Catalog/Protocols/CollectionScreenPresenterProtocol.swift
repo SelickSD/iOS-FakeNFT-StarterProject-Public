@@ -11,4 +11,5 @@ protocol CollectionScreenPresenterProtocol {
     func getNftItem(index: Int) -> (nftElement: NftElement, isLikes: Bool)?
     func getOptions() -> Collection
     func viewDidLoad()
+    func putLikes(nftId: String)
 }

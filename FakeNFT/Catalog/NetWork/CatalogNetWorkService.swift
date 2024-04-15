@@ -174,4 +174,42 @@ final class CatalogNetWorkService {
         }
         task.resume()
     }
+
+    func putLikes(likes: [String], completion: @escaping (Result<Void, Error>) -> Void) {
+
+        guard !self.isFetching else { UIBlockingProgressHUD.dismiss()
+            return }
+
+        self.isFetching = true
+        var request = URLRequest.makeHTTPRequest(path: "/api/v1/profile/1",
+                                                 httpMethod: "PUT", needToken: true)
+
+        var bodysParam: String = "null"
+        if !likes.isEmpty {
+            bodysParam = likes.map {"\($0)"}.joined(separator: ",")
+        } else {
+            bodysParam = "null"
+        }
+        print("likes=\(bodysParam)")
+        let requestBody = "likes=\(bodysParam)"
+        request.httpBody = requestBody.data(using: .utf8)
+
+        let task = URLSession.shared.dataTask(with: request) { (_, response, error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    completion(.failure(NetworkError.urlRequestError(error)))
+                    self.isFetching = false
+                }
+                if let responseCode = (response as? HTTPURLResponse)?.statusCode {
+                    if 200..<300 ~= responseCode {
+                    } else {
+                        completion(.failure(NetworkError.httpStatusCode(responseCode)))
+                    }
+                }
+                completion(.success(()))
+                self.isFetching = false
+            }
+        }
+        task.resume()
+    }
 }

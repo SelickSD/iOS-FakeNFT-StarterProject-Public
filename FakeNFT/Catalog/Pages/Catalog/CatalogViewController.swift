@@ -94,6 +94,7 @@ extension CatalogViewController: UITableViewDelegate {
         guard let collectionElement = presenter.getCollectionsElement(index: indexPath.row) else {return}
         let likes = presenter.getLikes()
         let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement, likes: likes)
+        collectionScreenPresenter.delegate = presenter as? CatalogPresenter
         let collectionsViewController = CollectionScreenViewController(presenter: collectionScreenPresenter)
         collectionScreenPresenter.view = collectionsViewController
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)

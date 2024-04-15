@@ -27,6 +27,9 @@ extension URLRequest {
         if (needToken) {
             request.setValue("7939bfb7-0c9d-4a5e-8cb7-feb0cbaa99d9", forHTTPHeaderField: "X-Practicum-Mobile-Token")
         }
+        if httpMethod == "PUT" {
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        }
         return request
     }
 }

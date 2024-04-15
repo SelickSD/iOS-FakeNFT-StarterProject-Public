@@ -7,12 +7,13 @@
 import Foundation
 final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     weak var view: CollectionScreenViewProtocol?
+    weak var delegate: CatalogPresenterDelegate?
     private var collectionServiceObserver: NSObjectProtocol?
     private let collectionService = CatalogNetWorkService.shared
     private var nfts: [NftElement] = []
     private let collection: Collection
     private var likes: [String]
-    
+
     init(collection: Collection, likes: [String]) {
         self.collection = collection
         self.likes = likes
@@ -72,7 +73,11 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     func getValueCount() -> Int {
         return nfts.count
     }
-    
+
+    func putLikes(nftId: String) {
+        delegate?.putLikes(nftId: nftId)
+    }
+
     private func sotrNFTElements(elements: [NftElement]) -> [NftElement] {
         var sortedNftElements: [NftElement] = []
         var idNfts: [String] = []

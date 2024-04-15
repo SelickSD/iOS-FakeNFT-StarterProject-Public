@@ -6,9 +6,12 @@
 //
 import UIKit
 final class NFTCollectionsViewCell: UICollectionViewCell {
+    weak var delegate: CollectionScreenDelegate?
     static let identifier = "NFTCollectionsViewCell"
+    private var nftsId = ""
     private var rating = 0
     private lazy var maneView = UIImageView()
+    private var isLikes = false
 
     private lazy var likeButton: UIButton = {
         let button = UIButton()
@@ -63,7 +66,9 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
 
     func configCell(nftItem: NftElement, isLikes: Bool) {
         rating = nftItem.rating
+        nftsId = nftItem.id
         maneView.image = nftItem.images
+        self.isLikes = isLikes
         if isLikes {
             likeButton.setImage(UIImage(named: "RedLike"), for: .normal)
         } else {
@@ -76,7 +81,13 @@ final class NFTCollectionsViewCell: UICollectionViewCell {
     }
 
     @objc private func didTapLikeButton() {
-        //MARK: TODO
+        if isLikes {
+            likeButton.setImage(UIImage(named: "WhiteLike"), for: .normal)
+        } else {
+            likeButton.setImage(UIImage(named: "RedLike"), for: .normal)
+        }
+        isLikes.toggle()
+        delegate?.didTapLikeButton(ntfsId: nftsId)
     }
 
     @objc private func didTapBasketButton() {

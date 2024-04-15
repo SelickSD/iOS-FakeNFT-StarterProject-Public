@@ -5,7 +5,8 @@
 //  Created by Сергей Денисенко on 26.03.2024.
 //
 import Foundation
-final class CatalogPresenter: CatalogPresenterProtocol {
+final class CatalogPresenter: CatalogPresenterProtocol,
+                              CatalogPresenterDelegate {
     weak var view: CatalogViewControllerProtocol?
     private var catalogServiceObserver: NSObjectProtocol?
     private let catalogService = CatalogNetWorkService.shared
@@ -109,6 +110,24 @@ final class CatalogPresenter: CatalogPresenterProtocol {
     
     func getLikes() -> [String] {
         return likes
+    }
+
+    func putLikes(nftId: String) {
+        print(likes.count)
+        if let index = likes.firstIndex(of: nftId) {
+            likes.remove(at: index)
+        } else {
+            likes.append(nftId)
+        }
+        catalogService.putLikes(likes: likes ) { result in
+            switch result {
+            case .success(_):
+                print(self.likes.count)
+                break
+            case .failure(let error):
+                self.showConnectError(message: "\(error)")
+            }
+        }
     }
 
     private func sortByName() {
