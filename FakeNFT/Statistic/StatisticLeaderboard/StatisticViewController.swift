@@ -2,7 +2,7 @@
 import UIKit
 import ProgressHUD
 
-final class StatisticViewController: UIViewController {
+final class StatisticViewController: UIViewController, ErrorView {
     
     private var sortButton: UIBarButtonItem?
     private var statisticModel = StatisticModel()
@@ -110,6 +110,7 @@ extension StatisticViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = statisticModel.getUser(at: indexPath)
         let userInfoVC = UserInfoViewController(userId: user.id)
+        userInfoVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(userInfoVC, animated: true)
     }
 }

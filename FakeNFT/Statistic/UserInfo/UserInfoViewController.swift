@@ -15,6 +15,7 @@ final class UserInfoViewController: UIViewController {
     private var users: Users?
     private var nftCount = 0
     private var userWebSiteUrl = URL(string: "")
+    private var nftCollection: [String] = []
     
     private lazy var userImageView: UIImageView = {
         let userImageView = UIImageView()
@@ -77,6 +78,7 @@ final class UserInfoViewController: UIViewController {
                 self?.nftCount = users.nfts.count
                 self?.descriptionLabel.text = users.description
                 self?.userWebSiteUrl = users.website
+                self?.nftCollection = users.nfts
                 self?.tableView.reloadData()
                 self?.makeVisible()
             }
@@ -174,5 +176,17 @@ extension UserInfoViewController: UITableViewDataSource {
 }
 
 extension UserInfoViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if nftCollection.isEmpty {
+            let error = ErrorModel(message: "Нет NFT", actionText: "OK", action: {})
+            showError(error)
+            return
+        } else {
+            let collectionVC = CollectionViewController(nftIds: nftCollection)
+            navigationController?.pushViewController(collectionVC, animated: true)
+        }
+    }
+}
+
+extension UserInfoViewController: ErrorView {
 }
