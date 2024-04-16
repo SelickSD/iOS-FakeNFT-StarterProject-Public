@@ -98,9 +98,12 @@ extension CatalogViewController: UITableViewDelegate {
         collectionScreenPresenter.delegate = presenter as? CatalogPresenter
         let collectionsViewController = CollectionScreenViewController(presenter: collectionScreenPresenter)
         collectionScreenPresenter.view = collectionsViewController
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage().withTintColor(.clear), for: .default)
 
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithTransparentBackground()
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem?.tintColor = .black
         navigationController?.tabBarController?.tabBar.isHidden = true
         self.navigationController?.pushViewController(collectionsViewController, animated: true)
