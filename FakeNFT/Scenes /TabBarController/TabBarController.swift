@@ -1,9 +1,8 @@
-
 import Foundation
 import UIKit
 
-class TabBarController: UITabBarController{
-    let profileVC = ProfileViewController()
+class TabBarController: UITabBarController {
+    let profileVC = ProfileViewController(nftServise: NetworkNFTService())
     let catalogVC = CatalogViewController()
     let shoppingСart = ShoppingСartViewController()
     let statisticVC = StatisticViewController()
@@ -12,28 +11,27 @@ class TabBarController: UITabBarController{
         generateTabBar()
         setupTabBar()
     }
-    private func generateTabBar(){
+    private func generateTabBar() {
         let profileNav = UINavigationController(rootViewController: profileVC)
         let catalogNav = UINavigationController(rootViewController: catalogVC)
         let shoppingСartNav = UINavigationController(rootViewController: shoppingСart)
         let statisticNav = UINavigationController(rootViewController: statisticVC)
         viewControllers = [
-            generateVC(viewController: profileNav,  title: "Профиль", image: UIImage(systemName: "person.crop.circle.fill")),
-            generateVC(viewController: catalogNav,  title: "Каталог", image: UIImage(systemName: "rectangle.stack.fill")),
-            generateVC(viewController: shoppingСartNav,title: "Корзина", image: UIImage(systemName: "bag.fill")),
-            generateVC(viewController: statisticNav,title: "Статистика", image: UIImage(systemName: "flag.2.crossed.fill"))
+            generateVC(viewController: profileNav, title: "Профиль", image: UIImage(systemName: "person.crop.circle.fill")),
+            generateVC(viewController: catalogNav, title: "Каталог", image: UIImage(systemName: "rectangle.stack.fill")),
+            generateVC(viewController: shoppingСartNav, title: "Корзина", image: UIImage(systemName: "bag.fill")),
+            generateVC(viewController: statisticNav, title: "Статистика", image: UIImage(systemName: "flag.2.crossed.fill"))
         ]
     }
-    private func generateVC(viewController: UINavigationController, title: String, image: UIImage?) -> UINavigationController{
+    private func generateVC(viewController: UINavigationController, title: String, image: UIImage?) -> UINavigationController {
         viewController.tabBarItem.title = title
         viewController.tabBarItem.image = image
-        
+
         return viewController
-        
+
     }
-    private func setupTabBar(){
+    private func setupTabBar() {
         tabBar.backgroundColor = .white
         tabBar.unselectedItemTintColor = .black
     }
 }
-

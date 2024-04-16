@@ -16,10 +16,10 @@ final class StatisticModel {
     var reloadTableViewClosure: (() -> Void)?
     var startLoading: (() -> Void)?
     var endLoading: (() -> Void)?
-    
+
     init() {
     }
-    
+
     func fetchUsers() {
         startLoading?()
         let urlString = "\(RequestConstants.baseURL)/api/v1/users"
@@ -49,20 +49,20 @@ final class StatisticModel {
             }
         }.resume()
     }
-    
+
     func getNumberOfRows() -> Int {
         return users.count
     }
-    
+
     func getUser(at indexPath: IndexPath) -> Users {
         return users[indexPath.row]
     }
-    
+
     func sortByName() {
         users.sort { $0.name.lowercased() < $1.name.lowercased()
         }
     }
-    
+
     func sortByRating() {
         users.sort {
             guard let rating1 = Int($0.rating), let rating2 = Int($1.rating) else { return false }
