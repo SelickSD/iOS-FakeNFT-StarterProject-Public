@@ -7,15 +7,18 @@
 import Foundation
 final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     weak var view: CollectionScreenViewProtocol?
+    weak var delegate: CatalogPresenterDelegate?
     private var collectionServiceObserver: NSObjectProtocol?
     private let collectionService = CatalogNetWorkService.shared
     private var nfts: [NftElement] = []
     private let collection: Collection
     private var likes: [String]
-    
-    init(collection: Collection, likes: [String]) {
+    private var basketNfts: [String]
+
+    init(collection: Collection, likes: [String], basketNfts: [String]) {
         self.collection = collection
         self.likes = likes
+        self.basketNfts = basketNfts
         collectionServiceObserver = NotificationCenter.default.addObserver(
             forName: CatalogNetWorkService.didChangeNotificationCollections,
             object: nil,
@@ -46,33 +49,48 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
             UIBlockingProgressHUD.dismiss()
         }
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
     func viewDidLoad() {
         collectionService.resetNft()
         collectionService.fetchNfts(collectionElement: collection.nfts)
     }
-    
+
     func getOptions() -> Collection {
         return collection
     }
-    
-    func getNftItem(index: Int) -> (nftElement: NftElement, isLikes: Bool)? {
+
+    func getNftItem(index: Int) -> (nftElement: NftElement, isLikes: Bool, isInBasket: Bool)? {
         guard index < nfts.count else {return nil}
+        let nftElement = nfts[index]
+        var isLikes = false
+        var isInBasket = false
         if likes.contains(nfts[index].id) {
-            return (nfts[index], true)
-        } else {
-            return (nfts[index], false)
+            isLikes = true
         }
+
+        if basketNfts.contains(nfts[index].id) {
+            isInBasket = true
+        }
+
+        return (nftElement, isLikes, isInBasket)
     }
-    
+
     func getValueCount() -> Int {
         return nfts.count
     }
-    
+
+    func putLikes(nftId: String) {
+        delegate?.putLikes(nftId: nftId)
+    }
+
+    func putBasket(nftId: String) {
+        delegate?.putBasket(nftId: nftId)
+    }
+
     private func sotrNFTElements(elements: [NftElement]) -> [NftElement] {
         var sortedNftElements: [NftElement] = []
         var idNfts: [String] = []
@@ -87,12 +105,11 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
         }
         return sortedNftElements
     }
-    
+
     private func showConnectError(message: String) {
         let action = AlertActionEvent(actionTitle: "Отмена",
                                       actionStyle: .destructive,
                                       handler: {_ in })
-
 
         let alert = AlertMessage(title: "Сетевая ошибка",
                                  message: message,

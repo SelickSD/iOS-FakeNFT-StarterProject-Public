@@ -56,6 +56,10 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
         present(alertController, animated: true)
     }
 
+    func sortCollection() {
+        catalogTableView.reloadData()
+    }
+
     @objc private func sortTapped() {
         presenter.showSortAlert()
     }
@@ -89,12 +93,17 @@ extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let collectionElement = presenter.getCollectionsElement(index: indexPath.row) else {return}
         let likes = presenter.getLikes()
-        let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement, likes: likes)
+        let basketNfts = presenter.getBasketNfts()
+        let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement, likes: likes, basketNfts: basketNfts)
+        collectionScreenPresenter.delegate = presenter as? CatalogPresenter
         let collectionsViewController = CollectionScreenViewController(presenter: collectionScreenPresenter)
         collectionScreenPresenter.view = collectionsViewController
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage().withTintColor(.clear), for: .default)
 
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithTransparentBackground()
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem?.tintColor = .black
         navigationController?.tabBarController?.tabBar.isHidden = true
         self.navigationController?.pushViewController(collectionsViewController, animated: true)

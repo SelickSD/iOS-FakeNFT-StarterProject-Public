@@ -223,7 +223,8 @@ extension CollectionScreenViewController: UICollectionViewDataSource {
                                                             for: indexPath) as? NFTCollectionsViewCell else {
             return UICollectionViewCell()
         }
-        cell.configCell(nftItem: nftItem.nftElement, isLikes: nftItem.isLikes)
+        cell.delegate = self
+        cell.configCell(nftItem: nftItem.nftElement, isLikes: nftItem.isLikes, isInBasket: nftItem.isInBasket)
         return cell
     }
 }
@@ -255,5 +256,15 @@ extension CollectionScreenViewController: UICollectionViewDelegateFlowLayout {
         let cellWidth =  availableWidth / CGFloat(params.cellCount)
         return CGSize(width: cellWidth,
                       height: 192)
+    }
+}
+
+//MARK: -CollectionScreenDelegate
+extension CollectionScreenViewController: CollectionScreenDelegate {
+    func didTapLikeButton(ntfsId: String) {
+        presenter.putLikes(nftId: ntfsId)
+    }
+    func didTapBasketButton(ntfsId: String) {
+        presenter.putBasket(nftId: ntfsId)
     }
 }
