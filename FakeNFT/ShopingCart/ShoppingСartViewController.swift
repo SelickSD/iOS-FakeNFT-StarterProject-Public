@@ -1,4 +1,3 @@
-
 import UIKit
 
 class ShoppingСartViewController: UIViewController {
@@ -8,7 +7,6 @@ class ShoppingСartViewController: UIViewController {
         view.backgroundColor = .white
         // Do any additional setup after loading the view.
     }
-    
 
     /*
     // MARK: - Navigation

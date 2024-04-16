@@ -1,19 +1,18 @@
-
 import UIKit
 import WebKit
 
 class ProfileViewController: UIViewController {
-    
+
     private let nftServise: NetworkNFTServiceProtocol
-    
+
     private var myNftArray: [String] = []
-    
+
     private var myFavNftArray: [String] = []
-    
+
     private var avatarUrl: String?
-    
-    private var categories = ["Мои NFT","Избранные NFT","О разработчике"]
-    
+
+    private var categories = ["Мои NFT", "Избранные NFT", "О разработчике"]
+
     private lazy var profileImage: UIImageView = {
         let profileImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
         profileImage.translatesAutoresizingMaskIntoConstraints = false
@@ -23,7 +22,7 @@ class ProfileViewController: UIViewController {
         profileImage.image = UIImage(systemName: "person.crop.circle.fill")
         return profileImage
     }()
-    
+
     private lazy var profileNameTitle: UILabel = {
         let profileNameTitle = UILabel()
         profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +31,7 @@ class ProfileViewController: UIViewController {
         profileNameTitle.text = "Имя пользователя"
         return profileNameTitle
     }()
-    
+
     private lazy var descriptionTextView: UITextView = {
         let descriptionTextView = UITextView()
         descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +43,7 @@ class ProfileViewController: UIViewController {
         descriptionTextView.backgroundColor = .white
         return descriptionTextView
     }()
-    
+
     private lazy var profileWebTitle: UILabel = {
         let profileWebTitle = UILabel()
         profileWebTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -52,13 +51,13 @@ class ProfileViewController: UIViewController {
         profileWebTitle.font = UIFont(name: "SFProText-Regular", size: 15)
         profileWebTitle.text = "Сайт пользователя"
         profileWebTitle.isUserInteractionEnabled = true
-        
+
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileWebTitleTapped))
         profileWebTitle.addGestureRecognizer(tapGesture)
-        
+
         return profileWebTitle
     }()
-    
+
     private lazy var profileTableView: UITableView = {
         let profileTableView = UITableView()
         profileTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,16 +69,16 @@ class ProfileViewController: UIViewController {
         profileTableView.register(ProfileTableViewCell.self, forCellReuseIdentifier: "ProfileTableViewCell")
         return profileTableView
     }()
-    
+
     init(nftServise: NetworkNFTServiceProtocol) {
         self.nftServise = nftServise
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.tabBarController?.tabBar.isHidden = false
@@ -94,7 +93,7 @@ class ProfileViewController: UIViewController {
         addSubviews()
         setupConstraints()
         UIBlockingProgressHUD.show()
-        nftServise.fetchProfileRequest() { profileResult in
+        nftServise.fetchProfileRequest { profileResult in
             switch profileResult {
             case .success(let profile):
                 DispatchQueue.main.async {
@@ -111,14 +110,13 @@ class ProfileViewController: UIViewController {
                     self.profileTableView.reloadData()
                     UIBlockingProgressHUD.dismiss()
                 }
-                
-            case .failure(_ ):
+
+            case .failure:
                 UIBlockingProgressHUD.dismiss()
-                break
             }
         }
     }
-    @objc private func editProfileInfo(){
+    @objc private func editProfileInfo() {
         let editProfileInfoNav = EditProfileViewController(state: .init(
             profileImage: profileImage.image,
             profileImageUrl: avatarUrl,
@@ -132,63 +130,64 @@ class ProfileViewController: UIViewController {
         let navController = UINavigationController(rootViewController: editProfileInfoNav)
         present(navController, animated: true, completion: nil)
     }
-    
+
     @objc private func profileWebTitleTapped() {
-        
+
         let profileWebView = ProfileWebViewController()
         profileWebView.profileWebText = profileWebTitle.text
         self.navigationController?.pushViewController(profileWebView, animated: true)
     }
-    
-    private func setupNavBar(){
+
+    private func setupNavBar() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: #selector(editProfileInfo))
         navigationItem.rightBarButtonItem?.tintColor = .black
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
-    
-    private func addSubviews(){
+
+    private func addSubviews() {
         view.addSubview(profileImage)
         view.addSubview(profileNameTitle)
         view.addSubview(descriptionTextView)
         view.addSubview(profileWebTitle)
         view.addSubview(profileTableView)
     }
-    
-    private func setupConstraints(){
+
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             profileImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 105),
             profileImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             profileImage.heightAnchor.constraint(equalToConstant: 70),
             profileImage.widthAnchor.constraint(equalToConstant: 70),
-            
+
             profileNameTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 129),
             profileNameTitle.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 16),
-            
+
             descriptionTextView.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 20),
             descriptionTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             descriptionTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
             descriptionTextView.heightAnchor.constraint(equalToConstant: 72),
             descriptionTextView.widthAnchor.constraint(equalToConstant: 341),
-            
+
             profileWebTitle.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 12),
             profileWebTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            
+
             profileTableView.topAnchor.constraint(equalTo: profileWebTitle.bottomAnchor, constant: 40),
             profileTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             profileTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            profileTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: 304)
-            
+            profileTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 304)
+
         ])
     }
 }
 
-extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
+extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileTableViewCell", for: indexPath) as! ProfileTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileTableViewCell", for: indexPath) as? ProfileTableViewCell
+        guard let cell = cell else {return UITableViewCell()}
         cell.title.text = categories[indexPath.row]
         let chevronImageView = UIImageView(image: UIImage(systemName: "chevron.forward"))
         chevronImageView.tintColor = .black
@@ -207,7 +206,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
             let NFTNav = MyNFTViewController(nftService: nftServise)
             NFTNav.idArray = myNftArray
             self.navigationController?.pushViewController(NFTNav, animated: true)
-            
+
         }
         if indexPath.row == 1 {
             let favouritesNav = FavouritesViewController(nftService: nftServise)
@@ -217,7 +216,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
             }
             print(myFavNftArray)
             self.navigationController?.pushViewController(favouritesNav, animated: true)
-            
+
         }
         if indexPath.row == 2 {
             let profileWebView = ProfileWebViewController()

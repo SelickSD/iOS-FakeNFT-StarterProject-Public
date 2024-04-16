@@ -61,6 +61,6 @@ struct NftFromID: Codable {
     let nft: [String]
 }
 
-struct Likes: Encodable{
+struct Likes: Encodable {
     let likesArray: [String]
 }

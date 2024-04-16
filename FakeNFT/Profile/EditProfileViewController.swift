@@ -1,4 +1,3 @@
-
 import UIKit
 
 protocol EditProfileViewControllerDelegate: AnyObject {
@@ -6,15 +5,15 @@ protocol EditProfileViewControllerDelegate: AnyObject {
 }
 
 class EditProfileViewController: UIViewController, UITextFieldDelegate {
-    
+
     private var activeTextField: UITextField?
-    
+
     weak var delegate: EditProfileViewControllerDelegate?
-    
+
     private let network: NetworkNFTServiceProtocol
-    
+
     private var avatarUrl: String?
-    
+
     private lazy var profileImage: UIImageView = {
         let profileImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
         profileImage.translatesAutoresizingMaskIntoConstraints = false
@@ -25,7 +24,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         profileImage.clipsToBounds = true
         return profileImage
     }()
-    
+
     private lazy var editChangeImageLabel: UILabel = {
         let editDescriptionTextView = UILabel()
         editDescriptionTextView.translatesAutoresizingMaskIntoConstraints = false
@@ -46,7 +45,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editDescriptionTextView.addGestureRecognizer(tapGesture)
         return editDescriptionTextView
     }()
-    
+
     private lazy var editNameTitle: UILabel = {
         let profileNameTitle = UILabel()
         profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +54,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         profileNameTitle.text = "Имя"
         return profileNameTitle
     }()
-    
+
     private lazy var editNameTextField: UITextField = {
         let editNameTextField = UITextField()
         editNameTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -71,12 +70,12 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editNameTextField.leftView = paddingView
         editNameTextField.leftViewMode = .always
         editNameTextField.rightView = clearButton
-        
+
         editNameTextField.rightViewMode = .whileEditing
         editNameTextField.delegate = self
         return editNameTextField
     }()
-    
+
     private lazy var editDescriptionTitle: UILabel = {
         let profileNameTitle = UILabel()
         profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -85,7 +84,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         profileNameTitle.text = "Описание"
         return profileNameTitle
     }()
-    
+
     private lazy var editDescriptionTextView: UITextView = {
         let editDescriptionTextView = UITextView()
         editDescriptionTextView.translatesAutoresizingMaskIntoConstraints = false
@@ -99,7 +98,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editDescriptionTextView.layer.masksToBounds = true
         return editDescriptionTextView
     }()
-    
+
     private lazy var editSiteTitle: UILabel = {
         let profileNameTitle = UILabel()
         profileNameTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -108,7 +107,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         profileNameTitle.text = "Сайт"
         return profileNameTitle
     }()
-    
+
     private lazy var editSiteTextField: UITextField = {
         let editSiteTextField = UITextField()
         editSiteTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -127,7 +126,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editSiteTextField.delegate = self
         return editSiteTextField
     }()
-    
+
     private lazy var clearButton: UIButton = {
         let clearButton = UIButton(type: .custom)
         clearButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
@@ -146,12 +145,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         editDescriptionTextView.text = state.profileDescription
         editSiteTextField.text = state.profileSite
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -161,13 +159,13 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         addGesture()
         addGestureLoadingNewImage()
     }
-    
-    private func setupNavBar(){
+
+    private func setupNavBar() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissController))
         navigationItem.rightBarButtonItem?.tintColor = .black
     }
-    
-    @objc private func dismissController(){
+
+    @objc private func dismissController() {
         UIBlockingProgressHUD.show()
         if editNameTextField.text != "", editDescriptionTextView.text != "", editSiteTextField.text != ""{
             delegate?.updateProfile(from: Profile(profileImage: profileImage.image,
@@ -180,40 +178,40 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
             network.updateProfile(from: ProfileEdit(profileImageUrl: avatarUrl,
                                                     profileName: editNameTextField.text,
                                                     profileDescription: editDescriptionTextView.text,
-                                                    profileSite: editSiteTextField.text)){_ in
+                                                    profileSite: editSiteTextField.text)) {_ in
                 UIBlockingProgressHUD.dismiss()
                 DispatchQueue.main.async {
                     self.dismiss(animated: true)
                 }
             }
-            
+
         }
     }
-    
+
     @objc func clearTextField(_ textField: UITextField) {
         activeTextField?.text = ""
     }
-    
+
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.activeTextField = textField
     }
-    
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.activeTextField = nil
     }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
     }
-    
-    private func addGestureLoadingNewImage(){
+
+    private func addGestureLoadingNewImage() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(loadingNewImage))
         tapGesture.cancelsTouchesInView = false
         editChangeImageLabel.addGestureRecognizer(tapGesture)
-        
+
     }
-    
-    @objc private func loadingNewImage(){
+
+    @objc private func loadingNewImage() {
         let alertController = UIAlertController(title: .none, message: "Хотите загрузить новое изображение?", preferredStyle: .alert)
         alertController.addTextField { textField in
             textField.placeholder = "Введите url изображения в формате .jpg или .png"
@@ -221,9 +219,9 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         let downloadImage = UIAlertAction(title: "Загрузить новое изображение?", style: .default) { _ in
             UIBlockingProgressHUD.show()
             guard let textField = alertController.textFields?.first else {return}
-            if let text = textField.text, text.hasSuffix(".jpg") || text.hasSuffix(".png"){
+            if let text = textField.text, text.hasSuffix(".jpg") || text.hasSuffix(".png") {
                 DispatchQueue.main.async {
-                    self.network.loadImageFromUrl(from: text){ imageView in
+                    self.network.loadImageFromUrl(from: text) { imageView in
                         self.profileImage.image = imageView?.image ?? UIImage(systemName: "")
                         self.avatarUrl = text
                         UIBlockingProgressHUD.dismiss()
@@ -237,27 +235,27 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
                 UIBlockingProgressHUD.dismiss()
             }
         }
-        
+
         let cancel = UIAlertAction(title: "Отменить", style: .destructive)
-        
+
         alertController.addAction(downloadImage)
         alertController.addAction(cancel)
-        
+
         self.present(alertController, animated: true)
     }
-    
-    private func addGesture(){
+
+    private func addGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(textViewShouldReturn))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
     }
-    
-    @objc private func textViewShouldReturn(){
+
+    @objc private func textViewShouldReturn() {
         editDescriptionTextView.resignFirstResponder()
         print("сброс")
     }
-    
-    private func addSubviews(){
+
+    private func addSubviews() {
         view.addSubview(profileImage)
         profileImage.addSubview(editChangeImageLabel)
         view.addSubview(editNameTitle)
@@ -267,43 +265,43 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(editSiteTitle)
         view.addSubview(editSiteTextField)
     }
-    
-    private func setupConstraints(){
+
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             profileImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
             profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             profileImage.heightAnchor.constraint(equalToConstant: 70),
             profileImage.widthAnchor.constraint(equalToConstant: 70),
-            
+
             editNameTitle.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 24),
             editNameTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            
+
             editNameTextField.topAnchor.constraint(equalTo: editNameTitle.bottomAnchor, constant: 8),
             editNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             editNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             editNameTextField.heightAnchor.constraint(equalToConstant: 44),
-            
+
             editDescriptionTitle.topAnchor.constraint(equalTo: editNameTextField.bottomAnchor, constant: 24),
             editDescriptionTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            
+
             editDescriptionTextView.topAnchor.constraint(equalTo: editDescriptionTitle.bottomAnchor, constant: 8),
             editDescriptionTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             editDescriptionTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             editDescriptionTextView.heightAnchor.constraint(equalToConstant: 132),
-            
+
             editSiteTitle.topAnchor.constraint(equalTo: editDescriptionTextView.bottomAnchor, constant: 24),
             editSiteTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            
+
             editSiteTextField.topAnchor.constraint(equalTo: editSiteTitle.bottomAnchor, constant: 8),
             editSiteTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             editSiteTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             editSiteTextField.heightAnchor.constraint(equalToConstant: 44),
-            
+
             editChangeImageLabel.topAnchor.constraint(equalTo: profileImage.topAnchor, constant: 23),
             editChangeImageLabel.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 12),
             editChangeImageLabel.heightAnchor.constraint(equalToConstant: 24),
-            editChangeImageLabel.widthAnchor.constraint(equalToConstant: 45),
-            
+            editChangeImageLabel.widthAnchor.constraint(equalToConstant: 45)
+
         ])
     }
 }
