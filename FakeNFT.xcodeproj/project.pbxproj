@@ -287,7 +287,6 @@
 		3F68069529CBBAF100B4F915 /* FakeNFT */ = {
 			isa = PBXGroup;
 			children = (
-				4B3FABF92BCF165200FBEC13 /* DecompositionProfile */,
 				4B64F4102BAE0D4A00117331 /* SystemAppSceneDelegate */,
 				4B64F4002BADFFCB00117331 /* Profile */,
 				4B64F4012BADFFD800117331 /* Catalog */,
@@ -299,6 +298,8 @@
 				3F6806C929CBBCAF00B4F915 /* Models */,
 				3F6806C729CBBC5B00B4F915 /* Scenes  */,
 				3F6806C629CBBC4E00B4F915 /* Services */,
+				4B3FABF92BCF165200FBEC13 /* DecompositionProfile */,
+				4B3FABFC2BCF16BC00FBEC13 /* ProfileFonts */,
 				3F6806A429CBBAF200B4F915 /* Info.plist */,
 			);
 			path = FakeNFT;
@@ -410,8 +411,8 @@
 		4B3FABE72BCF13EE00FBEC13 /* NetworkService */ = {
 			isa = PBXGroup;
 			children = (
-				4B3FABE82BCF13EE00FBEC13 /* URLSession + Extension.swift */,
 				4B3FABE92BCF13EE00FBEC13 /* NetworkNFTService.swift */,
+				4B3FABE82BCF13EE00FBEC13 /* URLSession + Extension.swift */,
 			);
 			path = NetworkService;
 			sourceTree = "<group>";
@@ -419,8 +420,8 @@
 		4B3FABEA2BCF13EE00FBEC13 /* Favourites */ = {
 			isa = PBXGroup;
 			children = (
-				4B3FABEB2BCF13EE00FBEC13 /* FavouritesCollectionViewCell.swift */,
 				4B3FABEC2BCF13EE00FBEC13 /* FavouritesViewController.swift */,
+				4B3FABEB2BCF13EE00FBEC13 /* FavouritesCollectionViewCell.swift */,
 			);
 			path = Favourites;
 			sourceTree = "<group>";
@@ -452,15 +453,22 @@
 			path = ProfileFonts;
 			sourceTree = "<group>";
 		};
+		4B3FAC052BCF240000FBEC13 /* ProfileModels */ = {
+			isa = PBXGroup;
+			children = (
+				4B3FABF02BCF13EE00FBEC13 /* MyNFTModel.swift */,
+			);
+			path = ProfileModels;
+			sourceTree = "<group>";
+		};
 		4B64F4002BADFFCB00117331 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				4B3FABFC2BCF16BC00FBEC13 /* ProfileFonts */,
-				4B3FABEA2BCF13EE00FBEC13 /* Favourites */,
-				4B3FABED2BCF13EE00FBEC13 /* MyNFT */,
-				4B3FABF02BCF13EE00FBEC13 /* MyNFTModel.swift */,
-				4B3FABE72BCF13EE00FBEC13 /* NetworkService */,
 				4B3FABE52BCF13EE00FBEC13 /* UserStorage */,
+				4B3FABE72BCF13EE00FBEC13 /* NetworkService */,
+				4B3FAC052BCF240000FBEC13 /* ProfileModels */,
+				4B3FABED2BCF13EE00FBEC13 /* MyNFT */,
+				4B3FABEA2BCF13EE00FBEC13 /* Favourites */,
 				4B64F4042BAE003300117331 /* ProfileViewController.swift */,
 				4B64F4172BAF1E4500117331 /* EditProfileViewController.swift */,
 				4B64F4152BAF107B00117331 /* ProfileTableViewCell.swift */,
