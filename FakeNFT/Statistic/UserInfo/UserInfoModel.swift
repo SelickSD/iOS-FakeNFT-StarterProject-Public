@@ -13,11 +13,11 @@ final class UserInfoModel {
     var userDetailsUpdated: ((Users) -> Void)?
     var startLoading: (() -> Void)?
     var endLoading: (() -> Void)?
-    
+
     init(userId: String) {
         self.userId = userId
     }
-    
+
     func fetchUserDetails() {
         startLoading?()
         let urlString = "\(RequestConstants.baseURL)/api/v1/users/\(userId)"

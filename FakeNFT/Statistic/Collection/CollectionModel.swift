@@ -19,7 +19,7 @@ final class CollectionModel {
             self.reloadCollectionViewClosure?()
         }
     }
-    var profile: Profile? {
+    var profile: ProfileStatistic? {
         didSet {
             self.reloadCollectionViewClosure?()
         }
@@ -27,16 +27,16 @@ final class CollectionModel {
     var reloadCollectionViewClosure: (() -> Void)?
     var startLoading: (() -> Void)?
     var endLoading: (() -> Void)?
-    
+
     init(nftIds: [String]) {
         self.nftIds = nftIds
     }
-    
+
     func fetchNftCollection() {
         guard !nftIds.isEmpty else { return }
         startLoading?()
         nftCollection.removeAll()
-        
+
         for nftId in nftIds {
             let urlString = "\(RequestConstants.baseURL)/api/v1/nft/\(nftId)"
             guard let url = URL(string: urlString) else { return }
@@ -71,7 +71,7 @@ final class CollectionModel {
         }
         endLoading?()
     }
-    
+
     func fetchOrder() {
         let urlString = "\(RequestConstants.baseURL)/api/v1/orders/1"
         guard let url = URL(string: urlString) else { return }
@@ -95,7 +95,7 @@ final class CollectionModel {
             }
         }.resume()
     }
-    
+
     func fetchLikes() {
         let urlString = "\(RequestConstants.baseURL)/api/v1/profile/1"
         guard let url = URL(string: urlString) else { return }
@@ -112,14 +112,14 @@ final class CollectionModel {
                 return
             }
             do {
-                let profile = try JSONDecoder().decode(Profile.self, from: data)
+                let profile = try JSONDecoder().decode(ProfileStatistic.self, from: data)
                 self?.profile = profile
             } catch {
                 print("Error decoding user: \(error.localizedDescription)")
             }
         }.resume()
     }
-    
+
     func cartUpdate(newNfts: [String]) {
         let urlString = "\(RequestConstants.baseURL)/api/v1/orders/1"
         guard let url = URL(string: urlString) else { return }
@@ -162,7 +162,7 @@ final class CollectionModel {
         }.resume()
         endLoading?()
     }
-    
+
     func likesUpdate(newLikes: [String]) {
         let urlString = "\(RequestConstants.baseURL)/api/v1/profile/1"
         guard let url = URL(string: urlString) else { return }
@@ -194,7 +194,7 @@ final class CollectionModel {
                 return
             }
             do {
-                let profile = try JSONDecoder().decode(Profile.self, from: data)
+                let profile = try JSONDecoder().decode(ProfileStatistic.self, from: data)
                 self?.profile = profile
             } catch {
                 print("Error decoding user: \(error.localizedDescription)")
@@ -205,27 +205,26 @@ final class CollectionModel {
         }.resume()
         endLoading?()
     }
-    
-    func changeCartState(nfts: [String], newNftId: String){
+
+    func changeCartState(nfts: [String], newNftId: String) {
         var cartNfts: [String]
         cartNfts = nfts
         if !cartNfts.contains(newNftId) {
             cartNfts.append(newNftId)
         } else {
-            cartNfts = cartNfts.filter(){$0 != newNftId}
+            cartNfts = cartNfts.filter {$0 != newNftId}
         }
         cartUpdate(newNfts: cartNfts)
     }
-    
-    func setLikes(likedNfts: [String], likedId: String){
+
+    func setLikes(likedNfts: [String], likedId: String) {
         var newLikedNfts: [String]
         newLikedNfts = likedNfts
         if !newLikedNfts.contains(likedId) {
             newLikedNfts.append(likedId)
         } else {
-            newLikedNfts = newLikedNfts.filter(){$0 != likedId}
+            newLikedNfts = newLikedNfts.filter {$0 != likedId}
         }
         likesUpdate(newLikes: newLikedNfts)
     }
 }
-

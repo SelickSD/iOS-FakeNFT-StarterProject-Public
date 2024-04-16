@@ -11,11 +11,11 @@ final class CollectionCell: UICollectionViewCell, ReuseIdentifying {
     var cellModel: CollectionCellModel? {
         didSet {
             updateView()
-            
+
         }
     }
-    var onLikeTap: (() -> ())?
-    var onCartTap: (() -> ())?
+    var onLikeTap: (() -> Void)?
+    var onCartTap: (() -> Void)?
 
     private lazy var imageView = {
         let imageView = UIImageView()
@@ -128,18 +128,18 @@ final class CollectionCell: UICollectionViewCell, ReuseIdentifying {
     }
 
     private func setupConstraints() {
-        
+
         NSLayoutConstraint.activate([
             imageView.heightAnchor.constraint(equalTo: contentView.widthAnchor),
-            
+
             likeButton.topAnchor.constraint(equalTo: imageView.topAnchor),
             likeButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
             likeButton.widthAnchor.constraint(equalToConstant: 40),
             likeButton.heightAnchor.constraint(equalToConstant: 40),
-            
+
             addToCartButton.widthAnchor.constraint(equalToConstant: 40),
             addToCartButton.heightAnchor.constraint(equalToConstant: 40),
-            
+
             mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -155,8 +155,8 @@ final class CollectionCell: UICollectionViewCell, ReuseIdentifying {
         likeButton.setImage(cellModel.isLiked ? UIImage(named: "like_active") : UIImage(named: "like_no_active"), for: .normal)
         imageView.kf.setImage(with: cellModel.imageUrls[0])
         if ratingStackView.arrangedSubviews.count == 0 {
-            for i in 1...5 {
-                if i <= cellModel.rating {
+            for index in 1...5 {
+                if index <= cellModel.rating {
                     let ratingImage = UIImageView(image: UIImage(named: "star_active"))
                     ratingStackView.addArrangedSubview(ratingImage)
                 } else {
@@ -168,11 +168,11 @@ final class CollectionCell: UICollectionViewCell, ReuseIdentifying {
             ratingStackView.addArrangedSubview(spacer)
         }
     }
-    
+
     @objc private func likeButtonTapped() {
         onLikeTap?()
     }
-    
+
     @objc private func cartButtonTapped() {
         onCartTap?()
     }

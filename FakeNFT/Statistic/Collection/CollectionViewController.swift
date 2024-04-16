@@ -14,7 +14,7 @@ final class CollectionViewController: UIViewController {
     private var nftIds: [String] = []
     private var nfts: [Nft] = []
     private var order: Order?
-    private var profile: Profile?
+    private var profile: ProfileStatistic?
 
     private lazy var collectionView: UICollectionView = {
         let layout = NftCollectionLayout()
@@ -77,7 +77,7 @@ final class CollectionViewController: UIViewController {
 
     private func setupCollectionView() {
         view.addSubview(collectionView)
-        
+
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -115,7 +115,7 @@ extension CollectionViewController: UICollectionViewDataSource {
             inOrder: inOrder
         )
         cell.onCartTap = { [weak self] in
-            self?.collectionModel.changeCartState(nfts: self?.order?.nfts ?? [], newNftId: nft.id) 
+            self?.collectionModel.changeCartState(nfts: self?.order?.nfts ?? [], newNftId: nft.id)
         }
         cell.onLikeTap = {[weak self] in
             self?.collectionModel.setLikes(likedNfts: self?.profile?.likes ?? [], likedId: nft.id)
