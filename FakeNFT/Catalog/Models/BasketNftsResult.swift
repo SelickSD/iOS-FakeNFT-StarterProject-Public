@@ -8,7 +8,7 @@ import Foundation
 struct BasketNftsResult: Codable {
     let nfts: [String]
 
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case nfts
     }
 }

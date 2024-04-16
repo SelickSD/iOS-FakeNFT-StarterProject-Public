@@ -14,7 +14,7 @@ struct CollectionResult: Codable {
     let author: String
     var id: String
 
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case createdAt
         case name
         case cover

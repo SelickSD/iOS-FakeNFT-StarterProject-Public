@@ -1,4 +1,3 @@
-
 import UIKit
 final class CatalogViewController: UIViewController, CatalogViewControllerProtocol {
     private let presenter: CatalogPresenterProtocol
@@ -48,7 +47,7 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
         let alertController = UIAlertController(title: alert.title,
                                                 message: alert.message,
                                                 preferredStyle: alert.preferredStyle)
-        alert.action.forEach{
+        alert.action.forEach {
             alertController.addAction(UIAlertAction(title: $0.actionTitle,
                                                     style: $0.actionStyle,
                                                     handler: $0.handler))
@@ -66,7 +65,7 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
 
     private func drawSelf() {
         view.backgroundColor = .white
-        [catalogTableView].forEach{
+        [catalogTableView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -88,13 +87,15 @@ final class CatalogViewController: UIViewController, CatalogViewControllerProtoc
     }
 }
 
-//MARK: -UITableViewDelegate
+// MARK: - UITableViewDelegate
 extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let collectionElement = presenter.getCollectionsElement(index: indexPath.row) else {return}
         let likes = presenter.getLikes()
         let basketNfts = presenter.getBasketNfts()
-        let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement, likes: likes, basketNfts: basketNfts)
+        let collectionScreenPresenter = CollectionScreenPresenter(collection: collectionElement,
+                                                                  likes: likes,
+                                                                  basketNfts: basketNfts)
         collectionScreenPresenter.delegate = presenter as? CatalogPresenter
         let collectionsViewController = CollectionScreenViewController(presenter: collectionScreenPresenter)
         collectionScreenPresenter.view = collectionsViewController
@@ -110,7 +111,7 @@ extension CatalogViewController: UITableViewDelegate {
     }
 }
 
-//MARK: -UITableViewDataSource
+// MARK: - UITableViewDataSource
 extension CatalogViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter.getValueCount()

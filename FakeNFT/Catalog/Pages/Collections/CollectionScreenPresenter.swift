@@ -28,7 +28,7 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
             else { return }
             nfts = collectionService.nfts
             if nfts.count == collection.nfts.count {
-                let sortedCollections = sotrNFTElements(elements:  nfts)
+                let sortedCollections = sotrNFTElements(elements: nfts)
                 nfts = sortedCollections
                 self.view?.updateScrollViewAnimated()
             }
@@ -94,7 +94,7 @@ final class CollectionScreenPresenter: CollectionScreenPresenterProtocol {
     private func sotrNFTElements(elements: [NftElement]) -> [NftElement] {
         var sortedNftElements: [NftElement] = []
         var idNfts: [String] = []
-        elements.forEach{
+        elements.forEach {
             idNfts.append($0.id)
         }
         let sortElementId = idNfts.sorted()

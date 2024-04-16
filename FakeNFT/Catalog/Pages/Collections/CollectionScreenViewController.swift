@@ -97,7 +97,7 @@ final class CollectionScreenViewController: UIViewController,
         let alertController = UIAlertController(title: alert.title,
                                                 message: alert.message,
                                                 preferredStyle: alert.preferredStyle)
-        alert.action.forEach{
+        alert.action.forEach {
             alertController.addAction(UIAlertAction(title: $0.actionTitle,
                                                     style: $0.actionStyle,
                                                     handler: $0.handler))
@@ -147,21 +147,17 @@ final class CollectionScreenViewController: UIViewController,
 
         [mainImageView, titleLabel, authorLabel,
          linkButton, descriptionLabel, backgroundScrollView,
-         contentView, collectionsCollectionView].forEach{
+         contentView, collectionsCollectionView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.clipsToBounds = true
         }
-
         view.addSubview(backgroundScrollView)
         backgroundScrollView.addSubview(contentView)
-
         [mainImageView, titleLabel, authorLabel,
-         linkButton, descriptionLabel, collectionsCollectionView].forEach{
+         linkButton, descriptionLabel, collectionsCollectionView].forEach {
             contentView.addSubview($0)
         }
-
         let count = getSafeAriaCount()
-
         NSLayoutConstraint.activate([
             backgroundScrollView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -205,7 +201,7 @@ final class CollectionScreenViewController: UIViewController,
     }
 }
 
-//MARK: -UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
 extension CollectionScreenViewController: UICollectionViewDataSource {
 
     func numberOfSections(in: UICollectionView) -> Int {
@@ -229,7 +225,7 @@ extension CollectionScreenViewController: UICollectionViewDataSource {
     }
 }
 
-//MARK: -UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionViewDelegateFlowLayout
 extension CollectionScreenViewController: UICollectionViewDelegateFlowLayout {
     private var params: GeometricParams {
         return GeometricParams(cellCount: 3,
@@ -259,7 +255,7 @@ extension CollectionScreenViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-//MARK: -CollectionScreenDelegate
+// MARK: - CollectionScreenDelegate
 extension CollectionScreenViewController: CollectionScreenDelegate {
     func didTapLikeButton(ntfsId: String) {
         presenter.putLikes(nftId: ntfsId)

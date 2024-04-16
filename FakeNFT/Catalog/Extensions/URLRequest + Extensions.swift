@@ -14,7 +14,7 @@ extension URLRequest {
         httpMethod: String,
         baseURL: URL = URL(string: RequestConstants.baseURL)!,
         needToken: Bool = false,
-        parameters:[String:String]? = nil
+        parameters: [String: String]? = nil
     ) -> URLRequest {
         var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
         request.httpMethod = httpMethod
@@ -24,7 +24,7 @@ extension URLRequest {
             components.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
             request.url = components.url
         }
-        if (needToken) {
+        if needToken {
             request.setValue("7939bfb7-0c9d-4a5e-8cb7-feb0cbaa99d9", forHTTPHeaderField: "X-Practicum-Mobile-Token")
         }
         if httpMethod == "PUT" {

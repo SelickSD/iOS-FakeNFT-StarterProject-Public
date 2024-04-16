@@ -39,9 +39,9 @@ final class CatalogNetWorkService {
         DispatchQueue.main.async {
             imageView.kf.setImage(with: url) { result in
                 switch result {
-                case .success(_):
+                case .success:
                     completion(imageView)
-                case .failure(_):
+                case .failure:
                     completion(nil)
                 }
             }
@@ -65,7 +65,7 @@ final class CatalogNetWorkService {
                 case .success(let body):
                     DispatchQueue.main.async {
                         var cardImageView = UIImageView()
-                        self.loadImageFromUrl(from: body.images[0]){ imageView in
+                        self.loadImageFromUrl(from: body.images[0]) { imageView in
                             cardImageView = imageView ?? UIImageView()
                             let nftElement = NftElement(createdAt: Date().formatDate(dateString: body.createdAt),
                                                         name: body.name,
@@ -108,7 +108,7 @@ final class CatalogNetWorkService {
             switch result {
             case .success(let body):
                 DispatchQueue.main.async {
-                    body.forEach{
+                    body.forEach {
                         let createdAt = Date().formatDate(dateString: $0.createdAt)
                         let name = $0.name
                         let nfts = $0.nfts

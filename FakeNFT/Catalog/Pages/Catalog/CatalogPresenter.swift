@@ -23,8 +23,8 @@ final class CatalogPresenter: CatalogPresenterProtocol,
         ) { [weak self] notification in
             guard let self = self
             else { return }
-            if let body = notification.userInfo?["collections"] {
-                collections = body as! [Collection]
+            if let body = notification.userInfo?["collections"] as? [Collection] {
+                collections = body
                 sortedCollections = collections
             } else {
                 return
@@ -77,28 +77,31 @@ final class CatalogPresenter: CatalogPresenterProtocol,
 
     func showSortAlert() {
 
-        let sortNameAlert = AlertActionEvent(actionTitle: NSLocalizedString("catalogView.sortName",
-                                                                            comment: "Text displayed like sort alert description"),
-                                             actionStyle: .default,
-                                             handler: {_ in
-            self.sortByName()
-            self.view?.sortCollection()
-        })
+        let sortNameAlert = AlertActionEvent(
+            actionTitle: NSLocalizedString("catalogView.sortName",
+                                           comment: "Text displayed like sort alert description"),
+            actionStyle: .default,
+            handler: {_ in
+                self.sortByName()
+                self.view?.sortCollection()
+            })
 
-        let sortNFTAlert = AlertActionEvent(actionTitle: NSLocalizedString("catalogView.sortNFT",
-                                                                           comment: "Text displayed like sort alert description"),
-                                            actionStyle: .default,
-                                            handler: {_ in
-            self.sortByCountNfts()
-            self.view?.sortCollection()
-        })
-        let sortCloseAlert = AlertActionEvent(actionTitle: NSLocalizedString("catalogView.sortClose",
-                                                                             comment: "Text displayed like sort alert description"),
-                                              actionStyle: .cancel,
-                                              handler: {_ in
-            self.sortedCollections = self.collections
-            self.view?.sortCollection()
-        })
+        let sortNFTAlert = AlertActionEvent(
+            actionTitle: NSLocalizedString("catalogView.sortNFT",
+                                           comment: "Text displayed like sort alert description"),
+            actionStyle: .default,
+            handler: {_ in
+                self.sortByCountNfts()
+                self.view?.sortCollection()
+            })
+        let sortCloseAlert = AlertActionEvent(
+            actionTitle: NSLocalizedString("catalogView.sortClose",
+                                           comment: "Text displayed like sort alert description"),
+            actionStyle: .cancel,
+            handler: {_ in
+                self.sortedCollections = self.collections
+                self.view?.sortCollection()
+            })
 
         let alert = AlertMessage(title: NSLocalizedString("catalogView.sortTitle",
                                                           comment: "Text displayed like sort alert description"),
@@ -125,7 +128,7 @@ final class CatalogPresenter: CatalogPresenterProtocol,
         }
         catalogService.putLikes(likes: likes ) { result in
             switch result {
-            case .success(_):
+            case .success:
                 break
             case .failure(let error):
                 self.showConnectError(message: "\(error)")
@@ -141,7 +144,7 @@ final class CatalogPresenter: CatalogPresenterProtocol,
         }
         catalogService.putBasket(basketNfts: basketNfts) { result in
             switch result {
-            case .success(_):
+            case .success:
                 break
             case .failure(let error):
                 self.showConnectError(message: "\(error)")
@@ -152,12 +155,12 @@ final class CatalogPresenter: CatalogPresenterProtocol,
     private func sortByName() {
         var stringArray: [String] = []
         sortedCollections = []
-        self.collections.forEach{
+        self.collections.forEach {
             stringArray.append($0.name)
         }
         var tmpArray = collections
         let sortedStringArray = stringArray.sorted()
-        sortedStringArray.forEach{
+        sortedStringArray.forEach {
             var count = 0
             for item in tmpArray {
                 if item.name == $0 {
@@ -173,12 +176,12 @@ final class CatalogPresenter: CatalogPresenterProtocol,
     private func sortByCountNfts() {
         var intArray: [Int] = []
         sortedCollections = []
-        self.collections.forEach{
+        self.collections.forEach {
             intArray.append($0.nfts.count)
         }
         var tmpArray = collections
         let sortedIntArray = intArray.sorted()
-        sortedIntArray.forEach{
+        sortedIntArray.forEach {
             var count = 0
             for item in tmpArray {
                 if item.nfts.count == $0 {
@@ -205,7 +208,7 @@ final class CatalogPresenter: CatalogPresenterProtocol,
     }
 
     private func fetchLikes() {
-        catalogService.fetchLikes() { likesResult in
+        catalogService.fetchLikes { likesResult in
             switch likesResult {
             case .success(let likes):
                 UIBlockingProgressHUD.dismiss()
@@ -219,7 +222,7 @@ final class CatalogPresenter: CatalogPresenterProtocol,
     }
 
     private func fetchBasketNfts() {
-        catalogService.fetchBasketNfts() { basketResult in
+        catalogService.fetchBasketNfts { basketResult in
             switch basketResult {
             case .success(let basketNfts):
                 UIBlockingProgressHUD.dismiss()
