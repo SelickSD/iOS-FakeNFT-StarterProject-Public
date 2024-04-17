@@ -1,6 +1,5 @@
 import UIKit
 import ProgressHUD
-
 class UIBlockingProgressHUD {
 
     private static var window: UIWindow? {
